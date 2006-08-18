@@ -1,1 +1,4 @@
-xterm -fn '-misc-fixed-*-*-*-*-8-*-*-*-*-*-*-*' -fb '-misc-fixed-*-*-*-*-8-*-*-*-*-*-*-*' -T 'tinyterm'
+#!/bin/bash
+#FONT='-misc-fixed-*-*-*-*-8-*-*-*-*-*-*-*'
+FONT='-*-fixed-*-*-*-*-8-*-*-*-*-*-*-*'
+xterm -fn ${FONT} -fb ${FONT} -T 'tinyterm'
