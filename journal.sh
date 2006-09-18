@@ -1,6 +1,6 @@
 #!/bin/sh
 DATE=`date '+%A, %B %d, %Y, %T %Z'`
-TIME=`date '+%T'`
+TIME=`date '+%T %Z'`
 LOCATION=${HOME}/sandbox/personal/zlog
 FILENAME=`date +%Y-%m-%d`.txt 
 FILE=${LOCATION}/${FILENAME}
