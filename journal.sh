@@ -7,11 +7,14 @@ FILE=${LOCATION}/${FILENAME}
 if [ ! -f ${FILE} ] 
 then
 	touch ${FILE}
-	echo ${DATE}\\n >> ${FILE}
+	echo ${DATE} >> ${FILE}
+	echo '' >> ${FILE}
 	svn add ${FILE}
 else
-	echo \\n${TIME}\\n >> ${FILE}
+	echo '' >> ${FILE}
+	echo ${TIME} >> ${FILE}
+	echo '' >> ${FILE}
 fi
 # script to go to end of file automatically
 ${EDITOR} -c $ ${FILE}
-#${edITOR} ${FILE} << EOF
+#${EDITOR} ${FILE} << EOF
