@@ -8,6 +8,7 @@ FILE=${LOCATION}/${FILENAME}
 if [ $1 ] && [ $1 = "ci" ]
 then
 	echo "Checking in outstanding journal entries..."
+	svn up ${LOCATION}
 	svn ci ${LOCATION} -m"latest journal entries"
 	exit 0
 fi
