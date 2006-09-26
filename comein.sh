@@ -9,3 +9,13 @@ then
 	cat ${ORIGINAL_FILE} >> ${FILE}
 fi
 open ${FILE}
+
+osascript <<END_SCRIPT
+tell application "TextEdit"
+	-- zoomed in vertical monitor
+	set bounds of window 1 to {-1200, -576, 0, 1024}
+	tell text of document 1
+		set the size to 32
+	end tell
+end tell
+END_SCRIPT
