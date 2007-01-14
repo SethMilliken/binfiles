@@ -1,7 +1,7 @@
 #!/bin/sh
 DATE=`date '+%A, %B %d, %Y, %T %Z'`
 TIME=`date '+%T %Z'`
-ORIGINAL_FILE=${HOME}/sandbox/personal/comein.txt
+ORIGINAL_FILE=${HOME}/sandbox/personal/todo/comein.txt
 FILE=/tmp/`date +%Y-%m-%d`.txt 
 if [ ! -f ${FILE} ] 
 then

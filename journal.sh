@@ -1,7 +1,7 @@
 #!/bin/sh
 DATE=`date '+%A, %B %d, %Y, %T %Z'`
 TIME=`date '+%T %Z'`
-LOCATION=${HOME}/sandbox/personal/zlog
+LOCATION=${HOME}/sandbox/personal/zaurus/zlog
 FILENAME=`date +%Y-%m-%d`.txt 
 FILE=${LOCATION}/${FILENAME}
 # handle check-in option

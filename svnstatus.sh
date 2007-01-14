@@ -1,12 +1,13 @@
 #!/bin/bash
-SVN_COMMAND="svn -q status"
+SVN=`which svn`
+SVN_COMMAND="${SVN} -q status"
 
 function svnstatus() {
 if [ -e "${1}" ]
 then
 		echo "DOING \"${SVN_COMMAND} '${1}'\""	
-		#${SVN_COMMAND} "${1}"
-		svn -q status "${1}"
+		${SVN_COMMAND} "${1}"
+		#svn -q status "${1}"
 		echo ""
 else
 		echo "skipping \"${1}\""

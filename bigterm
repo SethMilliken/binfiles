@@ -1,0 +1,4 @@
+#!/bin/sh
+#FONT='-misc-fixed-*-*-*-*-8-*-*-*-*-*-*-*'
+FONT='-*-fixed-*-*-*-*-*-200-*-*-*-*-*-*'
+xterm -fn ${FONT} -fb ${FONT} -T 'bigterm'
