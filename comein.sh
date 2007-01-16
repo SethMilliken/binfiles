@@ -9,7 +9,6 @@ then
 	cat ${ORIGINAL_FILE} >> ${FILE}
 fi
 open ${FILE}
-
 osascript <<END_SCRIPT
 tell application "TextEdit"
 	-- zoomed in vertical monitor
