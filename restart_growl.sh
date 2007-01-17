@@ -4,4 +4,4 @@ NOTIFICATION_SCRIPT=/usr/local/bin/growlnotify
 killall -HUP GrowlHelperApp
 open ${GROWLAPP}
 sleep 1
-${NOTIFICATION_SCRIPT} 'Growl' -m'Restarted'
+${NOTIFICATION_SCRIPT} 'Growl' -a'GrowlHelperApp' -m'Restarted'
