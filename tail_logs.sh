@@ -1,19 +1,25 @@
 #!/bin/bash
 function run() {
 	test_for_screen
-	do_command 'screen tail -F' "/var/log/system.log"
-	do_command 'screen tail -F' "/Library/Logs/Console/${UID}/console.log"
-	do_command 'screen tail -F' "${HOME}/sandbox/backup/doing/doing.txt"
+	create_screen_window /var/log/system.log
+	create_screen_window ${HOME}/sandbox/backup/doing/doing.txt
+	create_screen_window /Library/Logs/Console/$UID/console.log
 	exit 0
+}
+
+function create_screen_window() {
+	declare FILE=$1
+	if [ -f ${FILE} ]
+	then
+			do_command "screen -t ${FILE} tail -F" ${FILE}
+	fi
 }
 
 function do_command() {
 	COMMAND=$1
-	FILE=$2
-	if [ -e "${FILE}" ]
-	then
-			echo "${COMMAND}" "${FILE}"
-	fi
+	ARGUMENTS=$2
+	${COMMAND} ${ARGUMENTS}
+	sleep 1
 }
 
 function test_for_screen() {
