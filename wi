@@ -1,0 +1,52 @@
+#!/bin/sh
+# A script to select and setup a wifi connection.
+# Allow args with spaces in names.
+IFS=''
+NETWORK_NAME=$1
+TEST_PING_ADDRESS=araxia.net
+DEBUG_COMMAND=
+PRESET_NETWORK_NAMES="Available Presets:\
+canvas, cup, cttp, ax"
+
+function run() {
+	preconditions
+	select_network ${NETWORK_NAME} 
+	exit 0
+}
+
+function select_network() {
+	case $1 in
+			"-ls")	  echo ${PRESET_NETWORK_NAMES}
+					  exit 0
+					  ;;
+			"canvas") NETWORK="The Canvas Cafe"
+					  ;;
+			"cup")	  NETWORK="cupajoe"
+					  ;;	
+			"cttp")	  NETWORK="Coffee to the People"
+					  ;;
+			"ax")	  NETWORK="araxia.net"
+					  ;;
+			*)		  NETWORK=$1
+					  ;;
+	esac
+	# check for existence of selected network
+	${DEBUG_COMMAND} ifconfig wi0 nwid \'${NETWORK}\'
+	${DEBUG_COMMAND} dhclient wi0
+	${DEBUG_COMMAND} ping -c 3 ${TEST_PING_ADDRESS}
+}
+
+function preconditions() {
+	case "`uname`" in
+			"Darwin")	echo "Entering debug mode..."
+						DEBUG_COMMAND="echo"
+						;;
+			"OpenBSD")	;; 	
+			*)			echo "This command only works in OpenBSD with a wi0 device."
+				   		exit 1
+						;;
+	esac
+	# test for network adaptor
+	# just [ -f /dev/wi0 ] ?
+}
+run
