@@ -1,6 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 function run() {
 	test_for_screen
+	create_screen_window /var/log/daemon
 	create_screen_window /var/log/system.log
 	create_screen_window ${HOME}/sandbox/backup/doing/doing.txt
 	create_screen_window /Library/Logs/Console/$UID/console.log

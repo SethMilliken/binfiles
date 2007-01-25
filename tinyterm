@@ -1,4 +1,4 @@
 #!/bin/sh
 #FONT='-misc-fixed-*-*-*-*-8-*-*-*-*-*-*-*'
 FONT='-*-fixed-*-*-*-*-8-*-*-*-*-*-*-*'
-xterm -fn ${FONT} -fb ${FONT} -T 'tinyterm' &
+xterm -fn ${FONT} -fb ${FONT} -T 'tinyterm' -e screen -xR tinywork &
