@@ -34,7 +34,7 @@ function select_network {
 				  ;;
 	esac
 	# check for existence of selected network
-	${DEBUG_COMMAND} ifconfig wi0 nwid \'${NETWORK}\'
+	${DEBUG_COMMAND} ifconfig wi0 nwid ${NETWORK}
 	${DEBUG_COMMAND} dhclient wi0
 	${DEBUG_COMMAND} ping -c 3 ${TEST_PING_ADDRESS}
 }
