@@ -1,0 +1,3 @@
+#!/bin/sh
+IFS=$'\n'
+tail -F $1 | tr '\r' '\n'
