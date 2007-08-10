@@ -1,25 +1,47 @@
 #!/bin/sh
+ORIGINAL_IFS=$IFS
+CUSTOM_IFS=$'\n'$'\t'
+
 function run() {
 	test_for_screen
-	create_screen_window /var/log/daemon
-	create_screen_window /var/log/system.log
-	create_screen_window ${HOME}/sandbox/backup/doing/doing.txt
-	create_screen_window /Library/Logs/Console/$UID/console.log
+	# function			spaces?	command		file
+	create_screen_window	'y'	'mactail'	${HOME}/Documents/Eudora\ Folder/Eudora\ Log
+	create_screen_window	'n'	'tail -F'	/var/log/daemon
+	create_screen_window	'n'	'tail -F'	${HOME}/sandbox/backup/doing/doing.txt
+	create_screen_window	'n'	'tail -F'	/var/log/system.log
+	create_screen_window	'n'	'tail -F'	/Library/Logs/Console/$UID/console.log
 	exit 0
 }
 
 function create_screen_window() {
-	declare FILE=$1
-	if [ -f ${FILE} ]
+	IFS=$CUSTOM_IFS
+	declare SPACE=$1
+	declare COMMAND=$2
+	declare FILE=$3
+	declare ARGUMENTS=$4
+	if [ -f "${FILE}" ]
 	then
-			do_command "screen -t ${FILE} tail -F" ${FILE}
+		echo $SPACE $COMMAND $FILE $ARGUMENTS
+		do_command	${SPACE}	${COMMAND}	${FILE}	${ARGUMENTS}
 	fi
 }
 
 function do_command() {
-	COMMAND=$1
-	ARGUMENTS=$2
-	${COMMAND} ${ARGUMENTS}
+	declare SPACE=$1
+	declare COMMAND=$2
+	declare FILE=$3
+	declare ARGUMENTS=$4
+	case "$SPACE" in
+		"y")	#echo "spaces in filenames"
+				declare EXECUTE="screen	-t	${FILE}	${COMMAND}	${FILE}"
+				;;
+		"n")	#echo "no spaces in filenames"
+				IFS=$ORIGINAL_IFS
+				declare EXECUTE="screen -t ${FILE} ${COMMAND} ${FILE}"
+				;;
+	esac
+	#echo ${EXECUTE}
+	${EXECUTE}
 	sleep 1
 }
 
