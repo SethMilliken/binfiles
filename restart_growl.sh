@@ -1,5 +1,5 @@
 #!/bin/bash
-GROWLAPP=${HOME}/Library/PreferencePanes/Growl.prefPane/Contents/Resources/GrowlHelperApp.app
+GROWLAPP=/Library/PreferencePanes/Growl.prefPane/Contents/Resources/GrowlHelperApp.app
 NOTIFICATION_SCRIPT=/usr/local/bin/growlnotify
 killall -HUP GrowlHelperApp
 open ${GROWLAPP}
