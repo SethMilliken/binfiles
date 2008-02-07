@@ -3,5 +3,5 @@ GROWLAPP=/Library/PreferencePanes/Growl.prefPane/Contents/Resources/GrowlHelperA
 NOTIFICATION_SCRIPT=/usr/local/bin/growlnotify
 killall -HUP GrowlHelperApp
 open ${GROWLAPP}
-sleep 2
+sleep 3
 ${NOTIFICATION_SCRIPT} 'Growl' -a'GrowlHelperApp' -m'Restarted'
