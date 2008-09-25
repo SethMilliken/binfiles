@@ -5,11 +5,11 @@ CUSTOM_IFS=$'\n'$'\t'
 function run() {
 	test_for_screen
 	# function			spaces?	command		file
-	create_screen_window	'y'	'mactail'	${HOME}/Documents/Eudora\ Folder/Eudora\ Log
-	create_screen_window	'n'	'tail -F'	/var/log/daemon
+	#create_screen_window	'y'	"${HOME}/bin/mactail"	${HOME}/Documents/Eudora\ Folder/Eudora\ Log
 	create_screen_window	'n'	'tail -F'	${HOME}/sandbox/backup/doing/doing.txt
 	create_screen_window	'n'	'tail -F'	/var/log/system.log
-	create_screen_window	'n'	'tail -F'	/Library/Logs/Console/$UID/console.log
+	create_screen_window	'n'	'/usr/bin/syslog -w -C' '/usr/bin/syslog'
+	create_screen_window	'n'	'tail -F'	/var/log/daemon
 	exit 0
 }
 
@@ -19,7 +19,7 @@ function create_screen_window() {
 	declare COMMAND=$2
 	declare FILE=$3
 	declare ARGUMENTS=$4
-	if [ -f "${FILE}" ]
+	if [ -e "${FILE}" ]
 	then
 		echo $SPACE $COMMAND $FILE $ARGUMENTS
 		do_command	${SPACE}	${COMMAND}	${FILE}	${ARGUMENTS}
@@ -40,7 +40,7 @@ function do_command() {
 				declare EXECUTE="screen -t ${FILE} ${COMMAND} ${FILE}"
 				;;
 	esac
-	#echo ${EXECUTE}
+	echo ${EXECUTE}
 	${EXECUTE}
 	sleep 1
 }
