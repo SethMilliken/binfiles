@@ -9,7 +9,7 @@ KEYWORD=${5} # Keyword indicating successful application of change.
 ### TODO: check here for correct number of arguments, show usage if incorrect.
 find ${DIRECTORY} -name ${FILENAME} -exec echo {} \;
 find ${DIRECTORY} -name ${FILENAME} -exec p4 edit -c ${CHANGELIST} {} \;
-find ${DIRECTORY} -name ${FILENAME} -exec vim -S ${EX_SCRIPT} {} \;
+find ${DIRECTORY} -name ${FILENAME} -exec gvim -S ${EX_SCRIPT} {} \;
 find ${DIRECTORY} -name ${FILENAME} -exec grep ${KEYWORD} {} \;
 
 ### Example ex script (add_availablePrintServers.ex):
