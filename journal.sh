@@ -1,5 +1,5 @@
 #!/bin/sh
-EDITOR=vim
+EDITOR=`~/bin/set_editor.sh`
 DATE=`date '+%A, %B %d, %Y, %T %Z'`
 TIME=`date '+%T %Z'`
 LOCATION=${HOME}/sandbox/personal/zaurus/zlog
@@ -26,4 +26,5 @@ else
 	echo '' >> ${FILE}
 fi
 # go to end of file automatically
-${EDITOR} -c $ ${FILE}
+#${EDITOR} -c $ ${FILE}
+open ${FILE}
