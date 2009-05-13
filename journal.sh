@@ -26,5 +26,5 @@ else
 	echo '' >> ${FILE}
 fi
 # go to end of file automatically
-#${EDITOR} -c $ ${FILE}
-open ${FILE}
+${EDITOR} -c $ ${FILE}
+#open ${FILE}

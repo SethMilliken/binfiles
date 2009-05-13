@@ -30,7 +30,8 @@ binary="$VIM_APP_DIR/MacVim.app/Contents/MacOS/Vim"
 
 name="`basename "$0"`"
 gui=
-opts=
+#opts="--remote-tab-silent"
+opts=""
 
 if [ -z "$VIM_APP_DIR" ]
 then

@@ -1,2 +1,2 @@
 #!/bin/sh
-shift 5;${HOME}/bin/mvim -dO "$@"
+shift 5;${HOME}/bin/mvim -d -O "$@"
