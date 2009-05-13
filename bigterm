@@ -1,4 +1,4 @@
 #!/bin/sh
 #FONT='-*-courier-medium-r-*-*-14-*-*-*-*-*-*-*'
 FONT='-*-clean-medium-*-*-*-16-*-*-*-*-*-*-*'
-xterm -fn ${FONT} -fb ${FONT} -T 'bigterm' -e screen -xR bigwork &
+xterm -fn ${FONT} -fb ${FONT} -T 'bigterm' -e /usr/local/bin/screen -xR bigwork &

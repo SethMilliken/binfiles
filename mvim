@@ -24,19 +24,20 @@ then
 		fi
 	done
 fi
-if [ -z "$VIM_APP_DIR" ]
-then
-	echo "Sorry, cannot find MacVim.app.  Try setting the VIM_APP_DIR environment variable to the directory containing MacVim.app."
-	exit 1
-fi
 binary="$VIM_APP_DIR/MacVim.app/Contents/MacOS/Vim"
-
 # Next, peek at the name used to invoke this script, and set options
 # accordingly.
 
 name="`basename "$0"`"
 gui=
 opts=
+
+if [ -z "$VIM_APP_DIR" ]
+then
+	#	echo "Sorry, cannot find MacVim.app.  Try setting the VIM_APP_DIR environment variable to the directory containing MacVim.app."
+	binary=`which vim`
+	name=vim
+fi
 
 # GUI mode, implies forking
 case "$name" in m*|g*|rm*|rg*) gui=true ;; esac
