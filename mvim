@@ -43,6 +43,9 @@ fi
 # GUI mode, implies forking
 case "$name" in m*|g*|rm*|rg*) gui=true ;; esac
 
+# Nofork
+case "$name" in *n) opts="$opts -F";; esac
+
 # Restricted mode
 case "$name" in r*) opts="$opts -Z";; esac
 
