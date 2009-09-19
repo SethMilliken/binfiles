@@ -4,7 +4,7 @@ CONFIG_NAME=$1
 #DEBUG_COMMAND=echo
 DEBUG_COMMAND=
 PRESET_NETWORK_NAMES="Available Presets: work, home"
-DIRECTORY="/Users/milliken/Library/PreferencePanes/SynergyKM.prefPane/Contents/Resources/Synergyd.app/Contents/Resources"
+DIRECTORY="/Library/PreferencePanes/SynergyKM.prefPane/Contents/Resources/Synergyd.app/Contents/Resources"
 LOGFILE="${HOME}/Desktop/synergy.log"
 DESTINATION=""
 HOSTNAME="samsara"
@@ -17,7 +17,8 @@ function run {
 }
 
 function autodetect {
-	for TARGET in seth-g4.local. laboratory.local.
+	#for TARGET in seth-g4.local. laboratory.local.
+	for TARGET in rickd-dw.sf.nimblefish.com laboratory.local.
 	do
 		HOST=`scutil -r ${TARGET} | grep -q Directly && echo ${TARGET}`
 		if [ -n "${HOST}" ]
@@ -33,7 +34,7 @@ function select_network {
 		"-ls")		echo ${PRESET_NETWORK_NAMES}
 					exit 0;
 					;;
-		"work")		DESTINATION="seth-g4.local."
+		"work")		DESTINATION="rickd-dw.sf.nimblefish.com"
 					;;
 		"home")		DESTINATION="laboratory.local."
 					;;
@@ -43,14 +44,16 @@ function select_network {
 	esac
 
 	case ${DESTINATION} in
-		"seth-g4.local.")		COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
+		"rickd-dw.sf.nimblefish.com")	 	COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
 								;;
-		"laboratory.local.")	COMMAND="${DIRECTORY}/synergys -f --config ${HOME}/bin/synergy.conf --name samsara --debug ${DEBUG_MODE}"
+		#"laboratory.local.")	COMMAND="${DIRECTORY}/synergys -f --config ${HOME}/bin/synergy.conf --name samsara --debug ${DEBUG_MODE}"
+		"laboratory.local.")				COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
 								;;
 	esac
 
 	${DEBUG_COMMAND} ${COMMAND} &> ${LOGFILE} &
 	echo ${DESTINATION}
+	/usr/local/bin/growlnotify -t synswitch -m "${DESTINATION}"
 }
 
 function preconditions {
