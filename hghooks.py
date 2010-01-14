@@ -11,6 +11,10 @@ def p4OpenIncoming(ui, repo, **kwargs):
 		if value:
 			_handleChangeset(ui, repo, value)
 	pass
+	'''
+	for target in [value for key, value, somethingElse in kwargs.iteritems() if key.startswith("parent")]
+		_handleChangeset(ui, repo, target)
+	'''
 
 def _handleChangeset(ui, repo, key):
 	ctx = repo[key]
