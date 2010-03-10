@@ -13,42 +13,23 @@
 # or by un-commenting and editing the following line:
 # VIM_APP_DIR=/Applications
 
-if [ -z "$VIM_APP_DIR" ]
-then
-	myDir="`dirname "$0"`"
-	myAppDir="$myDir/../Applications"
-	for i in ~/Applications ~/Applications/vim $myDir $myDir/vim $myAppDir $myAppDir/vim /Applications /Applications/vim /Applications/Utilities /Applications/Utilities/vim; do
-		if [ -x "$i/MacVim.app" ]; then
-			VIM_APP_DIR="$i"
-			break
-		fi
-	done
-fi
-binary="$VIM_APP_DIR/MacVim.app/Contents/MacOS/Vim"
-# Next, peek at the name used to invoke this script, and set options
+# Peek at the name used to invoke this script, and set options
 # accordingly.
 
 name="`basename "$0"`"
 gui=
-#opts="--remote-tab-silent"
 opts=""
-
-if [ -z "$VIM_APP_DIR" ]
-then
-	#	echo "Sorry, cannot find MacVim.app.  Try setting the VIM_APP_DIR environment variable to the directory containing MacVim.app."
-	binary=`which vim`
-	name=vim
-fi
 
 # GUI mode, implies forking
 case "$name" in m*|g*|rm*|rg*) gui=true ;; esac
 
 # Nofork
-case "$name" in *n) opts="$opts -F";; esac
+case "$name" in *n) opts="$opts -f";; esac
 
 # Restricted mode
 case "$name" in r*) opts="$opts -Z";; esac
 
+macvimName="MacVim.app"
 # vimdiff, view, and ex mode
 case "$name" in
 	*vimdiff)
@@ -60,7 +41,32 @@ case "$name" in
 	*ex)
 		opts="$opts -e"
 		;;
+	*vimperator)
+		macvimName="Tasks.app"
+		opts="$opts --remote-tab-wait-silent"
+		gui=true
+		;;
 esac
+
+if [ -z "$VIM_APP_DIR" ]
+then
+	myDir="`dirname "$0"`"
+	myAppDir="$myDir/../Applications"
+	for i in ~/Applications ~/Applications/vim $myDir $myDir/vim $myAppDir $myAppDir/vim /Applications /Applications/vim /Applications/Utilities /Applications/Utilities/vim; do
+		if [ -x "$i/$macvimName" ]; then
+			VIM_APP_DIR="$i"
+			break
+		fi
+	done
+fi
+binary="$VIM_APP_DIR/$macvimName/Contents/MacOS/Vim"
+
+if [ -z "$VIM_APP_DIR" ]
+then
+	#	echo "Sorry, cannot find MacVim.app.  Try setting the VIM_APP_DIR environment variable to the directory containing MacVim.app."
+	binary=`which vim`
+	name=vim
+fi
 
 # Last step:  fire up vim.
 # The program should fork by default when started in GUI mode, but it does
