@@ -5,4 +5,4 @@ then
 		DATE=`date +'%Y-%m-%d %T'` 
 fi
 echo $@ ${DATE}
-java -classpath "/Users/milliken/bin" BlojsomEntryMetadata "$@" "${DATE}"
+java -classpath "${HOME}/bin" BlojsomEntryMetadata "$@" "${DATE}"
