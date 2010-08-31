@@ -6,6 +6,7 @@
 # Each command gets its own indiidual sticky notification that is updated on completion.
 #
 # TODO: support && compound commands, e.g. grun.py (echo "Initial output." && sleep 5 && echo "Final output.")
+# TODO: parameterize growlnotify location
 from sys import argv
 import os, subprocess, string
 
