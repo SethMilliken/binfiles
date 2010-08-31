@@ -7,6 +7,7 @@
 #
 # TODO: support && compound commands, e.g. grun.py (echo "Initial output." && sleep 5 && echo "Final output.")
 # TODO: parameterize growlnotify location
+# TODO: Testing
 from sys import argv
 import os, subprocess, string
 
