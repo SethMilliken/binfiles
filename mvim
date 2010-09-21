@@ -41,6 +41,26 @@ case "$name" in
 	*ex)
 		opts="$opts -e"
 		;;
+	*tvim)
+		macvimName="Tasks.app"
+		opts="$opts --remote-tab-wait-silent"
+		gui=true
+		;;
+	*svim)
+		macvimName="SourceCode.app"
+		opts="$opts --remote-tab-wait-silent"
+		gui=true
+		;;
+	*hvim)
+		macvimName="Research.app"
+		opts="$opts --remote-tab-wait-silent"
+		gui=true
+		;;
+	*wvim)
+		macvimName="Vimwiki.app"
+		opts="$opts --remote-tab-wait-silent"
+		gui=true
+		;;
 	*vimperator)
 		macvimName="Tasks.app"
 		opts="$opts --remote-tab-wait-silent"
