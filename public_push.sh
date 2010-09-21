@@ -17,20 +17,24 @@ function pushfiles {
 	LOCAL_REPO=$1
 	REMOTE_REPO=$2
 	NAME=$3
+	MERGE=$4
 
 	echo "Pushing from " ${LOCAL_REPO} " to " ${REMOTE_REPO}
-	hg --verbose convert -s hg -d hg --filemap ${LOCAL_REPO}/publicfiles.map ${LOCAL_REPO} ${REMOTE_REPO}  && pushd ${REMOTE_REPO} && hg merge && hg ci -m"Publishing " ${NAME} " files to bitbucket.org." && hg push
+	hg --verbose convert -s hg -d hg --filemap ${LOCAL_REPO}/publicfiles.map ${LOCAL_REPO} ${REMOTE_REPO}  && pushd ${REMOTE_REPO} && hg merge tip && hg ci -m"Publishing " ${NAME} " files to bitbucket.org." && hg push
 	popd
 }
 
 case "${NAME}" in
 	scpt)
-		pushfiles /Users/seth/bin ${REMOTE_REPO} applescripts
+		pushfiles /Users/seth/bin ${REMOTE_REPO} bin
+		;;
+	vim)
+		pushfiles /Users/seth/.vim ${REMOTE_REPO} vim 
 		;;
 	bin)
 		pushfiles /Users/seth/Library/Scripts/applescripts ${REMOTE_REPO} applescripts
 		;;
 	*)
-		echo "Valid targets are: scpt, bin"
+		echo "Valid targets are: scpt, bin, vim"
 		;;
 esac
