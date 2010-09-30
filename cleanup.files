@@ -1,0 +1,58 @@
+Applications
+Developer
+-Library/Address Book Plug-Ins
+Library/Audio
+Library/Caches
+Library/Colors
+Library/ColorSync
+Library/Components
+Library/Contextual Menu Items
+Library/Desktop Pictures
+Library/Dictionaries
+Library/Documentation
+Library/Extensions
+Library/Filesystems
+-Library/Fonts
+Library/Frameworks
+Library/Graphics
+Library/Image Capture
+Library/Internet Plug-Ins
+Library/Java
+Library/Keyboard Layouts
+-Library/Keychains
+Library/LaunchAgents
+Library/LaunchDaemons
+-Library/Logs
+Library/Mail
+-Library/Managed Preferences
+Library/Modem Scripts
+Library/PDF Services
+-Library/Packages
+Library/Parallels
+Library/Perl
+-Library/Preferences
+Library/Printers
+Library/Python
+Library/Qt
+Library/QuickTime
+-Library/Receipts
+Library/Screen Savers
+-Library/Scripts
+Library/Spotlight
+-Library/StartupItems
+Library/User Pictures
+Library/User Guides And Information
+Library/WebObjects
+Library/WebServer/CGI-Executables
+-Library/WebServer/Documents
+-Library/WebServer/Documents/WebObjects
+-Library/Widgets
+mach.sym
+private/tftpboot
+private/var/vm
+private/var/jobs
+private/var/spools
+private/var/audit
+private/tmp
+private/var/xgrid
+private/var/yp

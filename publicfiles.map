@@ -1,0 +1,4 @@
+include grun.py
+rename grun.py bin/grun.py
+include firefox_toggle.sh
+rename firefox_toggle.sh bin/firefox_toggle.sh
