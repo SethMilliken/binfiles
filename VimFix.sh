@@ -17,4 +17,5 @@ vimfix VIM7 SourceCode /Applications/SourceCode.app/Contents VimBlue.icns
 vimfix VIM6 Research /Applications/Research.app/Contents VimGrey.icns
 vimfix VIM5 Tasks /Applications/Tasks.app/Contents VimPurple.icns
 vimfix VIM4 Vimwiki /Applications/Vimwiki.app/Contents VimPaleGreen.icns
+vimfix VIM3 Todo /Applications/Todo.app/Contents VimGreen.icns
 vimfix VIMM MacVim /Applications/MacVim.app/Contents VimGreen.icns
