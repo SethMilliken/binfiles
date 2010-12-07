@@ -1,6 +1,6 @@
 #!/bin/bash
 GROWLAPP=/Library/PreferencePanes/Growl.prefPane/Contents/Resources/GrowlHelperApp.app
-GROWLMENU=/Library/PreferencePanes/Growl.prefPane/Contents/Resources/GrowlMenu.app/Contents/MacOS/GrowlMenu
+GROWLMENU=/Library/PreferencePanes/Growl.prefPane/Contents/Resources/GrowlMenu.app
 NOTIFICATION_SCRIPT=/usr/local/bin/growlnotify
 
 function running {
@@ -14,7 +14,7 @@ function running {
 		open ${GROWLAPP}
 		sleep 1
 		${NOTIFICATION_SCRIPT} 'Growl' -a'GrowlHelperApp' -m'Restarted'
-		${GROWLMENU} &
+		open ${GROWLMENU}
 	fi
 }
 
