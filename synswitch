@@ -19,7 +19,7 @@ function run {
 
 function autodetect {
 	#for TARGET in seth-g4.local. laboratory.local.
-	for TARGET in rickd-dw.sf.nimblefish.com laboratory.local.
+	for TARGET in seth.local. laboratory.local.
 	do
 		HOST=`scutil -r ${TARGET} | grep -q Directly && echo ${TARGET}`
 		if [ -n "${HOST}" ]
@@ -35,7 +35,7 @@ function select_network {
 		"-ls")		echo ${PRESET_NETWORK_NAMES}
 					exit 0;
 					;;
-		"work")		DESTINATION="rickd-dw.sf.nimblefish.com"
+		"work")		DESTINATION="seth.local."
 					;;
 		"home")		DESTINATION="laboratory.local."
 					;;
@@ -45,7 +45,7 @@ function select_network {
 	esac
 
 	case ${DESTINATION} in
-		"rickd-dw.sf.nimblefish.com")	 	COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
+		"seth.local.")	 	COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
 								;;
 		#"laboratory.local.")	COMMAND="${DIRECTORY}/synergys -f --config ${HOME}/bin/synergy.conf --name samsara --debug ${DEBUG_MODE}"
 		"laboratory.local.")				COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
