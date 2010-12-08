@@ -1,0 +1,5 @@
+#!/bin/sh
+REMOTE_SERVER="samsara" # Defined in ~/.ssh/config
+TARGET_SCRIPT="~/Library/Scripts/applescripts/playpause.applescript"
+ssh ${REMOTE_SERVER} osascript ${TARGET_SCRIPT}
+/usr/local/bin/growlnotify --identifier "playpause" -a 'iTunes.app' -t 'iTunes' -m 'play/pause'
