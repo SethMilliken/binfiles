@@ -1,0 +1,26 @@
+#!/bin/sh
+#
+# persistent script for testing bash shell scripts
+#
+
+REMOTE_SERVER="samsara" # Defined in ~/.ssh/config
+TARGET_SCRIPT="~/Library/Scripts/applescripts/playpause.applescript"
+STATE=`ssh ${REMOTE_SERVER} osascript << END
+tell app "iTunes"
+	activate
+	return "iTunes " &  player state
+end tell
+END`
+echo $STATE
+
+RESULT=`ssh ${REMOTE_SERVER} osascript << END
+tell app "iTunes"
+	set currentName to (get name of current track)
+	set currentArtist to (get artist of current track)
+	set currentAlbum to (get album of current track)
+	return currentName & " – " & currentAlbum & "\r" & currentArtist
+end tell
+END`
+echo $RESULT
+
+/usr/local/bin/growlnotify --identifier "playpause" -a 'iTunes.app' -t "${STATE}" -m "${RESULT}"

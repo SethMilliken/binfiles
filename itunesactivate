@@ -1,0 +1,8 @@
+#!/bin/sh
+# TODO: make remote server analogous to git's remote origin
+REMOTE_SERVER="samsara" # Defined in ~/.ssh/config
+STATE=`ssh ${REMOTE_SERVER} osascript << END
+tell app "iTunes"
+	activate
+end tell
+END`

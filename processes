@@ -1,0 +1,6 @@
+#!/bin/sh
+#
+# ps via growl
+#
+RESULT=`ps -o command | grep -v bash | grep -v COMMAND | grep -v mandoc | grep -v screen | sort | awk -F'\t' '{print "- " $1}'`
+/usr/local/bin/growlnotify --sticky --identifier "processes" -a 'Terminal.app' -t "processes" -m "${RESULT}"
