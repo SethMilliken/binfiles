@@ -6,9 +6,10 @@ function repocheck {
 	VCS_COMMAND=$3
 	REPO_DIR=$4
 	echo "[ Checking ${REPO_NAME}...]"
-	pushd ${REPO_DIR}
+	pushd ${REPO_DIR} 1> /dev/null
+	pwd
 	${VCS} ${VCS_COMMAND}
-	popd
+	popd 1> /dev/null
 	echo ""
 }
 
