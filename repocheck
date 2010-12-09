@@ -1,0 +1,20 @@
+#!/bin/sh
+# Check status on a list of repositories.
+function repocheck {
+	REPO_NAME=$1
+	VCS=$2
+	VCS_COMMAND=$3
+	REPO_DIR=$4
+	echo "[ Checking ${REPO_NAME}...]"
+	pushd ${REPO_DIR}
+	${VCS} ${VCS_COMMAND}
+	popd
+	echo ""
+}
+
+repocheck "dotfiles" svn st ~
+repocheck "vim files" hg st ~/.vim
+repocheck "bin files" hg st ~/bin
+repocheck "mac os x tools" hg st ~/sandbox/code/araxia-mac-os-x-tools
+repocheck "iphone engage" git st ~/sandbox/code/engage.iphone
+repocheck "work" hg st ~/sandbox/work
