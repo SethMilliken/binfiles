@@ -1,0 +1,5 @@
+#!/bin/sh
+STATE="you should..."
+RESULT=`cat ~/sandbox/personal/todo/personal.tst.txt | head -2 | tail -1`
+echo $RESULT
+/usr/local/bin/growlnotify --identifier "currentstatus" -a 'Tasks.app' -t "${STATE}" -m "${RESULT}"
