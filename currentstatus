@@ -1,5 +1,13 @@
 #!/bin/sh
+# TODO: use something better than year (date with format) for awk part
+# TODO: better handle missing timestamp
+# TODO: configurable top n items?
+# TODO: supporting vim function to retreive preformatted values?
+# TOOD: add line about adding to crontab & what the entry should look like
+# */15 * * * * /Users/seth/bin/currentstatus 1&> /dev/null
 STATE="you should..."
-RESULT=`cat ~/sandbox/personal/todo/personal.tst.txt | head -2 | tail -1`
+#FILE="${HOME}/sandbox/personal/todo/personal.tst.txt"
+FILE="${HOME}/sandbox/work/janrain.tst.txt"
+RESULT=`cat ${FILE} | head -5 | tail -4 | awk -F'2010-' '{print $1}'`
 echo $RESULT
 /usr/local/bin/growlnotify --identifier "currentstatus" -a 'Tasks.app' -t "${STATE}" -m "${RESULT}"
