@@ -5,10 +5,10 @@ CONFIG_NAME=$1
 DEBUG_COMMAND=
 PRESET_NETWORK_NAMES="Available Presets: work, home"
 #DIRECTORY="/Library/PreferencePanes/SynergyKM.prefPane/Contents/Resources/Synergyd.app/Contents/Resources"
-DIRECTORY="/usr/bin"
+DIRECTORY="/usr/local/bin"
 LOGFILE="${HOME}/Desktop/synergy.log"
 DESTINATION=""
-HOSTNAME="samsara"
+HOSTNAME="seth"
 DEBUG_MODE="NOTE"
 
 function run {
@@ -45,7 +45,8 @@ function select_network {
 	esac
 
 	case ${DESTINATION} in
-		"seth.local.")	 	COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
+		#"seth.local.")	 	COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
+		"seth.local.")	COMMAND="${DIRECTORY}/synergys -f --config ${HOME}/bin/synergy.conf --name ${HOSTNAME} --debug ${DEBUG_MODE}"
 								;;
 		#"laboratory.local.")	COMMAND="${DIRECTORY}/synergys -f --config ${HOME}/bin/synergy.conf --name samsara --debug ${DEBUG_MODE}"
 		"laboratory.local.")				COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
