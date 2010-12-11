@@ -1,0 +1,6 @@
+#!/bin/sh
+#
+# synergy active locally
+#
+RESULT="`hostname` returned"
+/usr/local/bin/growlnotify --identifier "synergy" -a 'Divvy.app' -t "synergy" -m "${RESULT}"
