@@ -1,0 +1,2 @@
+#!/bin/sh
+contacts -H -s -S -f '%n <%we>' $1
