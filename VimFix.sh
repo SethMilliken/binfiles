@@ -4,18 +4,25 @@
 function vimfix {
 	ID=$1
 	NAME=$2
-	PATH=$3
+	PATH_PREFIX=$3
 	ICON=$4
-	/usr/libexec/PlistBuddy ${PATH}/Info.plist -c 'Set :CFBundleIdentifier org.vim.MacVim.'${NAME}
-	/usr/libexec/PlistBuddy ${PATH}/Info.plist -c 'Set :CFBundleName '${NAME}
-	/usr/libexec/PlistBuddy ${PATH}/Info.plist -c 'Set :CFBundleSignature '${ID}
-	/usr/bin/sed -i '' -es/VIMM/${ID}/ ${PATH}/PkgInfo
-	/bin/cp ~/Pictures/VimIcons/${ICON} ${PATH}/Resources/MacVim.icns
+	FULL_PATH=${PATH_PREFIX}/${NAME}.app/Contents
+	if [ -d ${FULL_PATH} ]
+	then
+		/usr/libexec/PlistBuddy ${FULL_PATH}/Info.plist -c 'Set :CFBundleIdentifier org.vim.MacVim.'${NAME}
+		/usr/libexec/PlistBuddy ${FULL_PATH}/Info.plist -c 'Set :CFBundleName '${NAME}
+		/usr/libexec/PlistBuddy ${FULL_PATH}/Info.plist -c 'Set :CFBundleSignature '${ID}
+		/usr/bin/sed -i '' -es/VIMM/${ID}/ ${FULL_PATH}/PkgInfo
+		/bin/cp ~/Pictures/VimIcons/${ICON} ${FULL_PATH}/Resources/MacVim.icns
+	else
+		echo "${FULL_PATH} not found."
+	fi
 }
 
-vimfix VIM7 SourceCode /Applications/SourceCode.app/Contents VimBlue.icns
-vimfix VIM6 Research /Applications/Research.app/Contents VimGrey.icns
-vimfix VIM5 Tasks /Applications/Tasks.app/Contents VimPurple.icns
-vimfix VIM4 Vimwiki /Applications/Vimwiki.app/Contents VimPaleGreen.icns
-vimfix VIM3 Todo /Applications/Todo.app/Contents VimGreen.icns
-vimfix VIMM MacVim /Applications/MacVim.app/Contents VimGreen.icns
+vimfix VIM8 Scratch /Applications VimGrey.icns
+vimfix VIM7 SourceCode /Applications VimBlue.icns
+vimfix VIM6 Research /Applications VimGrey.icns
+vimfix VIM5 Tasks /Applications VimPurple.icns
+vimfix VIM4 Vimwiki /Applications VimPaleGreen.icns
+vimfix VIM3 Todo /Applications VimGreen.icns
+vimfix VIMM MacVim /Applications VimGreen.icns
