@@ -2,8 +2,6 @@
 
 from sys import argv
 from os import execlp
-import re
-
 
 left = "";
 right = "";
