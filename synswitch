@@ -5,10 +5,11 @@ CONFIG_NAME=$1
 DEBUG_COMMAND=
 PRESET_NETWORK_NAMES="Available Presets: work, home"
 #DIRECTORY="/Library/PreferencePanes/SynergyKM.prefPane/Contents/Resources/Synergyd.app/Contents/Resources"
+# TODO: Use `which synergyc` here.
 DIRECTORY="/usr/local/bin"
 LOGFILE="${HOME}/Desktop/synergy.log"
 DESTINATION=""
-HOSTNAME="seth"
+HOSTNAME="${SHORTHOST}"
 DEBUG_MODE="NOTE"
 
 function run {
@@ -19,7 +20,7 @@ function run {
 
 function autodetect {
 	#for TARGET in seth-g4.local. laboratory.local.
-	for TARGET in seth.local. laboratory.local.
+	for TARGET in seth.local seth-pc.local laboratory.local
 	do
 		HOST=`scutil -r ${TARGET} | grep -q Directly && echo ${TARGET}`
 		if [ -n "${HOST}" ]
@@ -35,9 +36,9 @@ function select_network {
 		"-ls")		echo ${PRESET_NETWORK_NAMES}
 					exit 0;
 					;;
-		"work")		DESTINATION="seth.local."
+		"work")		DESTINATION="seth.local"
 					;;
-		"home")		DESTINATION="laboratory.local."
+		"home")		DESTINATION="seth-pc.local"
 					;;
 		*)			#echo Autodetected: `autodetect`
 					DESTINATION=`autodetect`
@@ -45,11 +46,13 @@ function select_network {
 	esac
 
 	case ${DESTINATION} in
-		#"seth.local.")	 	COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
-		"seth.local.")	COMMAND="${DIRECTORY}/synergys -f --config ${HOME}/bin/synergy.conf --name ${HOSTNAME} --debug ${DEBUG_MODE}"
+		# TODO: make this conditional on hostname
+		"seth.local")	 	COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
 								;;
 		#"laboratory.local.")	COMMAND="${DIRECTORY}/synergys -f --config ${HOME}/bin/synergy.conf --name samsara --debug ${DEBUG_MODE}"
-		"laboratory.local.")				COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
+		"laboratory.local")				COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
+								;;
+		"seth-pc.local")				COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
 								;;
 	esac
 
