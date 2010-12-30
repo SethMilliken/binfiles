@@ -13,62 +13,62 @@ HOSTNAME="${SHORTHOST}"
 DEBUG_MODE="NOTE"
 
 function run {
-	preconditions
-	select_network ${CONFIG_NAME}
-	exit 0
+    preconditions
+    select_network ${CONFIG_NAME}
+    exit 0
 }
 
 function autodetect {
-	#for TARGET in seth-g4.local. laboratory.local.
-	for TARGET in seth.local seth-pc.local laboratory.local
-	do
-		HOST=`scutil -r ${TARGET} | grep -q Directly && echo ${TARGET}`
-		if [ -n "${HOST}" ]
-		then
-			break
-		fi      
-	done
-	echo ${HOST}
+    #for TARGET in seth-g4.local. laboratory.local.
+    for TARGET in seth.local seth-pc.local laboratory.local
+    do
+        HOST=`scutil -r ${TARGET} | grep -q Directly && echo ${TARGET}`
+        if [ -n "${HOST}" ]
+        then
+            break
+        fi      
+    done
+    echo ${HOST}
 }
 
 function select_network {
-	case ${CONFIG_NAME} in
-		"-ls")		echo ${PRESET_NETWORK_NAMES}
-					exit 0;
-					;;
-		"work")		DESTINATION="seth.local"
-					;;
-		"home")		DESTINATION="seth-pc.local"
-					;;
-		*)			#echo Autodetected: `autodetect`
-					DESTINATION=`autodetect`
-					;;
-	esac
+    case ${CONFIG_NAME} in
+        "-ls")      echo ${PRESET_NETWORK_NAMES}
+                    exit 0;
+                    ;;
+        "work")     DESTINATION="seth.local"
+                    ;;
+        "home")     DESTINATION="seth-pc.local"
+                    ;;
+        *)          #echo Autodetected: `autodetect`
+                    DESTINATION=`autodetect`
+                    ;;
+    esac
 
-	case ${DESTINATION} in
-		# TODO: make this conditional on hostname
-		"seth.local")	 	COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
-								;;
-		#"laboratory.local.")	COMMAND="${DIRECTORY}/synergys -f --config ${HOME}/bin/synergy.conf --name samsara --debug ${DEBUG_MODE}"
-		"laboratory.local")				COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
-								;;
-		"seth-pc.local")				COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
-								;;
-	esac
+    case ${DESTINATION} in
+        # TODO: make this conditional on hostname
+        "seth.local")       COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
+                                ;;
+        #"laboratory.local.")   COMMAND="${DIRECTORY}/synergys -f --config ${HOME}/bin/synergy.conf --name samsara --debug ${DEBUG_MODE}"
+        "laboratory.local")             COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
+                                ;;
+        "seth-pc.local")                COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
+                                ;;
+    esac
 
-	${DEBUG_COMMAND} ${COMMAND} &> ${LOGFILE} &
-	echo ${DESTINATION}
-	/usr/local/bin/growlnotify -t synswitch -m "${DESTINATION}"
+    ${DEBUG_COMMAND} ${COMMAND} &> ${LOGFILE} &
+    echo ${DESTINATION}
+    /usr/local/bin/growlnotify -t synswitch -m "${DESTINATION}"
 }
 
 function preconditions {
-	case "`uname`" in
-		"Darwin")	${DEBUG_COMMAND} killall -m synergy.
-					;;
-		"OpenBSD")	;; 	
-				*)	echo "This command only works in Mac OS X with SynergyKM installed."
-					exit 1
-					;;
-	esac
+    case "`uname`" in
+        "Darwin")   ${DEBUG_COMMAND} killall -m synergy.
+                    ;;
+        "OpenBSD")  ;;  
+                *)  echo "This command only works in Mac OS X with SynergyKM installed."
+                    exit 1
+                    ;;
+    esac
 }
 run
