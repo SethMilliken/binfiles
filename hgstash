@@ -1,0 +1,16 @@
+#!/bin/sh
+# TODO: Maybe this should guard against checking out into a working copy with applied patches
+# TODO: maybe always qinit a new patch after applying all patches to handle subsequent spontaneous edits that happen because forget that I have patches applied.
+STASH_PATCH=stash.patch
+STASH_NAME=stash
+echo "## check for existing ${STASH_PATCH} and abort if it's there"
+echo "## check for existing outgoing commits that could muck up pull (if so, push them now)"
+echo "hg outgoing"
+echo "## check what patches are there, and unapply all patches"
+echo "hg qseries -v && hg qpop -a"
+echo "## create new mqueue \"$STASH_NAME\", save it as a patch, and then pop back to no patches applied"
+echo "hg qnew ${STASH_NAME} && hg export tip > ${STASH_PATCH} && hg qpop"
+echo "## get the new stuff"
+echo "hg pull && hg up"
+echo "## apply the saved state to the new stuff, verify,  and then cleanup"
+echo "hg import --no-commit ${STASH_PATCH} && hg st && hg qdelete stash && rm ${STASH_PATCH}"
