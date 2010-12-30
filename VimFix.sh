@@ -15,8 +15,8 @@ function vimfix {
 		/usr/bin/sed -i '' -es/VIMM/${ID}/ ${FULL_PATH}/PkgInfo
 		/bin/cp ~/Pictures/VimIcons/${ICON} ${FULL_PATH}/Resources/MacVim.icns
 	else
-		echo "${FULL_PATH} not found. "
-		cp -Rp ${PATH_PREFIX}/MacVim.app ${PATH_PREFIX}/${NAME}.app
+		echo "${FULL_PATH} not found."
+		cp -Rp "${PATH_PREFIX}/MacVim.app" "${PATH_PREFIX}/${NAME}.app"
 	fi
 }
 
