@@ -47,17 +47,23 @@ function select_network {
 
     case ${DESTINATION} in
         # TODO: make this conditional on hostname
-        "seth.local")       COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
+        "seth.local")           
+            case ${HOSTNAME} in
+                "SAMSARA")      COMMAND="${DIRECTORY}/synergyc -f --name samsara --debug ${DEBUG_MODE} ${DESTINATION}"
+                                ;;
+                "SETH")         COMMAND="${DIRECTORY}/synergys -f --config ${HOME}/bin/synergy.conf --name seth --debug ${DEBUG_MODE}"
+                                ;;
+            esac
                                 ;;
         #"laboratory.local.")   COMMAND="${DIRECTORY}/synergys -f --config ${HOME}/bin/synergy.conf --name samsara --debug ${DEBUG_MODE}"
-        "laboratory.local")             COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
+        "laboratory.local")     COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
                                 ;;
-        "seth-pc.local")                COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
+        "seth-pc.local")        COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
                                 ;;
     esac
 
     ${DEBUG_COMMAND} ${COMMAND} &> ${LOGFILE} &
-    echo ${DESTINATION}
+    echo ${HOSTNAME} "@" ${DESTINATION}
     /usr/local/bin/growlnotify -t synswitch -m "${DESTINATION}"
 }
 
