@@ -1,6 +1,7 @@
 #!/bin/bash
-GROWLAPP=/Library/PreferencePanes/Growl.prefPane/Contents/Resources/GrowlHelperApp.app
-GROWLMENU=/Library/PreferencePanes/Growl.prefPane/Contents/Resources/GrowlMenu.app
+GROWLHOME=${HOME}/Library/PreferencePanes
+GROWLAPP=${GROWLHOME}/Growl.prefPane/Contents/Resources/GrowlHelperApp.app
+GROWLMENU=${GROWLHOME}/Growl.prefPane/Contents/Resources/GrowlMenu.app
 NOTIFICATION_SCRIPT=/usr/local/bin/growlnotify
 
 function running {
