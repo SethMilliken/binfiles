@@ -12,7 +12,7 @@ function timestamp {
     esac
 
     TIMESTAMP=$(date +"${FORMAT}")
-    echo $TIMESTAMP | tee >(pbcopy)
+    echo -ne $TIMESTAMP | tee >(pbcopy)
 
     OLDIFS=$IFS
     IFS=    \
