@@ -4,17 +4,17 @@ TARGET_SCRIPT="~/Library/Scripts/applescripts/playpause.applescript"
 ssh ${REMOTE_SERVER} osascript ${TARGET_SCRIPT}
 STATE=`ssh ${REMOTE_SERVER} osascript << END
 tell app "iTunes"
-	activate
-	return "iTunes " &  player state
+    activate
+    return "iTunes " &  player state
 end tell
 END`
 echo $STATE
 RESULT=`ssh ${REMOTE_SERVER} osascript << END
 tell app "iTunes"
-	set currentName to (get name of current track)
-	set currentArtist to (get artist of current track)
-	set currentAlbum to (get album of current track)
-	return currentName & " – " & currentAlbum & "\r" & currentArtist
+    set currentName to (get name of current track)
+    set currentArtist to (get artist of current track)
+    set currentAlbum to (get album of current track)
+    return currentName & " – " & currentAlbum & "\r" & currentArtist
 end tell
 END`
 echo $RESULT
