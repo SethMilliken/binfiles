@@ -1,4 +1,6 @@
 #!/bin/bash
+NOTIFICATION_SCRIPT=/usr/local/bin/growlnotify
+
 function timestamp {
     case $1 in
          1)
@@ -11,10 +13,11 @@ function timestamp {
 
     TIMESTAMP=$(date +"${FORMAT}")
     echo $TIMESTAMP | tee >(pbcopy)
+
     OLDIFS=$IFS
     IFS=    \
 
-    $(which growlnotify) --identifier timestamp -a 'Terminal.app' -t copy -m "on clipboard: '"${TIMESTAMP}"'"
+    ${NOTIFICATION_SCRIPT} --identifier timestamp -a 'Terminal.app' -t copy -m "on clipboard: '"${TIMESTAMP}"'"
     IFS=$OLDIFS
 }
 
