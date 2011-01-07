@@ -2,6 +2,6 @@
 #
 # synergy active remotely
 #
+NOTIFICATION_SCRIPT="${HOME}/bin/notify"
 RESULT='samsara.local'
-/usr/local/bin/growlnotify --sticky --identifier "synergy" -a 'Divvy.app' -t "synergy" -m "${RESULT}"
-
+${NOTIFICATION_SCRIPT} $(basename $0) "true" "${RESULT}"

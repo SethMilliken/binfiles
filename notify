@@ -1,0 +1,77 @@
+#!/bin/sh
+SCRIPT=$1
+STICKY=$2
+MESSAGE=$3
+
+osascript << END
+property app_name: "${SCRIPT}"
+property isSticky: "${STICKY}"
+property message: "${MESSAGE}"
+
+on run
+  my dispatch_message()
+end run
+
+on dispatch_message()
+  if app_name is "tester" then
+    set parameters to                           \
+    {                                           \
+         notification: "Test Notification",     \
+                  app: "Test Notifications",    \
+                 icon: "Terminal",              \
+               header: "test message",          \
+                   id: "test_notification"      \
+     }
+  else if app_name is "synswitch" then
+    set parameters to                           \
+    {                                           \
+         notification: "Default Notification",  \
+                  app: "Default Notifications", \
+                 icon: "Terminal",              \
+               header: "synergy",               \
+                   id: "synact_notification"    \
+    }
+  else if app_name is "syn_local" or app_name is "syn_remote" then
+    set parameters to                           \
+    {                                           \
+         notification: "Switch Notification",   \
+                  app: "Synergy Notifications", \
+                 icon: "Divvy",                 \
+               header: "synergy",               \
+                   id: "synergy_notification"   \
+    }
+  else
+    set parameters to                           \
+    {                                           \
+         notification: "Default Notification",  \
+                  app: "Default Notifications", \
+                 icon: "Terminal",              \
+               header: "notification",          \
+                   id: "default_notification"   \
+    }
+  end if
+  my send_notification(parameters)
+end dispatch_message
+
+on send_notification(parameters)
+ tell application "GrowlHelperApp"
+   set the all_notifications to {notification of parameters}
+   set the enabled_notifications to {notification of parameters}
+   set the app_name to (app of parameters)
+   register as                                     \
+     application app_name                          \
+     all notifications all_notifications           \
+     default notifications enabled_notifications   \
+     icon of application (icon of parameters)
+   notify with                                     \
+     name (notification of parameters)             \
+     title (header of parameters)                  \
+     description message                           \
+     application name app_name                     \
+     identifier (id of parameters)                 \
+     sticky isSticky
+  end tell
+end send_notification
+
+END
+# vim:ts=2:sts=2:ft=applescript

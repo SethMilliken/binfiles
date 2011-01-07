@@ -9,6 +9,7 @@ PRESET_NETWORK_NAMES="Available Presets: work, home"
 DIRECTORY="/usr/local/bin"
 LOGFILE="${HOME}/Desktop/synergy.log"
 DEBUG_MODE="NOTE"
+NOTIFICATION_SCRIPT="${HOME}/bin/notify"
 
 function run {
     preconditions
@@ -78,7 +79,7 @@ function run_synergy {
     LOGLINE=$(echo `date +%Y-%m-%d\ %T\ %Z` '[ '${LOGENTRY}' ]')
     echo ${LOGLINE} ${COMMAND} >> ${LOGFILE}
     ${DEBUG_COMMAND} ${COMMAND} &> ${LOGFILE} &
-    /usr/local/bin/growlnotify -t synswitch -m "${LOGENTRY}"
+    ${NOTIFICATION_SCRIPT} $(basename $0) "false" "${LOGENTRY}"
 }
 
 function preconditions {
