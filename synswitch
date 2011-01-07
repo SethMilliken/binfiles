@@ -1,14 +1,13 @@
-#!/bin/bash
+#!/bin/sh
+#
 # A script to select a Synergy configuration. Will attempt to autodetect network if no argument is given.
+#
 CONFIG_NAME=$1
 #DEBUG_COMMAND=echo
 DEBUG_COMMAND=
 PRESET_NETWORK_NAMES="Available Presets: work, home"
-#DIRECTORY="/Library/PreferencePanes/SynergyKM.prefPane/Contents/Resources/Synergyd.app/Contents/Resources"
-# TODO: Use `which synergyc` here.
 DIRECTORY="/usr/local/bin"
 LOGFILE="${HOME}/Desktop/synergy.log"
-DESTINATION=""
 DEBUG_MODE="NOTE"
 
 function run {
@@ -18,7 +17,6 @@ function run {
 }
 
 function autodetect {
-    #for TARGET in seth-g4.local. laboratory.local.
     for TARGET in seth.local seth-pc.local laboratory.local
     do
         HOST=`scutil -r ${TARGET} | grep -q Directly && echo ${TARGET}`
@@ -44,33 +42,46 @@ function select_network {
                     ;;
     esac
 
-    echo "Selecting $DESTINATION"
+
     case ${DESTINATION} in
-        # TODO: make this conditional on hostname
         "seth.local")
-            case ${SHORTHOST} in
-                "SAMSARA")      COMMAND="${DIRECTORY}/synergyc -f --name samsara --debug ${DEBUG_MODE} ${DESTINATION}"
-                                ;;
-                "SETH")         COMMAND="${DIRECTORY}/synergys -f --config ${HOME}/bin/synergy.conf --name seth --debug ${DEBUG_MODE}"
-                                ;;
+            case ${HOSTNAME} in
+                "samsara.local")    run_synergy client ${DESTINATION}
+                                    ;;
+                "seth.local")       run_synergy host with "${HOME}/bin/synergy.conf"
+                                    ;;
             esac
-                                ;;
-        #"laboratory.local.")   COMMAND="${DIRECTORY}/synergys -f --config ${HOME}/bin/synergy.conf --name samsara --debug ${DEBUG_MODE}"
-        "laboratory.local")     COMMAND="${DIRECTORY}/synergyc -f --name ${SHORTHOST} --debug ${DEBUG_MODE} ${DESTINATION}"
-                                ;;
-        "seth-pc.local")        COMMAND="${DIRECTORY}/synergyc -f --name ${SHORTHOST} --debug ${DEBUG_MODE} ${DESTINATION}"
-                                ;;
+            ;;
+        "laboratory.local")         run_synergy client "seth-pc.local"
+                                    #run_synergy host with "${HOME}/bin/synergy_home.conf"
+                                    ;;
+        "seth-pc.local")            run_synergy client "samsara.local"
+                                    #run_synergy host with "${figure this out}"
+                                    ;;
+    esac
+}
+
+function run_synergy {
+    TYPE=$1
+    DESTINATION=$2
+    CONFIG=$3
+
+    case ${TYPE} in
+        "host")     COMMAND="${DIRECTORY}/synergys -f --name ${HOSTNAME} --debug ${DEBUG_MODE} --config ${CONFIG}"
+                    ;;
+        "client")   COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
+                    ;;
     esac
 
+    LOGENTRY=$(echo `date +%Y-%m-%d\ %T\ %Z` '[ '${HOSTNAME} "->" ${DESTINATION}' ]')
+    echo ${LOGENTRY} ${COMMAND} >> ${LOGFILE}
     ${DEBUG_COMMAND} ${COMMAND} &> ${LOGFILE} &
-    MESSAGE="${SHORTHOST} "@" ${DESTINATION}"
-    echo "${MESSAGE}"
-    /usr/local/bin/growlnotify -t synswitch -m "${MESSAGE}"
+    /usr/local/bin/growlnotify -t synswitch -m "${DESTINATION}"
 }
 
 function preconditions {
     case "`uname`" in
-        "Darwin")   ${DEBUG_COMMAND} killall -m synergy
+        "Darwin")   ${DEBUG_COMMAND} killall -m synergy.
                     sleep 1
                     ;;
         "OpenBSD")  ;;
