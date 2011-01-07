@@ -1,12 +1,20 @@
 #!/bin/sh
+# Usage:
+# NOTIFICATION_SCRIPT="${HOME}/bin/notify"
+# ${NOTIFICATION_SCRIPT} $(basename $0) "false" "${MESSAGE}" "${HEADER}" ${IDENTIFIER}
+#
 SCRIPT=$1
 STICKY=$2
 MESSAGE=$3
+HEADER=$4
+IDENTIFIER=$5
 
 osascript << END
 property app_name: "${SCRIPT}"
 property isSticky: "${STICKY}"
 property message: "${MESSAGE}"
+property header: "${HEADER}"
+property identifier: "${IDENTIFIER}"
 
 on run
   my dispatch_message()
@@ -31,6 +39,24 @@ on dispatch_message()
                header: "synergy",               \
                    id: "synact_notification"    \
     }
+  else if app_name is "playpause" then
+    set parameters to                           \
+    {                                           \
+         notification: "iTunes Notification",   \
+                  app: "iTunes Notifications",  \
+                 icon: "iTunes",                \
+               header: header,                  \
+                   id: "itunes_notification"    \
+    }
+  else if app_name is "grun" then
+    set parameters to                           \
+    {                                           \
+         notification: "Shell Notification",    \
+                  app: "Shell Notifications",   \
+                 icon: "Terminal",              \
+               header: header,                  \
+                   id: identifier               \
+    }
   else if app_name is "syn_local" or app_name is "syn_remote" then
     set parameters to                           \
     {                                           \
@@ -46,8 +72,8 @@ on dispatch_message()
          notification: "Default Notification",  \
                   app: "Default Notifications", \
                  icon: "Terminal",              \
-               header: "notification",          \
-                   id: "default_notification"   \
+               header: header,                  \
+                   id: identifier               \
     }
   end if
   my send_notification(parameters)
