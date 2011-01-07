@@ -1,8 +1,22 @@
 #!/bin/sh
-# Usage:
-# NOTIFICATION_SCRIPT="${HOME}/bin/notify"
-# ${NOTIFICATION_SCRIPT} $(basename $0) "false" "${MESSAGE}" "${HEADER}" ${IDENTIFIER}
 #
+# Script to facilitate posting Growl notifications.
+# Customization allows for using different themes for different message sources.
+#
+# After posting a notification with this script, go to the "Applications" tab of
+# the Growl system preference pane to customize it.
+#
+# To use in a bash script, insert the output of running the command without any
+# arguments. e.g. for vim, ":r !notify" will insert the necessary lines.
+#
+
+## Usage:
+if [ $# == 0 ]; then
+    echo 'NOTIFICATION_SCRIPT="${HOME}/bin/notify"'
+    echo '${NOTIFICATION_SCRIPT} $(basename $0) "false" "${MESSAGE}" "${HEADER}" ${IDENTIFIER} ${APP_ICON}'
+fi
+
+## Arg Name Assignment:
 SCRIPT=$1
 STICKY=$2
 MESSAGE=$3
@@ -10,6 +24,7 @@ HEADER=$4
 IDENTIFIER=$5
 APP_ICON=$6
 
+## AppleScript Notification:
 osascript << END
 property script_name:    "${SCRIPT}"
 property isSticky:       "${STICKY}"
@@ -75,6 +90,8 @@ on dispatch_message()
                header: "synergy",               \
                    id: "synergy_notification"   \
     } & defaults
+  else
+    set parameters to defaults
   end if
   my send_notification(parameters)
 end dispatch_message
@@ -120,4 +137,5 @@ on send_notification(parameters)
 end send_notification
 
 END
+
 # vim:ts=2:sts=2:ft=applescript
