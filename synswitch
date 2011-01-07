@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # A script to select a Synergy configuration. Will attempt to autodetect network if no argument is given.
 CONFIG_NAME=$1
 #DEBUG_COMMAND=echo
@@ -9,7 +9,6 @@ PRESET_NETWORK_NAMES="Available Presets: work, home"
 DIRECTORY="/usr/local/bin"
 LOGFILE="${HOME}/Desktop/synergy.log"
 DESTINATION=""
-HOSTNAME="${SHORTHOST}"
 DEBUG_MODE="NOTE"
 
 function run {
@@ -26,7 +25,7 @@ function autodetect {
         if [ -n "${HOST}" ]
         then
             break
-        fi      
+        fi
     done
     echo ${HOST}
 }
@@ -45,10 +44,11 @@ function select_network {
                     ;;
     esac
 
+    echo "Selecting $DESTINATION"
     case ${DESTINATION} in
         # TODO: make this conditional on hostname
-        "seth.local")           
-            case ${HOSTNAME} in
+        "seth.local")
+            case ${SHORTHOST} in
                 "SAMSARA")      COMMAND="${DIRECTORY}/synergyc -f --name samsara --debug ${DEBUG_MODE} ${DESTINATION}"
                                 ;;
                 "SETH")         COMMAND="${DIRECTORY}/synergys -f --config ${HOME}/bin/synergy.conf --name seth --debug ${DEBUG_MODE}"
@@ -56,22 +56,24 @@ function select_network {
             esac
                                 ;;
         #"laboratory.local.")   COMMAND="${DIRECTORY}/synergys -f --config ${HOME}/bin/synergy.conf --name samsara --debug ${DEBUG_MODE}"
-        "laboratory.local")     COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
+        "laboratory.local")     COMMAND="${DIRECTORY}/synergyc -f --name ${SHORTHOST} --debug ${DEBUG_MODE} ${DESTINATION}"
                                 ;;
-        "seth-pc.local")        COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
+        "seth-pc.local")        COMMAND="${DIRECTORY}/synergyc -f --name ${SHORTHOST} --debug ${DEBUG_MODE} ${DESTINATION}"
                                 ;;
     esac
 
     ${DEBUG_COMMAND} ${COMMAND} &> ${LOGFILE} &
-    echo ${HOSTNAME} "@" ${DESTINATION}
-    /usr/local/bin/growlnotify -t synswitch -m "${DESTINATION}"
+    MESSAGE="${SHORTHOST} "@" ${DESTINATION}"
+    echo "${MESSAGE}"
+    /usr/local/bin/growlnotify -t synswitch -m "${MESSAGE}"
 }
 
 function preconditions {
     case "`uname`" in
-        "Darwin")   ${DEBUG_COMMAND} killall -m synergy.
+        "Darwin")   ${DEBUG_COMMAND} killall -m synergy
+                    sleep 1
                     ;;
-        "OpenBSD")  ;;  
+        "OpenBSD")  ;;
                 *)  echo "This command only works in Mac OS X with SynergyKM installed."
                     exit 1
                     ;;
