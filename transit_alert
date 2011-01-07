@@ -2,7 +2,8 @@
 #
 # bus arrival notification
 #
+NOTIFICATION_SCRIPT="${HOME}/bin/notify"
 TRANSIT_PAGE="http://trimet.org/arrivals/popup_tracker?locids=7747"
 open -a 'Google Chrome.app' ${TRANSIT_PAGE}
 RESULT="watch for bus arrival times"
-/usr/local/bin/growlnotify --identifier "transit_alert" -a 'Network Utility.app' -t "Transit Alert" -m "${RESULT}"
+${NOTIFICATION_SCRIPT} $(basename $0) "false" "${RESULT}" "Transit Alert"

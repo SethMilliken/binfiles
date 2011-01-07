@@ -11,80 +11,69 @@ IDENTIFIER=$5
 APP_ICON=$6
 
 osascript << END
-property app_name: "${SCRIPT}"
-property isSticky: "${STICKY}"
-property message: "${MESSAGE}"
-property header: "${HEADER}"
-property identifier: "${IDENTIFIER}"
-property app_icon: "${APP_ICON}"
+property script_name:    "${SCRIPT}"
+property isSticky:       "${STICKY}"
+property message:        "${MESSAGE}"
+property header:         "${HEADER}"
+property identifier:     "${IDENTIFIER}"
+property app_icon:       "${APP_ICON}"
 
 on run
   my dispatch_message()
 end run
 
 on dispatch_message()
-  if app_name is "tester" then
-    set parameters to                           \
+  set defaults to                               \
+  {                                             \
+       notification: "Default Notification",    \
+               icon: app_icon,                  \
+             header: header,                    \
+         script_name: script_name,              \
+                 id: identifier                 \
+  }
+  if script_name is "tester" then
+    set parameters to defaults &                \
     {                                           \
          notification: "Test Notification",     \
-                  app: "Test Notifications",    \
-                 icon: "Terminal",              \
-               header: "test message",          \
-                   id: "test_notification"      \
+               header: "test message"           \
      }
-  else if app_name is "synswitch" then
-    set parameters to                           \
+  else if script_name is "synswitch" then
+    set parameters to defaults &                \
     {                                           \
-         notification: "Default Notification",  \
-                  app: "Default Notifications", \
-                 icon: "Terminal",              \
-               header: "synergy",               \
-                   id: "synact_notification"    \
+         notification: "Default Notification"   \
     }
-  else if app_name is "currentstatus" then
-    set parameters to                           \
+  else if script_name is "currentstatus" then
+    set parameters to defaults &                \
     {                                           \
          notification: "Tasks Notification",    \
-                  app: "Tasks Notifications",   \
-                 icon: "Tasks.app",             \
-               header: header,                  \
-                   id: identifier               \
+                 icon: "Tasks.app"              \
     }
-  else if app_name is "playpause" then
-    set parameters to                           \
+  else if script_name is "transit_alert" then
+    set parameters to defaults &                \
+    {                                           \
+         notification: "Transit Notification",  \
+                 icon: "Network Utility.app"    \
+    }
+  else if script_name is "playpause" then
+    set parameters to defaults &                \
     {                                           \
          notification: "iTunes Notification",   \
-                  app: "iTunes Notifications",  \
                  icon: "iTunes",                \
-               header: header,                  \
                    id: "itunes_notification"    \
     }
-  else if app_name is "grun" then
-    set parameters to                           \
+  else if script_name is "grun" then
+    set parameters to defaults &                \
     {                                           \
-         notification: "Shell Notification",    \
-                  app: "Shell Notifications",   \
-                 icon: "Terminal",              \
-               header: header,                  \
-                   id: identifier               \
+         notification: "Shell Notification"     \
     }
-  else if app_name is "syn_local" or app_name is "syn_remote" then
-    set parameters to                           \
+  else if script_name is "syn_local" or script_name is "syn_remote" then
+    set parameters to defaults &                \
     {                                           \
          notification: "Switch Notification",   \
                   app: "Synergy Notifications", \
                  icon: "Divvy",                 \
                header: "synergy",               \
                    id: "synergy_notification"   \
-    }
-  else
-    set parameters to                           \
-    {                                           \
-         notification: "Default Notification",  \
-                  app: "Default Notifications", \
-                 icon: app_icon,                \
-               header: header,                  \
-                   id: identifier               \
     }
   end if
   my send_notification(parameters)
@@ -94,18 +83,38 @@ on send_notification(parameters)
  tell application "GrowlHelperApp"
    set the all_notifications to {notification of parameters}
    set the enabled_notifications to {notification of parameters}
-   set the app_name to (app of parameters)
+   set the notification_name to (notification of parameters)
+   try
+       set the app_name to (app of parameters)
+   on error
+       set app_name to (notification of parameters) & "s"
+   end try
+   set message_header to (header of parameters)
+   if message_header is "" then
+       set message_header to (script_name of parameters)
+   end if
+   set message_id to (id of parameters)
+   if message_id is "" then
+       set message_id to script_name & "_notification"
+   end if
+   set app_icon to (icon of parameters)
+   if app_icon is "" then
+       set app_icon to "Terminal.app"
+   end if
+   if isSticky is "" then
+       set isSticky to "false"
+   end if
    register as                                     \
      application app_name                          \
      all notifications all_notifications           \
      default notifications enabled_notifications   \
-     icon of application (icon of parameters)
+     icon of application app_icon
    notify with                                     \
-     name (notification of parameters)             \
-     title (header of parameters)                  \
+     name notification_name                        \
+     title message_header                          \
      description message                           \
      application name app_name                     \
-     identifier (id of parameters)                 \
+     identifier message_id                         \
      sticky isSticky
   end tell
 end send_notification
