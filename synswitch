@@ -68,15 +68,17 @@ function run_synergy {
 
     case ${TYPE} in
         "host")     COMMAND="${DIRECTORY}/synergys -f --name ${HOSTNAME} --debug ${DEBUG_MODE} --config ${CONFIG}"
+                    LOGENTRY=$(echo ${HOSTNAME} "->" ${CONFIG})
                     ;;
         "client")   COMMAND="${DIRECTORY}/synergyc -f --name ${HOSTNAME} --debug ${DEBUG_MODE} ${DESTINATION}"
+                    LOGENTRY=$(echo ${HOSTNAME} "->" ${DESTINATION})
                     ;;
     esac
 
-    LOGENTRY=$(echo `date +%Y-%m-%d\ %T\ %Z` '[ '${HOSTNAME} "->" ${DESTINATION}' ]')
-    echo ${LOGENTRY} ${COMMAND} >> ${LOGFILE}
+    LOGLINE=$(echo `date +%Y-%m-%d\ %T\ %Z` '[ '${LOGENTRY}' ]')
+    echo ${LOGLINE} ${COMMAND} >> ${LOGFILE}
     ${DEBUG_COMMAND} ${COMMAND} &> ${LOGFILE} &
-    /usr/local/bin/growlnotify -t synswitch -m "${DESTINATION}"
+    /usr/local/bin/growlnotify -t synswitch -m "${LOGENTRY}"
 }
 
 function preconditions {
