@@ -5,6 +5,7 @@
 # TODO: supporting vim function to retreive preformatted values?
 # TOOD: add line about adding to crontab & what the entry should look like
 # */15 * * * * /Users/seth/bin/currentstatus 1&> /dev/null
+NOTIFICATION_SCRIPT="${HOME}/bin/notify"
 STATE="you should..."
 if [ ${HOSTNAME} == "seth.local" ]; then
     FILE="${HOME}/sandbox/work/janrain.tst.txt"
@@ -13,4 +14,4 @@ else
 fi
 RESULT=`cat ${FILE} | head -5 | tail -4 | awk -F'201.-' '{print $1}'`
 echo $RESULT
-/usr/local/bin/growlnotify --identifier "currentstatus" -a 'Tasks.app' -t "${STATE}" -m "${RESULT}"
+${NOTIFICATION_SCRIPT} $(basename $0) "false" "${RESULT}" "${STATE}" "currentstatus"

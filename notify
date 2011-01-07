@@ -8,6 +8,7 @@ STICKY=$2
 MESSAGE=$3
 HEADER=$4
 IDENTIFIER=$5
+APP_ICON=$6
 
 osascript << END
 property app_name: "${SCRIPT}"
@@ -15,6 +16,7 @@ property isSticky: "${STICKY}"
 property message: "${MESSAGE}"
 property header: "${HEADER}"
 property identifier: "${IDENTIFIER}"
+property app_icon: "${APP_ICON}"
 
 on run
   my dispatch_message()
@@ -38,6 +40,15 @@ on dispatch_message()
                  icon: "Terminal",              \
                header: "synergy",               \
                    id: "synact_notification"    \
+    }
+  else if app_name is "currentstatus" then
+    set parameters to                           \
+    {                                           \
+         notification: "Tasks Notification",    \
+                  app: "Tasks Notifications",   \
+                 icon: "Tasks.app",             \
+               header: header,                  \
+                   id: identifier               \
     }
   else if app_name is "playpause" then
     set parameters to                           \
@@ -71,7 +82,7 @@ on dispatch_message()
     {                                           \
          notification: "Default Notification",  \
                   app: "Default Notifications", \
-                 icon: "Terminal",              \
+                 icon: app_icon,                \
                header: header,                  \
                    id: identifier               \
     }
