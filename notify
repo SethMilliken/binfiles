@@ -14,6 +14,9 @@
 if [ $# == 0 ]; then
     echo 'NOTIFICATION_SCRIPT="${HOME}/bin/notify"'
     echo '${NOTIFICATION_SCRIPT} $(basename $0) "false" "${MESSAGE}" "${HEADER}" ${IDENTIFIER} ${APP_ICON}'
+    echo '# notify "Header" -m "Message"'
+    echo '# notify "Header" "true" "Message" # for sticky'
+    exit 0
 fi
 
 ## Arg Name Assignment:
@@ -137,5 +140,4 @@ on send_notification(parameters)
 end send_notification
 
 END
-
 # vim:ts=2:sts=2:ft=applescript
