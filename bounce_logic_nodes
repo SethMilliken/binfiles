@@ -1,0 +1,8 @@
+#!/bin/bash
+REMOTE_SERVER="notable" # Defined in ~/.ssh/config
+TARGET_SCRIPT="logic_node_restart.sh"
+NOTIFICATION_SCRIPT="${HOME}/bin/notify"
+
+RESULT=$(ssh ${REMOTE_SERVER} ${TARGET_SCRIPT})
+echo $RESULT
+${NOTIFICATION_SCRIPT} $(basename $0) "false" "${RESULT}"
