@@ -16,14 +16,16 @@ function toggle_app {
 
 function bounce_app {
     kill_app
+    sleep 1
     open_app
     echo ${APPNAME} restarted on ${HOSTNAME}.
 }
 
 function kill_app {
-osascript <<END
-    tell app "${APPNAME}" to quit
-END
+killall -m "${APPNAME}"
+#osascript <<END
+#    tell app "${APPNAME}" to quit
+#END
 }
 
 function open_app {
