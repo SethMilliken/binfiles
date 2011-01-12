@@ -19,4 +19,5 @@ while argv:
     else:
         right = arg
 
-execlp("opendiff", "opendiff", left, right)
+#execlp("opendiff", "opendiff", left, right)
+execlp("vimdiff", "vimdiff", left, right)
