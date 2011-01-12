@@ -47,7 +47,8 @@ on dispatch_message()
                icon: app_icon,                  \
              header: header,                    \
          script_name: script_name,              \
-                 id: identifier                 \
+                 id: identifier,                \
+           priority: 0                          \
   }
   if script_name is "tester" then
     set parameters to                           \
@@ -91,7 +92,8 @@ on dispatch_message()
                   app: "Synergy Notifications", \
                  icon: "Divvy",                 \
                header: "synergy",               \
-                   id: "synergy_notification"   \
+                   id: "synergy_notification",  \
+             priority: -2                       \
     } & defaults
   else
     set parameters to defaults
@@ -109,6 +111,10 @@ on send_notification(parameters)
    on error
        set app_name to (notification of parameters) & "s"
    end try
+   set message_priority to (priority of parameters)
+   if message_priority is "" then
+       set message_priority to 0
+   end if
    set message_header to (header of parameters)
    if message_header is "" then
        set message_header to (script_name of parameters)
@@ -135,6 +141,7 @@ on send_notification(parameters)
      description message                           \
      application name app_name                     \
      identifier message_id                         \
+     priority message_priority                     \
      sticky isSticky
   end tell
 end send_notification
