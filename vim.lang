@@ -1,0 +1,37 @@
+# Vimscript language definition file
+#
+# Author: Seth Milliken
+#   Mail: seth@araxia.netseth@araxia.netseth@araxia.netseth@araxia.net
+#   Date: 2011-01-11
+# ------------------------------------------
+# This file is a part of highlight, a free source code converter released under the GPL.
+#
+# The file is used to describe keywords and special symbols of programming languages.
+# See README in the highlight directory for details.
+#
+# New definition files for future releases of highlight are always appreciated ;)
+#
+# ----------
+# andre.simon1@gmx.de
+# http:/www.andre-simon.de/
+
+$DESCRIPTION=vimscript
+
+$KEYWORDS(kwb)= break continue default in false with for this try while if do else return null case catch true let function command au augroup END endif finish endwhile endfunction call
+
+$KEYWORDS(kwa)=regex(.map|.:)
+
+$KEYWORDS(kwd)=regex((\w+)\s*\()
+
+$SL_COMMENT=regex(^\".*$)
+
+$ML_COMMENT=
+
+# $STRINGDELIMITERS=regex(\"[^{}\s]|'")
+$STRINGDELIMITERS= """ '''
+
+$IGNORECASE=false
+
+#$ESCCHAR=regex(\\\d{3}|\\x\p{XDigit}{2}|\\[ntvbrfa\\\?'"])
+
+$SYMBOLS= ( ) [ ] { } , ; : & | < > !  = / * %  + - . && ||

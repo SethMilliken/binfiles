@@ -1,0 +1,62 @@
+# seth.style
+#
+# Custom style for QLColorCode
+#
+# Install here:
+# ~/Library/QuickLook/QLColorCode.qlgenerator/Contents/Resources/highlight/share/highlight/themes/seth.style
+#
+# Syntax is for 'highlight' tool, a universal source code converter.
+
+$FONTSIZE=9
+$BGCOLOUR=#000000                   # black
+$DEFAULTCOLOUR=#ffefd5              # papayawhip
+$KW-GROUP(kwa)=#f0f8ff              # aliceblue
+$KW-GROUP(kwb)=#d1c79e              # tan
+$KW-GROUP(kwc)=#ffffe0              # lightyellow
+$KW-GROUP(kwd)=#add8e6              # skyblue
+$NUMBER=#4682b4                     # steelblue
+$ESCAPECHAR=#800000                 # maroon
+$STRING=#ffd700                     # golden
+$STRING-DIRECTIVE=#b8860b           # darkgoldenrod
+$COMMENT=#c0c0c0                    # silver; multiline comment
+$SL-COMMENT=#9C928C                 # lightgrey; single line comment
+$DIRECTIVE=#ff8c00                  # darkorange
+$LINE=#778899                       # lightslategrey
+$SYMBOL=#ffa500                     # orange
+$MARK-LINE=#ff00ff
+
+# Other colors to consider:
+# #7B2421 blood red
+# #394e62 grayish blue
+# "antiquewhite":         '#faebd7'
+# "beige":                '#f5f5dc'
+# "bisque":               '#ffe4c4'
+# "black":                '#000000'
+# "blanchedalmond":       '#ffebcd'
+# "burlywood":            '#deb887'
+# "cornsilk":             '#fff8dc'
+# "floralwhite":          '#fffaf0'
+# "gainsboro":            '#dcdcdc'
+# "ghostwhite":           '#f8f8ff'
+# "honeydew":             '#f0fff0'
+# "ivory":                '#fffff0'
+# "khaki":                '#f0e68c'
+# "lemonchiffon":         '#fffacd'
+# "lightgoldenrodyellow": '#fafad2'
+# "lightyellow":          '#ffffe0'
+# "linen":                '#faf0e6'
+# "mintcream":            '#f5fffa'
+# "mistyrose":            '#ffe4e1'
+# "palegoldenrod":        '#eee8aa'
+# "tan":                  '#d2b48c'
+# "peachpuff":            '#ffdab9'
+# "wheat":                '#f5deb3'
+# "moccasin":             '#ffe4b5'
+# "navajowhite":          '#ffdead'
+# "papayawhip":           '#ffefd5'
+# "seashell":             '#fff5ee'
+# "silver":               '#c0c0c0'
+# "steelblue":            '#4682b4'
+# "lightslategrey":       '#778899'
+# "lightsteelblue":       '#b0c4de'
+# "maroon":               '#800000'
