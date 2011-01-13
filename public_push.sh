@@ -20,7 +20,12 @@ function pushfiles {
 	MERGE=$4
 
 	echo "Pushing from " ${LOCAL_REPO} " to " ${REMOTE_REPO}
-	hg --verbose convert -s hg -d hg --filemap ${LOCAL_REPO}/publicfiles.map ${LOCAL_REPO} ${REMOTE_REPO}  && pushd ${REMOTE_REPO} && hg merge tip && hg ci -m"Publishing " ${NAME} " files to bitbucket.org." && hg push
+	hg --verbose convert -s hg -d hg --filemap ${LOCAL_REPO}/publicfiles.map ${LOCAL_REPO} ${REMOTE_REPO}  && pushd ${REMOTE_REPO}
+        if [[ $? == "0" ]]; then
+           hg merge tip && hg ci -m"Publishing " ${NAME} " files to bitbucket.org." && hg push
+        else
+           echo "Ran into a problem. Have a look at $0."
+        fi
 	popd
 }
 
