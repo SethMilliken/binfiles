@@ -2,20 +2,25 @@
 #
 # Script to facilitate posting Growl notifications.
 # Customization allows for using different themes for different message sources.
+# Can also act as a more versatile replacement for growlnotify.
 #
 # After posting a notification with this script, go to the "Applications" tab of
 # the Growl system preference pane to customize it.
 #
-# To use in a bash script, insert the output of running the command without any
-# arguments. e.g. for vim, ":r !notify" will insert the necessary lines.
-#
+# Author:   Seth Milliken <seth_vim@araxia.net>
+# Date:     2011-01-14 13:45:46 PST
+# Version:  0.1
 
 ## Usage:
 if [ $# == 0 ]; then
-    echo 'NOTIFICATION_SCRIPT="${HOME}/bin/notify"'
+    echo 'NOTIFICATION_SCRIPT=${HOME}'"/bin/$(basename $0)"
     echo '${NOTIFICATION_SCRIPT} $(basename $0) "false" "${MESSAGE}" "${HEADER}" ${IDENTIFIER} ${APP_ICON}'
-    echo '# notify "Header" -m "Message"'
-    echo '# notify "Header" "true" "Message" # for sticky'
+    echo
+    echo "# Use the lines above to use $(basename $0) in a bash script. (n.b. in vim \":r !$(basename $0)\", then normal vipd this para.)"
+    echo '# Lines below for commandline use.'
+    echo "# $(basename $0) \"Header\" -m \"Message\""
+    echo "# $(basename $0) \"Header\" \"true\" \"Message\" # for sticky"
+    echo
     exit 0
 fi
 
