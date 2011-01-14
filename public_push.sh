@@ -20,24 +20,28 @@ function pushfiles {
 	MERGE=$4
 
 	echo "Pushing from " ${LOCAL_REPO} " to " ${REMOTE_REPO}
-	hg --verbose convert -s hg -d hg --filemap ${LOCAL_REPO}/publicfiles.map ${LOCAL_REPO} ${REMOTE_REPO}  && pushd ${REMOTE_REPO}
+	local command
+        command="hg --verbose convert -s hg -d hg --filemap ${LOCAL_REPO}/publicfiles.map ${LOCAL_REPO} ${REMOTE_REPO}"
+        echo $command
+        $command
         if [[ $? == "0" ]]; then
-           hg merge tip && hg ci -m"Publishing " ${NAME} " files to bitbucket.org." && hg push
+            pushd "${REMOTE_REPO}"
+            command="hg merge tip && hg ci -m\"Publishing \" ${NAME} \" files to bitbucket.org.\" && hg push"
+            popd
         else
            echo "Ran into a problem. Have a look at $0."
         fi
-	popd
 }
 
 case "${NAME}" in
 	scpt)
-		pushfiles /Users/seth/bin ${REMOTE_REPO} bin
+		pushfiles /Users/seth/Library/Scripts/applescripts ${REMOTE_REPO} applescripts
 		;;
 	vim)
 		pushfiles /Users/seth/.vim ${REMOTE_REPO} vim 
 		;;
 	bin)
-		pushfiles /Users/seth/Library/Scripts/applescripts ${REMOTE_REPO} applescripts
+		pushfiles /Users/seth/bin ${REMOTE_REPO} bin
 		;;
 	*)
 		echo "Valid targets are: scpt, bin, vim"
