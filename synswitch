@@ -18,7 +18,7 @@ function run {
 }
 
 function autodetect {
-    for TARGET in seth.local seth-pc.local laboratory.local
+    for TARGET in seth-pc.local seth.local laboratory.local
     do
         HOST=`scutil -r ${TARGET} | grep -q Directly && echo ${TARGET}`
         if [ -n "${HOST}" ]
@@ -53,10 +53,10 @@ function select_network {
                                     ;;
             esac
             ;;
-        "laboratory.local")         run_synergy client "seth-pc.local"
+        "laboratory.local")         run_synergy client "laboratory.local"
                                     #run_synergy host with "${HOME}/bin/synergy_home.conf"
                                     ;;
-        "seth-pc.local")            run_synergy client "samsara.local"
+        "seth-pc.local")            run_synergy client "seth-pc.local"
                                     #run_synergy host with "${figure this out}"
                                     ;;
     esac
