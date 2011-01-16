@@ -38,6 +38,8 @@ function select_network {
                     ;;
         "home")     DESTINATION="seth-pc.local"
                     ;;
+        "lab")     DESTINATION="laboratory.local"
+                    ;;
         *)          #echo Autodetected: `autodetect`
                     DESTINATION=`autodetect`
                     ;;
@@ -53,9 +55,14 @@ function select_network {
                                     ;;
             esac
             ;;
-        "laboratory.local")         run_synergy client "laboratory.local"
-                                    #run_synergy host with "${HOME}/bin/synergy_home.conf"
+        "laboratory.local")
+            case ${HOSTNAME} in
+                "samsara.local")    run_synergy client ${DESTINATION}
                                     ;;
+                "laboratory.local") run_synergy host with "${HOME}/bin/synergy-lab.conf"
+                                    ;;
+            esac
+            ;;
         "seth-pc.local")            run_synergy client "seth-pc.local"
                                     #run_synergy host with "${figure this out}"
                                     ;;
