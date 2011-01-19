@@ -35,13 +35,13 @@ function pushfiles {
 
 case "${NAME}" in
 	scpt)
-		pushfiles /Users/seth/Library/Scripts/applescripts ${REMOTE_REPO} applescripts
+		pushfiles /Users/seth/Library/Scripts/applescripts ${REMOTE_REPO}/applescripts applescripts
 		;;
 	vim)
-		pushfiles /Users/seth/.vim ${REMOTE_REPO} vim 
+		pushfiles /Users/seth/.vim ${REMOTE_REPO}/vim vim 
 		;;
 	bin)
-		pushfiles /Users/seth/bin ${REMOTE_REPO} bin
+		pushfiles /Users/seth/bin ${REMOTE_REPO}/bin bin
 		;;
 	*)
 		echo "Valid targets are: scpt, bin, vim"
