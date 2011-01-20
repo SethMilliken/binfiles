@@ -51,7 +51,7 @@ function select_network {
             case ${HOSTNAME} in
                 "samsara.local")    run_synergy client ${DESTINATION}
                                     ;;
-                "seth.local")       run_synergy host with "${HOME}/bin/synergy.conf"
+                "seth.local")       run_synergy host with "${HOME}/bin/synergy.conf"; ssh samsara synswitch work
                                     ;;
             esac
             ;;
@@ -59,7 +59,7 @@ function select_network {
             case ${HOSTNAME} in
                 "samsara.local")    run_synergy client ${DESTINATION}
                                     ;;
-                "laboratory.local") run_synergy host with "${HOME}/bin/synergy-lab.conf"
+                "laboratory.local") run_synergy host with "${HOME}/bin/synergy-lab.conf"; ssh samsara synswitch lab
                                     ;;
             esac
             ;;
