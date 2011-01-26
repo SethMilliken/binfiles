@@ -6,7 +6,11 @@ CONFIG_NAME=$1
 #DEBUG_COMMAND=echo
 DEBUG_COMMAND=
 PRESET_NETWORK_NAMES="Available Presets: work, home"
-DIRECTORY="/usr/local/bin"
+if [[ -d /usr/local/bin/synergyc ]]; then
+    DIRECTORY="/usr/local/bin"
+else
+    DIRECTORY="/opt/local/bin"
+fi
 LOGFILE="${HOME}/Desktop/synergy.log"
 DEBUG_MODE="NOTE"
 NOTIFICATION_SCRIPT="${HOME}/bin/notify"
@@ -51,7 +55,7 @@ function select_network {
             case ${HOSTNAME} in
                 "samsara.local")    run_synergy client ${DESTINATION}
                                     ;;
-                "seth.local")       run_synergy host with "${HOME}/bin/synergy.conf"; ssh samsara synswitch work
+                "seth.local")       run_synergy host with "${HOME}/bin/synergy.conf"; sleep 1; ssh samsara synswitch work
                                     ;;
             esac
             ;;
@@ -59,7 +63,7 @@ function select_network {
             case ${HOSTNAME} in
                 "samsara.local")    run_synergy client ${DESTINATION}
                                     ;;
-                "laboratory.local") run_synergy host with "${HOME}/bin/synergy-lab.conf"; ssh samsara synswitch lab
+                "laboratory.local") run_synergy host with "${HOME}/bin/synergy-lab.conf"; sleep 1; ssh samsara synswitch lab
                                     ;;
             esac
             ;;
