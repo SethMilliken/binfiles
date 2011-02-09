@@ -22,6 +22,7 @@ function vimfix {
 
 vimfix VIMM MacVim /Applications VimGreen.icns
 vimfix VIMH VimHelp /Applications VimGrey.icns
+vimfix VIMT TwitVim /Applications VimBlue.icns
 vimfix VIM8 Scratch /Applications VimGrey.icns
 vimfix VIM7 SourceCode /Applications VimBlue.icns
 vimfix VIM6 Research /Applications VimGrey.icns

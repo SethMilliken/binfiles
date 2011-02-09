@@ -62,7 +62,7 @@ case "$name" in
 		gui=true
 		;;
 	*vimperator)
-		macvimName="Tasks.app"
+		macvimName="Scratch.app"
 		opts="$opts --remote-tab-wait-silent"
 		gui=true
 		;;
