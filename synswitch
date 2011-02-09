@@ -6,7 +6,7 @@ CONFIG_NAME=$1
 #DEBUG_COMMAND=echo
 DEBUG_COMMAND=
 PRESET_NETWORK_NAMES="Available Presets: work, home"
-if [[ -d /usr/local/bin/synergyc ]]; then
+if [[ -f /usr/local/bin/synergyc ]]; then
     DIRECTORY="/usr/local/bin"
 else
     DIRECTORY="/opt/local/bin"
@@ -40,9 +40,10 @@ function select_network {
                     ;;
         "work")     DESTINATION="seth.local"
                     ;;
-        "home")     DESTINATION="seth-pc.local"
+        "home")     DESTINATION="samsara.local"
+                    # DESTINATION="seth-pc.local"
                     ;;
-        "lab")     DESTINATION="laboratory.local"
+        "lab")      DESTINATION="laboratory.local"
                     ;;
         *)          #echo Autodetected: `autodetect`
                     DESTINATION=`autodetect`
@@ -56,6 +57,14 @@ function select_network {
                 "samsara.local")    run_synergy client ${DESTINATION}
                                     ;;
                 "seth.local")       run_synergy host with "${HOME}/bin/synergy.conf"; sleep 1; ssh samsara synswitch work
+                                    ;;
+            esac
+            ;;
+        "samsara.local")
+            case ${HOSTNAME} in
+                "laboratory.local")    run_synergy client ${DESTINATION}
+                                    ;;
+                "samsara.local") run_synergy host with "${HOME}/bin/synergy.conf"; sleep 1; ssh laboratory synswitch home
                                     ;;
             esac
             ;;
