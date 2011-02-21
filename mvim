@@ -66,6 +66,11 @@ case "$name" in
 		opts="$opts --remote-tab-wait-silent"
 		gui=true
 		;;
+	gvimdiff)
+		macvimName="MacVim.app"
+		opts="$opts --remote-tab-silent"
+		gui=true
+		;;
 esac
 
 if [ -z "$VIM_APP_DIR" ]
