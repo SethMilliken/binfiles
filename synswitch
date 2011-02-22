@@ -22,7 +22,7 @@ function run {
 }
 
 function autodetect {
-    for TARGET in seth-pc.local seth.local laboratory.local
+    for TARGET in samsara.local seth-pc.local seth.local laboratory.local
     do
         HOST=`scutil -r ${TARGET} | grep -q Directly && echo ${TARGET}`
         if [ -n "${HOST}" ]
