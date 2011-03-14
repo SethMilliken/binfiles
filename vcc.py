@@ -6,4 +6,4 @@ dispatcher = {
 		'hg incoming' : '/Users/seth/sandbox/code/work/sb'
 		}
 for command, path in dispatcher:
-	os.execvp(command, path)     
+	os.execvp(command, path)
