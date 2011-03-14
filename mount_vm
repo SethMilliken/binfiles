@@ -5,20 +5,20 @@
 
 DEBUG=
 #DEBUG=echo
-HOST=seth@sethtest.janrain.com
+HOST=dev
 MOUNTPOINT=${HOME}/sandbox/work/vm
 VOLUMENAME=vm
 
 if [ -d ${MOUNTPOINT} ]; then
-    if [ "$1" == "clean" ]; then
-        umount -f ${MOUNTPOINT}
-    fi
-    if [ ! $(ls ${MOUNTPOINT} 2> /dev/null | wc -l) -gt "0" ]; then
-            ${DEBUG} sshfs ${HOST}: ${MOUNTPOINT} -oauto_cache,reconnect,volname=${VOLUMENAME}
-            ps axwww | grep sshfs
-    else
-            echo "Mount directory not empty: \"${MOUNTPOINT}\""
-    fi
+    echo "Creating missing mount directory : \"${MOUNTPOINT}\""
+    mkdir -p ${MOUNTPOINT}
+fi
+if [ "$1" == "clean" ]; then
+    umount -f ${MOUNTPOINT}
+fi
+if [ ! $(ls ${MOUNTPOINT} 2> /dev/null | wc -l) -gt "0" ]; then
+    ${DEBUG} sshfs ${HOST}: ${MOUNTPOINT} -oauto_cache,reconnect,volname=${VOLUMENAME}
+    ps axwww | grep sshfs
 else
-    echo "Mount directory does not exist: \"${MOUNTPOINT}\""
+    echo "Mount directory not empty: \"${MOUNTPOINT}\""
 fi
