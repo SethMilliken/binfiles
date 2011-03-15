@@ -3,5 +3,9 @@
 # synergy active remotely
 #
 NOTIFICATION_SCRIPT="${HOME}/bin/notify"
-RESULT='samsara.local'
+if [[ "${HOSTNAME}" == "samsara.local" ]]; then
+    RESULT='laboratory.local'
+else
+    RESULT='samsara.local'
+fi
 ${NOTIFICATION_SCRIPT} $(basename $0) "true" "${RESULT}"

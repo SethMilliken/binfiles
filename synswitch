@@ -6,7 +6,11 @@ CONFIG_NAME=$1
 #DEBUG_COMMAND=echo
 DEBUG_COMMAND=
 PRESET_NETWORK_NAMES="Available Presets: work, home"
-DIRECTORY="/usr/local/bin"
+if [[ -f /usr/local/bin/synergyc ]]; then
+    DIRECTORY="/usr/local/bin"
+else
+    DIRECTORY="/opt/local/bin"
+fi
 LOGFILE="${HOME}/Desktop/synergy.log"
 DEBUG_MODE="NOTE"
 NOTIFICATION_SCRIPT="${HOME}/bin/notify"
@@ -18,7 +22,7 @@ function run {
 }
 
 function autodetect {
-    for TARGET in seth-pc.local seth.local laboratory.local
+    for TARGET in samsara.local seth-pc.local seth.local laboratory.local
     do
         HOST=`scutil -r ${TARGET} | grep -q Directly && echo ${TARGET}`
         if [ -n "${HOST}" ]
@@ -36,9 +40,10 @@ function select_network {
                     ;;
         "work")     DESTINATION="seth.local"
                     ;;
-        "home")     DESTINATION="seth-pc.local"
+        "home")     DESTINATION="samsara.local"
+                    # DESTINATION="seth-pc.local"
                     ;;
-        "lab")     DESTINATION="laboratory.local"
+        "lab")      DESTINATION="laboratory.local"
                     ;;
         *)          #echo Autodetected: `autodetect`
                     DESTINATION=`autodetect`
@@ -51,7 +56,15 @@ function select_network {
             case ${HOSTNAME} in
                 "samsara.local")    run_synergy client ${DESTINATION}
                                     ;;
-                "seth.local")       run_synergy host with "${HOME}/bin/synergy.conf"; ssh samsara synswitch work
+                "seth.local")       run_synergy host with "${HOME}/bin/synergy.conf"; sleep 1; ssh samsara synswitch work
+                                    ;;
+            esac
+            ;;
+        "samsara.local")
+            case ${HOSTNAME} in
+                "laboratory.local")    run_synergy client ${DESTINATION}
+                                    ;;
+                "samsara.local") run_synergy host with "${HOME}/bin/synergy.conf"; sleep 1; ssh laboratory synswitch home
                                     ;;
             esac
             ;;
@@ -59,7 +72,7 @@ function select_network {
             case ${HOSTNAME} in
                 "samsara.local")    run_synergy client ${DESTINATION}
                                     ;;
-                "laboratory.local") run_synergy host with "${HOME}/bin/synergy-lab.conf"; ssh samsara synswitch lab
+                "laboratory.local") run_synergy host with "${HOME}/bin/synergy-lab.conf"; sleep 1; ssh samsara synswitch lab
                                     ;;
             esac
             ;;

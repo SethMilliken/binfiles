@@ -1,4 +1,5 @@
 #!/bin/sh
+# Snapshot 57
 #
 # This shell script passes all its arguments to the binary inside the
 # MacVim.app application bundle.  If you make links to this script as view,
@@ -13,23 +14,37 @@
 # or by un-commenting and editing the following line:
 # VIM_APP_DIR=/Applications
 
-# Peek at the name used to invoke this script, and set options
+if [ -z "$VIM_APP_DIR" ]
+then
+	myDir="`dirname "$0"`"
+	myAppDir="$myDir/../Applications"
+	for i in ~/Applications ~/Applications/vim $myDir $myDir/vim $myAppDir $myAppDir/vim /Applications /Applications/vim /Applications/Utilities /Applications/Utilities/vim; do
+		if [ -x "$i/MacVim.app" ]; then
+			VIM_APP_DIR="$i"
+			break
+		fi
+	done
+fi
+if [ -z "$VIM_APP_DIR" ]
+then
+	echo "Sorry, cannot find MacVim.app.  Try setting the VIM_APP_DIR environment variable to the directory containing MacVim.app."
+	exit 1
+fi
+binary="$VIM_APP_DIR/MacVim.app/Contents/MacOS/Vim"
+
+# Next, peek at the name used to invoke this script, and set options
 # accordingly.
 
 name="`basename "$0"`"
 gui=
-opts=""
+opts=
 
 # GUI mode, implies forking
 case "$name" in m*|g*|rm*|rg*) gui=true ;; esac
 
-# Nofork
-case "$name" in *n) opts="$opts -f";; esac
-
 # Restricted mode
 case "$name" in r*) opts="$opts -Z";; esac
 
-macvimName="MacVim.app"
 # vimdiff, view, and ex mode
 case "$name" in
 	*vimdiff)
@@ -41,57 +56,7 @@ case "$name" in
 	*ex)
 		opts="$opts -e"
 		;;
-	*tvim)
-		macvimName="Tasks.app"
-		opts="$opts --remote-tab-wait-silent"
-		gui=true
-		;;
-	*svim)
-		macvimName="SourceCode.app"
-		opts="$opts --remote-tab-wait-silent"
-		gui=true
-		;;
-	*hvim)
-		macvimName="Research.app"
-		opts="$opts --remote-tab-wait-silent"
-		gui=true
-		;;
-	*wvim)
-		macvimName="Vimwiki.app"
-		opts="$opts --remote-tab-wait-silent"
-		gui=true
-		;;
-	*vimperator)
-		macvimName="Scratch.app"
-		opts="$opts --remote-tab-wait-silent"
-		gui=true
-		;;
-	gvimdiff)
-		macvimName="MacVim.app"
-		opts="$opts --remote-tab-silent"
-		gui=true
-		;;
 esac
-
-if [ -z "$VIM_APP_DIR" ]
-then
-	myDir="`dirname "$0"`"
-	myAppDir="$myDir/../Applications"
-	for i in ~/Applications ~/Applications/vim $myDir $myDir/vim $myAppDir $myAppDir/vim /Applications /Applications/vim /Applications/Utilities /Applications/Utilities/vim; do
-		if [ -x "$i/$macvimName" ]; then
-			VIM_APP_DIR="$i"
-			break
-		fi
-	done
-fi
-binary="$VIM_APP_DIR/$macvimName/Contents/MacOS/Vim"
-
-if [ -z "$VIM_APP_DIR" ]
-then
-	#	echo "Sorry, cannot find MacVim.app.  Try setting the VIM_APP_DIR environment variable to the directory containing MacVim.app."
-	binary=`which vim`
-	name=vim
-fi
 
 # Last step:  fire up vim.
 # The program should fork by default when started in GUI mode, but it does
