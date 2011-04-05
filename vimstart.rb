@@ -52,10 +52,10 @@ end
 
 # Define Commands
 commandList = CommandList.new
-commandList.insert(Command.new("tasks", "Opens taskstack in Tasks instance of MacVim", "tvim ~/sandbox/work/janrain.tst.txt"))
-commandList.insert(Command.new("work", "Open personal taskstack.", "tvim ~/sandbox/personal/todo/personal.tst.txt"))
-commandList.insert(Command.new("v", "Open this script.", "svim ~/bin/vimstart.rb"))
-commandList.insert(Command.new("vimrc", "Open .vimrc.", "svim ~/.vimrc"))
+commandList.insert(Command.new("tasks",     "Opens taskstack in Tasks instance of MacVim", "tvim ~/sandbox/work/janrain.tst.txt"))
+commandList.insert(Command.new("work",      "Open personal taskstack.", "tvim ~/sandbox/personal/todo/personal.tst.txt"))
+commandList.insert(Command.new("v",         "Open this script.", "svim ~/bin/vimstart.rb"))
+commandList.insert(Command.new("vimrc",     "Open .vimrc.", "svim ~/.vimrc"))
 
 # Parse Options
 # TODO: Actually use --instance
