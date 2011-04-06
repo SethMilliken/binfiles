@@ -56,6 +56,9 @@ commandList.insert(Command.new("tasks",     "Opens taskstack in Tasks instance o
 commandList.insert(Command.new("work",      "Open personal taskstack.", "tvim ~/sandbox/personal/todo/personal.tst.txt"))
 commandList.insert(Command.new("v",         "Open this script.", "svim ~/bin/vimstart.rb"))
 commandList.insert(Command.new("vimrc",     "Open .vimrc.", "svim ~/.vimrc"))
+commandList.insert(Command.new("vimhelp",   "Open vimhelp.", "open /Applications/VimHelp.app"))
+commandList.insert(Command.new("scratch",   "Open scratch.", "open -a /Applications/Scratch.app ~/.vim/swap/scratch.scratch"))
+commandList.insert(Command.new("wiki",   "Open vimwiki.", "wvim ~/sandbox/work/wiki/SethMilliken.wiki"))
 
 # Parse Options
 # TODO: Actually use --instance
