@@ -1,0 +1,35 @@
+# Create a ready-to-go screen session
+#
+source $HOME/.screenrc
+
+chdir $HOME
+screen -t  '~'
+
+chdir $HOME/.vim
+screen -t .vim bash
+stuff "hg st"
+
+chdir $HOME/sethbin
+screen -t bin bash
+stuff "hg st"
+
+chdir $HOME/.pentadactyl
+screen -t pentadactyl  bash
+stuff "hg st"
+
+chdir $HOME/bin
+screen -t forkingrails bash
+
+chdir $HOME/bin
+screen -t disco bash
+
+chdir $HOME
+screen -t db bash
+stuff "sudo -u postgres psql accelerator_development"
+
+chdir /etc/nginx
+screen -t nginx bash
+
+chdir $HOME
+
+# vim: ft=screen
