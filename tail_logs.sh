@@ -6,10 +6,11 @@ function run() {
 	test_for_screen
 	# function			spaces?	command		file
 	#create_screen_window	'y'	"${HOME}/bin/mactail"	${HOME}/Documents/Eudora\ Folder/Eudora\ Log
-	create_screen_window	'n'	'tail -F'	${HOME}/sandbox/backup/doing/doing.txt
+	#create_screen_window	'n'	'tail -F'	${HOME}/sandbox/backup/doing/doing.txt
 	create_screen_window	'n'	'tail -F'	/var/log/system.log
-	create_screen_window	'n'	'/usr/bin/syslog -w -C' '/usr/bin/syslog'
+	create_screen_window	'n'	'tail -F'	${HOME}/Desktop/synergy.log
 	create_screen_window	'n'	'tail -F'	/var/log/daemon
+	create_screen_window	'n'	'/usr/bin/syslog -w -C' '/usr/bin/syslog'
 	exit 0
 }
 
