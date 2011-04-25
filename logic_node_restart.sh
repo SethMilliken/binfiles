@@ -23,9 +23,9 @@ function bounce_app {
 
 function kill_app {
 killall -m "${APPNAME}"
-#osascript <<END
-#    tell app "${APPNAME}" to quit
-#END
+osascript <<END
+    tell app "${APPNAME}" to quit
+END
 }
 
 function open_app {
