@@ -28,5 +28,5 @@ function fix {
 
 #fix FFBR Browse /Applications/Browse.app/Contents FirefoxBlue.icns
 fix FFTS Test /Applications FireFox FireFoxBlue.icns
-fix FFSS Research /Applications FireFox\ 4.0 FireFoxBlue.icns
-fix FFDY Dactyl /Applications FireFox\ 4.0 FireFoxBlue.icns
+fix FFSS Research /Applications FireFox FireFoxBlue.icns
+fix FFDY Dactyl /Applications FireFox FireFoxBlue.icns
