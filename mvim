@@ -56,6 +56,11 @@ case "$name" in
 		opts="$opts --remote-tab-wait-silent"
 		gui=true
 		;;
+	*dvim)
+		macvimName="Todo.app"
+		opts="$opts --remote-tab-wait-silent"
+		gui=true
+		;;
 	*wvim)
 		macvimName="Vimwiki.app"
 		opts="$opts --remote-tab-wait-silent"
