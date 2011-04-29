@@ -1,0 +1,33 @@
+# Create a ready-to-go screen session
+#
+source $HOME/.screenrc
+
+chdir $HOME
+screen -t  '~'
+stuff "svn st"
+
+chdir $HOME/bin
+screen -t bin bash
+
+chdir $HOME/bin
+screen -t config  bash
+stuff "vim buswork.screen"
+
+chdir $HOME/staging/pow/linkex
+screen -t linkex bash
+
+chdir $HOME/staging/pow
+screen -t pow bash
+screen -t pow-serve bash
+
+chdir $HOME/Library/Logs/Pow
+screen -t pow-logs bash
+stuff "less +F development.log"
+
+chdir $HOME/.pow
+screen -t pow-setup bash
+stuff "echo 'Symlink rails apps here...'"
+
+chdir $HOME
+
+# vim: ft=screen

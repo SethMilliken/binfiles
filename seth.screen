@@ -1,0 +1,44 @@
+# Create a ready-to-go screen session
+#
+source $HOME/.screenrc
+
+chdir $HOME
+screen -t  '~'
+stuff "svn st"
+
+chdir $HOME/.vim
+screen -t .vim bash
+stuff "hg st"
+
+chdir $HOME/bin
+screen -t bin bash
+stuff "hg st"
+
+chdir $HOME/.pentadactyl
+screen -t pentadactyl  bash
+stuff "hg st"
+
+chdir $HOME/sandbox/work/
+screen -t work bash
+stuff "hg st"
+
+chdir $HOME/bin
+screen -t mount_vm bash
+stuff "mount_vm"
+
+chdir $HOME/sandbox/work
+screen -t hack bash
+
+chdir $HOME/staging/vim
+screen -t vim-test  bash
+
+chdir $HOME/sandbox/code
+screen -t code bash
+
+chdir $HOME
+screen -t brew bash
+stuff "brew update"
+
+chdir $HOME
+
+# vim: ft=screen

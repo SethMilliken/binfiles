@@ -4,6 +4,7 @@ source $HOME/.screenrc
 
 chdir $HOME
 screen -t  '~'
+stuff "ssh-agent bash; ssh-add"
 
 chdir $HOME/.vim
 screen -t .vim bash
@@ -13,22 +14,36 @@ chdir $HOME/sethbin
 screen -t bin bash
 stuff "hg st"
 
-chdir $HOME/.pentadactyl
-screen -t pentadactyl  bash
-stuff "hg st"
+chdir $HOME
+screen -t engage bash
+stuff "engage"
 
 chdir $HOME/bin
 screen -t forkingrails bash
+stuff "forkingrails --ssl --debug"
 
 chdir $HOME/bin
 screen -t disco bash
+stuff "disco --ssl --debug"
 
 chdir $HOME
 screen -t db bash
 stuff "sudo -u postgres psql accelerator_development"
 
+chdir $HOME
+screen -t migrate bash
+stuff "engage; cd db"
+
 chdir /etc/nginx
 screen -t nginx bash
+
+chdir /var/log/nginx
+screen -t nginx-logs bash
+stuff "multitail access.log error.log"
+
+chdir $HOME/sethbin
+screen -t screen bash
+stuff "vim sethtest.screen"
 
 chdir $HOME
 
