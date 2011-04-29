@@ -18,6 +18,10 @@ chdir $HOME/.pentadactyl
 screen -t pentadactyl  bash
 stuff "hg st"
 
+chdir $HOME/sandbox/work
+screen -t engage bash
+stuff "engage"
+
 chdir $HOME/sandbox/work/
 screen -t work bash
 stuff "hg st"
@@ -26,14 +30,15 @@ chdir $HOME/bin
 screen -t mount_vm bash
 stuff "mount_vm"
 
-chdir $HOME/sandbox/work
-screen -t hack bash
-
 chdir $HOME/staging/vim
 screen -t vim-test  bash
 
 chdir $HOME/sandbox/code
 screen -t code bash
+
+chdir $HOME/bin
+screen -t screen bash
+stuff "vim seth.screen"
 
 chdir $HOME
 screen -t brew bash
