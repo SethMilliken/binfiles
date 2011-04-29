@@ -4,6 +4,7 @@ source $HOME/.screenrc
 
 chdir $HOME
 screen -t  '~'
+stuff "ssh-agent bash; ssh-add"
 
 chdir $HOME/.vim
 screen -t .vim bash
