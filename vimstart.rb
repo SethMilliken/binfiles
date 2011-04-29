@@ -59,6 +59,7 @@ commandList.insert(Command.new("vimrc",     "Open .vimrc.", "svim ~/.vimrc"))
 commandList.insert(Command.new("vimhelp",   "Open vimhelp.", "open /Applications/VimHelp.app"))
 commandList.insert(Command.new("scratch",   "Open scratch.", "open -a /Applications/Scratch.app ~/.vim/swap/scratch.scratch"))
 commandList.insert(Command.new("wiki",   "Open vimwiki.", "wvim ~/sandbox/work/wiki/SethMilliken.wiki"))
+commandList.insert(Command.new("todo",   "Open todo.", "dvim ~/sandbox/personal/todo/todo.txt"))
 
 # Parse Options
 # TODO: Actually use --instance
