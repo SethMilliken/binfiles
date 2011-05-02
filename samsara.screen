@@ -35,6 +35,14 @@ chdir $HOME
 screen -t brew bash
 stuff "brew update"
 
+chdir $HOME/bin
+screen -t firefox  bash
+stuff "v ff"
+
+chdir $HOME/bin
+screen -t screen  bash
+stuff "vim samsara.screen"
+
 chdir $HOME
 
 # vim: ft=screen
