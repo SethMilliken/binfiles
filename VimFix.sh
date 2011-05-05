@@ -13,7 +13,7 @@ function vimfix {
 		/usr/libexec/PlistBuddy ${FULL_PATH}/Info.plist -c 'Set :CFBundleName '${NAME}
 		/usr/libexec/PlistBuddy ${FULL_PATH}/Info.plist -c 'Set :CFBundleSignature '${ID}
 		/usr/bin/sed -i '' -es/VIMM/${ID}/ ${FULL_PATH}/PkgInfo
-		/bin/cp ~/Pictures/VimIcons/${ICON} ${FULL_PATH}/Resources/MacVim.icns
+		/bin/cp ~/Pictures/MacVimIcons/${ICON} ${FULL_PATH}/Resources/MacVim.icns
 	else
 		echo "${FULL_PATH} not found."
 		cp -Rp "${PATH_PREFIX}/MacVim.app" "${PATH_PREFIX}/${NAME}.app"
@@ -23,7 +23,7 @@ function vimfix {
 vimfix VIMM MacVim /Applications VimGreen.icns
 vimfix VIMH VimHelp /Applications VimGrey.icns
 vimfix VIMT TwitVim /Applications VimBlue.icns
-vimfix VIM8 Scratch /Applications VimGrey.icns
+vimfix VIM8 Scratch /Applications VimOrange.icns
 vimfix VIM7 SourceCode /Applications VimBlue.icns
 vimfix VIM6 Research /Applications VimGrey.icns
 vimfix VIM5 Tasks /Applications VimPurple.icns
