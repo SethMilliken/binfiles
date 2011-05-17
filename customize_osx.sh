@@ -26,6 +26,9 @@ fi
 QLCOLORCODE=${HOME}/Library/QuickLook/QLColorCode.qlgenerator
 if [[ ! -e ${QLCOLORCODE} ]]; then
    echo "Install QLColorCode: http://code.google.com/p/qlcolorcode/"
+else
+    ln -s ${HOME}/bin/seth.style ${HOME}/Library/QuickLook/QLColorCode.qlgenerator/Contents/Resources/highlight/share/highlight/themes/seth.style
 fi
+
 
 # TODO: firefox symlinks for each profile
