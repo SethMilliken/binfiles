@@ -20,12 +20,14 @@ function vimfix {
 	fi
 }
 
-vimfix VIMM MacVim /Applications VimGreen.icns
-vimfix VIMH VimHelp /Applications VimGrey.icns
-vimfix VIMT TwitVim /Applications VimBlue.icns
-vimfix VIM8 Scratch /Applications VimOrange.icns
-vimfix VIM7 SourceCode /Applications VimBlue.icns
-vimfix VIM6 Research /Applications VimGrey.icns
-vimfix VIM5 Tasks /Applications VimPurple.icns
-vimfix VIM4 Vimwiki /Applications VimPaleGreen.icns
 vimfix VIM3 Todo /Applications VimGreen.icns
+vimfix VIM4 Vimwiki /Applications VimPaleGreen.icns
+vimfix VIM5 Tasks /Applications VimPurple.icns
+vimfix VIM6 Research /Applications VimGrey.icns
+vimfix VIM7 SourceCode /Applications VimBlue.icns
+vimfix VIM8 Scratch /Applications VimOrange.icns
+vimfix VIMA AdiumVim /Applications VimOrange.icns
+vimfix VIMC ColloquyVim  /Applications VimOrange.icns
+vimfix VIMH VimHelp /Applications VimGrey.icns
+vimfix VIMM MacVim /Applications VimGreen.icns
+vimfix VIMT TwitVim /Applications VimBlue.icns
