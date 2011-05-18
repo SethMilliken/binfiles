@@ -4,7 +4,7 @@ source $HOME/.screenrc
 
 chdir $HOME
 screen -t  '~'
-stuff "svn st"
+stuff "svn stssh-add"
 
 chdir $HOME/.vim
 screen -t .vim bash

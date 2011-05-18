@@ -65,6 +65,8 @@ commandList.insert(Command.new("ffre",   "Open FireFoxResearch.", "/Applications
 commandList.insert(Command.new("ffvo",   "Open volatile FireFox.", "/Applications/FireFoxVolatile.app/Contents/MacOS/firefox -P Minefield"))
 commandList.insert(Command.new("ffdev",   "Open dev FireFox.", "/Applications/FireFoxDactyl.app/Contents/MacOS/firefox --chromebug -P PentadactylDev"))
 commandList.insert(Command.new("ffvimp",   "Open vimperator FireFox.", "/Applications/FireFoxTest.app/Contents/MacOS/firefox --chromebug -P VimperatorTest"))
+commandList.insert(Command.new("fftest-choose",   "Open FireFoxTest.", "/Applications/FireFoxTest.app/Contents/MacOS/firefox -ProfileManager"))
+commandList.insert(Command.new("fftest",   "Open FireFoxTest.", "/Applications/FireFoxTest.app/Contents/MacOS/firefox -P Test"))
 commandList.insert(Command.new("ffchoose",   "Open selected FireFox.", "/Applications/FireFoxVolatile.app/Contents/MacOS/firefox --chromebug -ProfileManager"))
 
 # Parse Options
