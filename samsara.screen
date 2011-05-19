@@ -43,6 +43,10 @@ chdir $HOME/bin
 screen -t screen  bash
 stuff "vim samsara.screen"
 
+chdir $HOME/bin
+screen -t screen  bash
+stuff "less +F ~/Desktop/synergy.log"
+
 chdir $HOME
 
 # vim: ft=screen
