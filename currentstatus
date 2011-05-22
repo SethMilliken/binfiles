@@ -12,6 +12,6 @@ if [ ${HOSTNAME} == "seth.local" ]; then
 else
     FILE="${HOME}/sandbox/personal/todo/personal.tst.txt"
 fi
-RESULT=`cat ${FILE} | head -5 | tail -4 | awk -F'201.-' '{print $1}'`
+RESULT=`cat ${FILE} | head -5 | tail -3 | awk -F'201.-' '{print $1}'`
 echo $RESULT
 ${NOTIFICATION_SCRIPT} $(basename $0) "false" "${RESULT}" "${STATE}"

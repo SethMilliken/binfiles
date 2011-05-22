@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+#
+# This is a script for modifying copies of MacVim to uniquely identify them.
+#
+
+def vimfix(identifier, name, install_root, icon)
+    full_path="#{install_root}/#{name}.app/Contents"
+    if /Scratch/ =~ name
+        bundle_id="org.vim.MacVim"
+    else
+        bundle_id="org.vim.MacVim.#{name}"
+    end
+    create_copy(full_path, install_root, name) unless File.exist? full_path
+    if File.exist? full_path
+        `/usr/libexec/PlistBuddy #{full_path}/Info.plist -c 'Set :CFBundleIdentifier org.vim.'#{name}`
+        `/usr/libexec/PlistBuddy #{full_path}/Info.plist -c 'Set :CFBundleName '#{name}`
+        `/usr/libexec/PlistBuddy #{full_path}/Info.plist -c 'Set :CFBundleSignature '#{identifier}`
+        `/usr/bin/sed -i '' -es/VIMM/#{identifier}/ #{full_path}/PkgInfo`
+        `/bin/cp ~/Pictures/MacVimIcons/#{icon} #{full_path}/Resources/MacVim.icns`
+    end
+end
+
+def create_copy(full_path, install_root, name)
+    printf "%s was not found. Copying...\n", full_path
+    `cp -Rp "#{install_root}/MacVim.app" "#{install_root}/#{name}.app"`
+end
+
+vimfix 'VIM3', 'Todo',           '/Applications', 'VimGreen.icns'
+vimfix 'VIM4', 'Vimwiki',        '/Applications', 'VimPaleGreen.icns'
+vimfix 'VIM5', 'Tasks',          '/Applications', 'VimPurple.icns'
+vimfix 'VIM6', 'Research',       '/Applications', 'VimGrey.icns'
+vimfix 'VIM7', 'SourceCode',     '/Applications', 'VimBlue.icns'
+vimfix 'VIM8', 'Scratch',        '/Applications', 'VimOrange.icns'
+vimfix 'VIMA', 'AdiumVim',       '/Applications', 'VimOrange.icns'
+vimfix 'VIMC', 'ColloquyVim',    '/Applications', 'VimOrange.icns'
+vimfix 'VIMH', 'VimHelp',        '/Applications', 'VimGrey.icns'
+vimfix 'VIMM', 'MacVim',         '/Applications', 'VimGreen.icns'
+vimfix 'VIMT', 'TwitVim',        '/Applications', 'VimBlue.icns'

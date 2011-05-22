@@ -4,7 +4,7 @@ source $HOME/.screenrc
 
 chdir $HOME
 screen -t  '~'
-stuff "svn st"
+stuff "svn stssh-add"
 
 chdir $HOME/.vim
 screen -t .vim bash
@@ -34,6 +34,18 @@ screen -t code bash
 chdir $HOME
 screen -t brew bash
 stuff "brew update"
+
+chdir $HOME/bin
+screen -t firefox  bash
+stuff "v ff"
+
+chdir $HOME/bin
+screen -t screen  bash
+stuff "vim samsara.screen"
+
+chdir $HOME/bin
+screen -t screen  bash
+stuff "less +F ~/Desktop/synergy.log"
 
 chdir $HOME
 
