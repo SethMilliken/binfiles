@@ -5,10 +5,11 @@ GROWLMENU=GrowlMenu.app
 NOTIFICATION_SCRIPT="${HOME}/bin/notify"
 
 function running {
-    RESULT=`ps x | grep Growl | grep -v grep`
+    RESULT=`ps x | grep GrowlHelper | grep -v grep`
     if [[ $RESULT != "" ]]
     then
-        killall -m -HUP Growl
+        killall -m -HUP GrowlHelperApp
+        killall -m -HUP GrowlMenu
     else
         open_growl ${GROWLAPP}
         sleep 1
