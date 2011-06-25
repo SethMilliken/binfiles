@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+#
+# This is a script for modifying copies of Firefox to uniquely identify them.
+#
+
+APPNAME="Firefox"
+ORIGINAL_SIG="MOZB"
+ICON_NAME="firefox"
+BUNDLE_ID="org.mozilla.firefox"
+APP_PREFIX="Firefox"
+
+def fix(identifier, name, install_root, icon)
+    full_path="#{install_root}/#{APP_PREFIX}#{name}.app/Contents"
+    if /Scratch/ =~ name
+        bundle_id=BUNDLE_ID
+    else
+        bundle_id="#{BUNDLE_ID}.#{name}"
+    end
+    create_copy(full_path, install_root, name) unless File.exist? full_path
+    if File.exist? full_path
+        `/usr/libexec/PlistBuddy #{full_path}/Info.plist -c 'Set :CFBundleIdentifier #{BUNDLE_ID}.'#{name}`
+        `/usr/libexec/PlistBuddy #{full_path}/Info.plist -c 'Set :CFBundleName '#{name}`
+        `/usr/libexec/PlistBuddy #{full_path}/Info.plist -c 'Set :CFBundleSignature '#{identifier}`
+        `/usr/bin/sed -i '' -es/#{ORIGINAL_SIG}/#{identifier}/ #{full_path}/PkgInfo`
+        `/bin/cp ~/Pictures/#{APPNAME}Icons/#{icon} #{full_path}/Resources/#{ICON_NAME}.icns`
+    end
+end
+
+def create_copy(full_path, install_root, name)
+    printf "%s was not found. Copying...\n", full_path
+    `cp -Rp "#{install_root}/#{APPNAME}.app" "#{install_root}/#{APP_PREFIX}#{name}.app"`
+end
+
+fix 'FFBR' , 'Browse'   , '/Applications' , 'FirefoxBlue.icns'
+fix 'FFDY' , 'Dactyl'   , '/Applications' , 'FireFoxBlue.icns'
+fix 'FFSS' , 'Research' , '/Applications' , 'FireFoxBlue.icns'
+fix 'FFTS' , 'Test'     , '/Applications' , 'FireFoxBlue.icns'
+fix 'FFVO' , 'Volatile' , '/Applications' , 'FireFoxBlue.icns'
