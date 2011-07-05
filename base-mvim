@@ -1,5 +1,5 @@
 #!/bin/sh
-# Snapshot 57
+# Snapshot 58
 #
 # This shell script passes all its arguments to the binary inside the
 # MacVim.app application bundle.  If you make links to this script as view,
