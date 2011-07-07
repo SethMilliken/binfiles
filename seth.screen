@@ -8,15 +8,15 @@ stuff "svn st"
 
 chdir $HOME/.vim
 screen -t .vim bash
-stuff "hg st"
+stuff "hg incoming; hg outgoing; hg st"
 
 chdir $HOME/bin
 screen -t bin bash
-stuff "hg st"
+stuff "hg incoming; hg outgoing; hg st"
 
 chdir $HOME/.pentadactyl
 screen -t pentadactyl  bash
-stuff "hg st"
+stuff "hg incoming; hg outgoing; hg st"
 
 chdir $HOME/sandbox/work
 screen -t engage bash
@@ -24,7 +24,7 @@ stuff "engage"
 
 chdir $HOME/sandbox/work/
 screen -t work bash
-stuff "hg st"
+stuff "hg incoming; hg outgoing; hg st"
 
 chdir $HOME/staging/vim
 screen -t vim-test  bash
@@ -36,9 +36,13 @@ chdir $HOME/bin
 screen -t screen bash
 stuff "vim seth.screen"
 
+chdir $HOME/bin
+screen -t synswitch bash
+stuff "synswitch work"
+
 chdir $HOME
 screen -t brew bash
-stuff "brew update"
+stuff "brew update && brew upgrade"
 
 chdir $HOME/bin
 screen -t mount_vm bash
