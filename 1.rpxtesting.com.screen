@@ -9,7 +9,9 @@ stuff "ssh-add"
 
 chdir $HOME/bin
 screen -t release bash
-stuff "git fetch --tags && git checkout 2011."
+stuff "#git fetch --tags && git checkout 2011.rc"
+stuff "#cd ~/code/release/"
+stuff "sudo su murphy"
 
 chdir $HOME/bin
 screen -t forkingrails bash
@@ -17,7 +19,8 @@ stuff "sudo killall -9 ruby; sudo /home/murphy/bin/forkingrails.sh &> /tmp/forki
 
 chdir $HOME/bin
 screen -t migrate bash
-stuff "/home/murphy/bin/db-migrate.sh"
+stuff "#/home/murphy/bin/db-migrate.sh"
+stuff "sudo su murphy"
 
 chdir $HOME/bin
 screen -t railslog bash
@@ -32,13 +35,13 @@ screen -t nginx bash
 stuff "#sudo /etc/init.d/nginx restart"
 stuff "vim sites-enabled/rpxtesting.com +'vsplit nginx.conf' +'split conf.local/ssl-common'"
 
-chdir $HOME
-screen -t db bash
-stuff "sudo -u postgres psql accelerator_testing"
+#chdir $HOME
+#screen -t db bash
+#stuff "sudo -u postgres psql accelerator_testing"
 
 chdir ~murphy
 screen -t murphy bash
-stuff "vim `which rpx-pull` +'vsplit /usr/local/sbin/release.sh' +'split .user-data'"
+stuff "vim +'vsplit /usr/local/sbin/release.sh' +'split .user-data'"
 
 chdir $HOME/.vim
 screen -t vim bash
