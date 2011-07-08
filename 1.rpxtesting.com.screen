@@ -53,7 +53,7 @@ stuff "git st"
 
 chdir $HOME/sethbin
 screen -t screen bash
-stuff "vim sethtest.screen"
+stuff "vim 1.rpxtesting.com.screen"
 
 chdir $HOME
 
