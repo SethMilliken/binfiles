@@ -1,0 +1,60 @@
+#
+# Create a ready-to-go screen session
+#
+source $HOME/.screenrc
+
+chdir $HOME
+screen -t '~' bash
+stuff "ssh-add"
+
+chdir $HOME/bin
+screen -t release bash
+stuff "#git fetch --tags && git checkout 2011.rc"
+stuff "#cd ~/code/release/"
+stuff "sudo su murphy"
+
+chdir $HOME/bin
+screen -t forkingrails bash
+stuff "sudo killall -9 ruby; sudo /home/murphy/bin/forkingrails.sh &> /tmp/forkingrails.log"
+
+chdir $HOME/bin
+screen -t migrate bash
+stuff "#/home/murphy/bin/db-migrate.sh"
+stuff "sudo su murphy"
+
+chdir $HOME/bin
+screen -t railslog bash
+stuff "less +F /tmp/forkingrails.log"
+
+chdir /var/log/nginx
+screen -t nginx-logs bash
+stuff "sudo multitail access.log error.log"
+
+chdir /etc/nginx
+screen -t nginx bash
+stuff "#sudo /etc/init.d/nginx restart"
+stuff "vim sites-enabled/rpxtesting.com +'vsplit nginx.conf' +'split conf.local/ssl-common'"
+
+#chdir $HOME
+#screen -t db bash
+#stuff "sudo -u postgres psql accelerator_testing"
+
+chdir ~murphy
+screen -t murphy bash
+stuff "vim +'vsplit /usr/local/sbin/release.sh' +'split .user-data'"
+
+chdir $HOME/.vim
+screen -t vim bash
+stuff "git st"
+
+chdir $HOME/bin
+screen -t bin bash
+stuff "git st"
+
+chdir $HOME/sethbin
+screen -t screen bash
+stuff "vim 1.rpxtesting.com.screen"
+
+chdir $HOME
+
+# vim: ft=screen
