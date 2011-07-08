@@ -50,9 +50,9 @@ screen -t bin bash
 stuff "git st"
 
 # 3
-chdir $HOME/sethbin
+chdir $HOME/bin
 screen -t screen bash
-stuff "vim sethtest.screen"
+stuff "vim rpxstaging.com.screen"
 
 chdir $HOME
 
