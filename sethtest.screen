@@ -8,11 +8,11 @@ stuff "ssh-add"
 
 chdir $HOME/.vim
 screen -t .vim bash
-stuff "hg st"
+stuff "git st"
 
 chdir $HOME/sethbin
 screen -t bin bash
-stuff "hg st"
+stuff "git st"
 
 chdir $HOME
 screen -t engage bash
