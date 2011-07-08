@@ -1,7 +1,7 @@
 #
 # Create a ready-to-go screen session
 #
-source $HOME/dotfiles/.screenrc
+source $HOME/.screenrc
 
 # 0
 chdir $HOME
@@ -45,7 +45,7 @@ screen -t vim bash
 stuff "git st"
 
 # 2
-chdir $HOME/binfiles
+chdir $HOME/bin
 screen -t bin bash
 stuff "git st"
 
