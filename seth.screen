@@ -7,45 +7,45 @@ screen -t  '~'
 stuff "git in; git out; git st"
 
 chdir $HOME/.vim
-screen -t .vim bash
+screen -t .vim zsh
 stuff "git in; git out; git st"
 
 chdir $HOME/bin
-screen -t bin bash
+screen -t bin zsh
 stuff "git in; git out; git st"
 
 chdir $HOME/.pentadactyl
-screen -t pentadactyl  bash
+screen -t pentadactyl zsh
 stuff "git in; git out; git st"
 
 chdir $HOME/sandbox/work
-screen -t engage bash
+screen -t engage zsh
 stuff "engage"
 
 chdir $HOME/sandbox/work/
-screen -t work bash
+screen -t work zsh
 stuff "git in; git out; git st"
 
 chdir $HOME/staging/vim
-screen -t vim-test  bash
+screen -t vim-test  zsh
 
 chdir $HOME/sandbox/code
-screen -t code bash
+screen -t code zsh
 
 chdir $HOME/bin
-screen -t screen bash
+screen -t screen zsh
 stuff "vim seth.screen"
 
 chdir $HOME/bin
-screen -t synswitch bash
+screen -t synswitch zsh
 stuff "synswitch work"
 
 chdir $HOME
-screen -t brew bash
+screen -t brew zsh
 stuff "brew update && brew upgrade"
 
 chdir $HOME/bin
-screen -t mount_vm bash
+screen -t mount_vm zsh
 stuff "mount_vm"
 
 chdir $HOME
