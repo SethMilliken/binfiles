@@ -4,23 +4,23 @@ source $HOME/.screenrc
 
 chdir $HOME
 screen -t  '~'
-stuff "svn stssh-add"
+stuff "ssh-add && git in; git out; git st"
 
 chdir $HOME/.vim
 screen -t .vim bash
-stuff "hg st"
+stuff "git in; git out; git st"
 
 chdir $HOME/bin
 screen -t bin bash
-stuff "hg st"
+stuff "git in; git out; git st"
 
 chdir $HOME/sandbox/personal/
 screen -t personal bash
-stuff "hg st"
+stuff "git in; git out; git st"
 
 chdir $HOME/.pentadactyl
 screen -t pentadactyl  bash
-stuff "hg st"
+stuff "git in; git out; git st"
 
 chdir $HOME/sandbox/work
 screen -t work bash
@@ -44,7 +44,7 @@ screen -t screen  bash
 stuff "vim samsara.screen"
 
 chdir $HOME/bin
-screen -t screen  bash
+screen -t synergy  bash
 stuff "less +F ~/Desktop/synergy.log"
 
 chdir $HOME
