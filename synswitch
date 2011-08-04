@@ -13,6 +13,7 @@ else
 fi
 LOGFILE="${HOME}/Desktop/synergy.log"
 DEBUG_MODE="NOTE"
+#DEBUG_MODE="DEBUG1"
 NOTIFICATION_SCRIPT="${HOME}/bin/notify"
 
 function run {
