@@ -4,23 +4,23 @@ source $HOME/.screenrc
 
 chdir $HOME
 screen -t  '~'
-stuff "ssh-add && git in; git out; git st"
+stuff "ssh-add && git state"
 
 chdir $HOME/.vim
 screen -t .vim zsh
-stuff "git in; git out; git st"
+stuff "git state"
 
 chdir $HOME/bin
 screen -t bin zsh
-stuff "git in; git out; git st"
+stuff "git state"
 
 chdir $HOME/sandbox/personal/
 screen -t personal zsh
-stuff "git in; git out; git st"
+stuff "git state"
 
 chdir $HOME/.pentadactyl
 screen -t pentadactyl  zsh
-stuff "git in; git out; git st"
+stuff "git state"
 
 chdir $HOME/sandbox/work
 screen -t work zsh
