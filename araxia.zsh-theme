@@ -17,6 +17,7 @@ PROMPT+='[ '
 PROMPT+='%F{208}%c%f'
 PROMPT+=' ]'
 PROMPT+='$(git_prompt_status)'
+#PROMPT+='$(svn_prompt_info)'
 PROMPT+=' %# '
 PROMPT+='%{$reset_color%}'
 
@@ -102,11 +103,3 @@ function git_time_since_commit() {
         fi
     fi
 }
-
-# mode indication {{{1
-#function _vi_indicate_mode {
-	#vicmd=${KEYMAP/(main|viins)/}
-	#zle reset-prompt
-#}
-#zle -N zle-keymap-select _vi_indicate_mode
-#zle -N zle-line-init _vi_indicate_mode
