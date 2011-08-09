@@ -4,46 +4,50 @@ source $HOME/.screenrc
 
 chdir $HOME
 screen -t  '~'
-stuff "ssh-add"
+stuff "git state"
 
 chdir $HOME/.vim
-screen -t .vim bash
-stuff "git st"
+screen -t .vim zsh
+stuff "git state"
 
 chdir $HOME/sethbin
-screen -t bin bash
-stuff "git st"
+screen -t bin zsh
+stuff "git state"
 
-chdir $HOME
-screen -t engage bash
-stuff "engage"
+chdir $HOME/rpx/ruby/bin
+screen -t release zsh
+stuff "./rpx-release -b "
 
 chdir $HOME/bin
-screen -t forkingrails bash
+screen -t forkingrails zsh
 stuff "forkingrails --ssl --debug"
 
 chdir $HOME/bin
-screen -t disco bash
+screen -t disco zsh
 stuff "disco --ssl --debug"
 
 chdir $HOME
-screen -t db bash
+screen -t db zsh
 stuff "sudo -u postgres psql accelerator_development"
 
 chdir $HOME
-screen -t migrate bash
+screen -t migrate zsh
 stuff "engage; cd db/migrate"
 
-chdir /etc/nginx
-screen -t nginx bash
-stuff "vim nginx.conf"
+chdir $HOME
+screen -t engage zsh
+stuff "engage"
 
 chdir /var/log/nginx
-screen -t nginx-logs bash
+screen -t nginx-logs zsh
 stuff "sudo multitail access.log error.log"
 
+chdir /etc/nginx
+screen -t nginx zsh
+stuff "vim nginx.conf"
+
 chdir $HOME/sethbin
-screen -t screen bash
+screen -t screen zsh
 stuff "vim sethtest.screen"
 
 chdir $HOME
