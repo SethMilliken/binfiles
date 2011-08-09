@@ -1,0 +1,25 @@
+#! /usr/bin/env awk -f
+/^[ ]{0,1}D/  { deleted++   };
+/^[ ]{0,1}R/  { renamed++   };
+/^[ ]{0,1}C/  { copied++    };
+/^[ ]{0,1}M/  { modified++  };
+/^[ ]{0,1}A/  { added++     };
+/^[ ]{0,1}U/  { unmerged++  };
+/^[ ]{0,1}\?/ { untracked++ };
+
+END {
+
+    status["deleted"]   = deleted+0     "✖";
+    status["modified"]  = modified+0    "▹";
+    status["renamed"]   = renamed+0     "➜";
+    status["untracked"] = untracked+0   "✭";
+    status["added"]     = added+0       "✚";
+    status["unmerged"]  = unmerged+0    "⇋";
+    status["copied"]    = copied+0      "ⓒ";
+
+    for (i in status) {
+        if (status[i]+0 != 0) {
+            printf(status[i] " ");
+        }
+    }
+}
