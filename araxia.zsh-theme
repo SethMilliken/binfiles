@@ -12,11 +12,12 @@ PROMPT+='%{$reset_color%}'
 PROMPT+='%{$bg[green]%}%{$fg_bold[grey]%} %j ' # child jobs
 PROMPT+='%{$reset_color%}'
 PROMPT+='$(git_time_since_commit)'
+PROMPT+='$(git status -s | git dirt)'
 PROMPT+='$(git_prompt_info)'
 PROMPT+='[ '
 PROMPT+='%F{208}%c%f'
 PROMPT+=' ]'
-PROMPT+='$(git_prompt_status)'
+#PROMPT+='$(git_prompt_status)'
 #PROMPT+='$(svn_prompt_info)'
 PROMPT+=' %# '
 PROMPT+='%{$reset_color%}'
@@ -29,7 +30,8 @@ RPROMPT+='%{$reset_color%}'
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%F{154}±%f%F{124}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%})"
-ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}%B✘%b%F{154}%f%{$reset_color%}"
+#ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}%B✘%b%F{154}%f%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIRTY=" "
 ZSH_THEME_GIT_PROMPT_CLEAN=" %{$fg[green]%}✔%F{154}"
 
 ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%}✚"
