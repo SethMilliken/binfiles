@@ -4,55 +4,55 @@
 source $HOME/.screenrc
 
 chdir $HOME
-screen -t '~' bash
+screen -t '~' zsh
 stuff "ssh-add"
 
 chdir $HOME/bin
-screen -t release bash
+screen -t release zsh
 stuff "#git fetch --tags && git checkout 2011.rc"
 stuff "#cd ~/code/release/"
 stuff "sudo su murphy"
 
 chdir $HOME/bin
-screen -t forkingrails bash
+screen -t forkingrails zsh
 stuff "sudo killall -9 ruby; sudo /home/murphy/bin/forkingrails.sh &> /tmp/forkingrails.log"
 
 chdir $HOME/bin
-screen -t migrate bash
+screen -t migrate zsh
 stuff "#/home/murphy/bin/db-migrate.sh"
 stuff "sudo su murphy"
 
 chdir $HOME/bin
-screen -t railslog bash
+screen -t railslog zsh
 stuff "less +F /tmp/forkingrails.log"
 
 chdir /var/log/nginx
-screen -t nginx-logs bash
+screen -t nginx-logs zsh
 stuff "sudo multitail access.log error.log"
 
 chdir /etc/nginx
-screen -t nginx bash
+screen -t nginx zsh
 stuff "#sudo /etc/init.d/nginx restart"
 stuff "vim sites-enabled/rpxtesting.com +'vsplit nginx.conf' +'split conf.local/ssl-common'"
 
 #chdir $HOME
-#screen -t db bash
+#screen -t db zsh
 #stuff "sudo -u postgres psql accelerator_testing"
 
 chdir ~murphy
-screen -t murphy bash
+screen -t murphy zsh
 stuff "vim +'vsplit /usr/local/sbin/release.sh' +'split .user-data'"
 
 chdir $HOME/.vim
-screen -t vim bash
+screen -t vim zsh
 stuff "git st"
 
 chdir $HOME/bin
-screen -t bin bash
+screen -t bin zsh
 stuff "git st"
 
 chdir $HOME/sethbin
-screen -t screen bash
+screen -t screen zsh
 stuff "vim 1.rpxtesting.com.screen"
 
 chdir $HOME
