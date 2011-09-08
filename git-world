@@ -6,15 +6,16 @@ include Open3
 
 def gitworld(command)
     home = ENV["HOME"]
-    paths = [                                      \
+    paths = [                      \
+        "",                        \
         "bin",                     \
-        "",                         \
         ".vim",                    \
         ".vim/bundle/vim-traitor", \
         ".vim/bundle/vimple",      \
         ".pentadactyl",            \
-        "sandbox/personal",        \
         ".oh-my-zsh"               \
+        "sandbox/work",            \
+        "sandbox/personal",        \
     ]
     paths.each do |path|
         fullpath = "#{home}/#{path}"
