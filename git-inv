@@ -1,7 +1,26 @@
 #!/usr/bin/env ruby
 
+# generalize this to take any git command and apply it in all paths (maybe make some "safe")
+
 def checkshit
-    put `git io`
+    paths = [                  \
+        "/Users/milliken/bin", \
+        "/Users/milliken",     \
+        "/Users/milliken/.vim", \
+        "/Users/milliken/.vim/bundle/vim-traitor", \
+        "/Users/milliken/.vim/bundle/vimple", \
+        "/Users/milliken/.pentadactyl", \
+        "/Users/milliken/sandbox/personal", \
+        "/Users/milliken/.oh-my-zsh" \
+    ]
+    paths.each do |path|
+        Dir.chdir(path)
+
+        output = %x[ git state ]
+        if output.length > 0
+            puts output
+        end
+    end
 end
 
 checkshit
