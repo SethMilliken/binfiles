@@ -1,28 +1,36 @@
 #!/usr/bin/env ruby
 
-# generalize this to take any git command and apply it in all paths (maybe make some "safe")
+# TODO: use colors in output
 
-def checkshit
-    paths = [                  \
-        "/Users/milliken/bin", \
-        "/Users/milliken",     \
-        "/Users/milliken/.vim", \
-        "/Users/milliken/.vim/bundle/vim-traitor", \
-        "/Users/milliken/.vim/bundle/vimple", \
-        "/Users/milliken/.pentadactyl", \
-        "/Users/milliken/sandbox/personal", \
-        "/Users/milliken/.oh-my-zsh" \
+def gitworld(command)
+    home = ENV["HOME"]
+    paths = [                                      \
+        "bin",                     \
+        "",                         \
+        ".vim",                    \
+        ".vim/bundle/vim-traitor", \
+        ".vim/bundle/vimple",      \
+        ".pentadactyl",            \
+        "sandbox/personal",        \
+        ".oh-my-zsh"               \
     ]
     paths.each do |path|
-        Dir.chdir(path)
-
-        output = %x[ git state ]
-        if output.length > 0
-            puts output
+        fullpath = "#{home}/#{path}"
+        if File.directory? fullpath
+            Dir.chdir("#{fullpath}")
+            output = %x[ git #{command}]
+            printf "============================[ %30s ]=======\n%s", path, output
         end
     end
 end
 
-checkshit
+if ARGV[0].nil?
+    command = "state"
+else
+    command = ARGV
+end
+
+puts "Running `git #{command}` on all repositories..."
+gitworld command
 
 # vim: set ft=ruby
