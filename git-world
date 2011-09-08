@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+require 'open3'
+include Open3
 
 # TODO: use colors in output
 
@@ -18,8 +20,14 @@ def gitworld(command)
         fullpath = "#{home}/#{path}"
         if File.directory? fullpath
             Dir.chdir("#{fullpath}")
-            output = %x[ git #{command}]
-            printf "============================[ %30s ]=======\n%s", path, output
+            popen3("git #{command}") do |stdin, stdout, stderr, wait_thr|
+                output = stdout.read
+                error = stderr.read
+                printf "============================[ %30s ]=======\n%s", path, output
+                puts "" if output.length > 0
+                print stderr.read
+                puts "" if error.length > 0
+            end
         end
     end
 end
