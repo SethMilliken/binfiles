@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+def checkshit
+    put `git io`
+end
+
+checkshit
+
+# vim: set ft=ruby
