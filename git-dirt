@@ -1,25 +1,27 @@
-#! /usr/bin/awk -f
-/^[ ]*D/  { deleted++   };
-/^[ ]*R/  { renamed++   };
-/^[ ]*C/  { copied++    };
-/^[ ]*M/  { modified++  };
-/^[ ]*A/  { added++     };
-/^[ ]*U/  { unmerged++  };
-/^[ ]*\?/ { untracked++ };
+#!/bin/bash
+git status -s | awk "
+/^\?\? /     { untracked++ };
+/^[AM]  /    { added++     };
+/^[A ][MT] / { modified++  };
+/^R  /       { renamed++   };
+/^[A ]D /    { deleted++   };
+/^UU /       { unmerged++  };
+/^C  /       { copied++    };
 
 END {
 
-    status["deleted"]   = deleted+0     "✖";
-    status["modified"]  = modified+0    "▹";
-    status["renamed"]   = renamed+0     "➜";
-    status["untracked"] = untracked+0   "✭";
-    status["added"]     = added+0       "✚";
-    status["unmerged"]  = unmerged+0    "⇋";
-    status["copied"]    = copied+0      "ⓒ";
+    status[\"deleted\"]   = deleted+0     \"✖\";
+    status[\"modified\"]  = modified+0    \"▹\";
+    status[\"renamed\"]   = renamed+0     \"➜\";
+    status[\"untracked\"] = untracked+0   \"✭\";
+    status[\"added\"]     = added+0       \"✚\";
+    status[\"unmerged\"]  = unmerged+0    \"⇋\";
+    status[\"copied\"]    = copied+0      \"ⓒ\";
 
     for (i in status) {
         if (status[i]+0 != 0) {
-            printf(status[i] " ");
+            printf(status[i] \" \");
         }
     }
 }
+"
