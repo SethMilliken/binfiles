@@ -57,7 +57,7 @@ function select_network {
             case ${HOSTNAME} in
                 "samsara.local")    run_synergy client ${DESTINATION}
                                     ;;
-                "seth.local")       run_synergy host with "${HOME}/bin/synergy.conf" && sleep 1; ssh samsara synswitch work
+                "seth.local")       run_synergy host with "${HOME}/bin/synergy.conf" && sleep 1; synremote samsara work
                                     ;;
             esac
             ;;
@@ -65,7 +65,7 @@ function select_network {
             case ${HOSTNAME} in
                 "laboratory.local")    run_synergy client ${DESTINATION}
                                     ;;
-                "samsara.local") run_synergy host with "${HOME}/bin/synergy.conf" && sleep 1; ssh laboratory synswitch home
+                "samsara.local") run_synergy host with "${HOME}/bin/synergy.conf" && sleep 1; synremote laboratory home
                                     ;;
             esac
             ;;
@@ -75,7 +75,7 @@ function select_network {
                                     ;;
                 "seth.local")       run_synergy client ${DESTINATION}
                                     ;;
-                "laboratory.local") run_synergy host with "${HOME}/bin/synergy-lab.conf" && sleep 1; ssh samsara synswitch lab; ssh seth synswitch lab
+                "laboratory.local") run_synergy host with "${HOME}/bin/synergy-lab.conf" && sleep 1; synremote samsara lab; synremote seth lab
                                     ;;
             esac
             ;;
@@ -83,6 +83,13 @@ function select_network {
                                     #run_synergy host with "${figure this out}"
                                     ;;
     esac
+}
+
+function synremote {
+    DESTINATION=$1
+    CONFIG=$2
+    echo "Initiating remote switch to \"${CONFIG}\" @ \"${DESTINATION}\"..."
+    ssh ${DESTINATION} synswitch ${CONFIG}
 }
 
 function run_synergy {
