@@ -9,15 +9,16 @@ HOST=dev
 MOUNTPOINT=${HOME}/sandbox/work/vm
 VOLUMENAME=vm
 
-if [ -d ${MOUNTPOINT} ]; then
+if [ ! -d ${MOUNTPOINT} ]; then
     echo "Creating missing mount directory : \"${MOUNTPOINT}\""
     mkdir -p ${MOUNTPOINT}
 fi
 if [ "$1" == "clean" ]; then
     umount -f ${MOUNTPOINT}
+    exit 0
 fi
 if [ ! $(ls ${MOUNTPOINT} 2> /dev/null | wc -l) -gt "0" ]; then
-    ${DEBUG} sshfs ${HOST}: ${MOUNTPOINT} -oauto_cache,reconnect,volname=${VOLUMENAME}
+    ${DEBUG} sshfs ${HOST}: ${MOUNTPOINT} -C -oauto_cache,reconnect,follow_symlinks,volname=${VOLUMENAME}
     ps axwww | grep sshfs
 else
     echo "Mount directory not empty: \"${MOUNTPOINT}\""
