@@ -1,53 +1,0 @@
-# Create a ready-to-go screen session
-#
-source $HOME/.screenrc
-
-chdir $HOME
-screen -t  '~'
-stuff "git state"
-
-chdir $HOME/.vim
-screen -t .vim zsh
-stuff "git state"
-
-chdir $HOME/bin
-screen -t bin zsh
-stuff "git state"
-
-chdir $HOME/.pentadactyl
-screen -t pentadactyl zsh
-stuff "git state"
-
-chdir $HOME/sandbox/work
-screen -t engage zsh
-stuff "engage"
-
-chdir $HOME/sandbox/work/
-screen -t work zsh
-stuff "git state"
-
-chdir $HOME/staging/vim
-screen -t vim-test  zsh
-
-chdir $HOME/sandbox/code
-screen -t code zsh
-
-chdir $HOME/bin
-screen -t screen zsh
-stuff "vim seth.screen"
-
-chdir $HOME/bin
-screen -t synswitch zsh
-stuff "synswitch work"
-
-chdir $HOME
-screen -t brew zsh
-stuff "brew update && brew upgrade"
-
-chdir $HOME/bin
-screen -t mount_vm zsh
-stuff "mount_vm"
-
-chdir $HOME
-
-# vim: ft=screen
