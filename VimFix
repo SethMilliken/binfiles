@@ -2,15 +2,31 @@
 #
 # This is a script for modifying copies of MacVim to uniquely identify them.
 #
+APP="MacVim"
 
-def vimfix(identifier, name, install_root, icon)
+def install_root()
+  return "/Applications"
+end
+
+def source_root()
+  full_path = Dir.glob("/usr/local/Cellar/macvim/**/#{APP}.app")
+  if full_path.length > 0
+    return File.dirname(full_path[-1])
+  end
+  full_path = "/Applications/#{APP}.app"
+  if File.exists? full_path
+    return File.dirname(full_path)
+  end
+end
+
+def vimfix(identifier, name, icon)
     full_path="#{install_root}/#{name}.app/Contents"
     if /Scratch/ =~ name
         bundle_id="org.vim.MacVim"
     else
         bundle_id="org.vim.MacVim.#{name}"
     end
-    create_copy(full_path, install_root, name) unless File.exist? full_path
+    create_copy(full_path, name) unless File.exist? full_path
     if File.exist? full_path
         `/usr/libexec/PlistBuddy #{full_path}/Info.plist -c 'Set :CFBundleIdentifier org.vim.'#{name}`
         `/usr/libexec/PlistBuddy #{full_path}/Info.plist -c 'Set :CFBundleName '#{name}`
@@ -20,19 +36,19 @@ def vimfix(identifier, name, install_root, icon)
     end
 end
 
-def create_copy(full_path, install_root, name)
+def create_copy(full_path, name)
     printf "%s was not found. Copying...\n", full_path
-    `cp -Rp "#{install_root}/MacVim.app" "#{install_root}/#{name}.app"`
+    `cp -Rp "#{source_root}/MacVim.app" "#{install_root}/#{name}.app"`
 end
 
-vimfix 'VIM3', 'Todo',           '/Applications', 'VimGreen.icns'
-vimfix 'VIM4', 'Vimwiki',        '/Applications', 'VimPaleGreen.icns'
-vimfix 'VIM5', 'Tasks',          '/Applications', 'VimPurple.icns'
-vimfix 'VIM6', 'Research',       '/Applications', 'VimGrey.icns'
-vimfix 'VIM7', 'SourceCode',     '/Applications', 'VimBlue.icns'
-vimfix 'VIM8', 'Scratch',        '/Applications', 'VimOrange.icns'
-vimfix 'VIMA', 'AdiumVim',       '/Applications', 'VimOrange.icns'
-vimfix 'VIMC', 'ColloquyVim',    '/Applications', 'VimOrange.icns'
-vimfix 'VIMH', 'VimHelp',        '/Applications', 'VimGrey.icns'
-vimfix 'VIMM', 'MacVim',         '/Applications', 'VimGreen.icns'
-vimfix 'VIMT', 'TwitVim',        '/Applications', 'VimBlue.icns'
+vimfix 'VIM3', 'Todo',           'VimGreen.icns'
+vimfix 'VIM4', 'Vimwiki',        'VimPaleGreen.icns'
+vimfix 'VIM5', 'Tasks',          'VimPurple.icns'
+vimfix 'VIM6', 'Research',       'VimGrey.icns'
+vimfix 'VIM7', 'SourceCode',     'VimBlue.icns'
+vimfix 'VIM8', 'Scratch',        'VimOrange.icns'
+vimfix 'VIMH', 'VimHelp',        'VimGrey.icns'
+vimfix 'VIMM', 'MacVim',         'VimGreen.icns'
+vimfix 'VIMT', 'TwitVim',        'VimBlue.icns'
+#vimfix 'VIMA', 'AdiumVim',       'VimOrange.icns'
+#vimfix 'VIMC', 'ColloquyVim',    'VimOrange.icns'
