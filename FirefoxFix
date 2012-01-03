@@ -22,7 +22,7 @@ def fix(identifier, name, install_root, icon)
         `/usr/libexec/PlistBuddy #{full_path}/Info.plist -c 'Set :CFBundleName '#{name}`
         `/usr/libexec/PlistBuddy #{full_path}/Info.plist -c 'Set :CFBundleSignature '#{identifier}`
         `/usr/bin/sed -i '' -es/#{ORIGINAL_SIG}/#{identifier}/ #{full_path}/PkgInfo`
-        `/bin/cp ~/Pictures/#{APPNAME}Icons/#{icon} #{full_path}/Resources/#{ICON_NAME}.icns`
+        `/bin/cp ~/Pictures/FirefoxIcons/#{icon} #{full_path}/Resources/#{ICON_NAME}.icns` unless icon.nil?
     end
 end
 
@@ -31,8 +31,9 @@ def create_copy(full_path, install_root, name)
     `cp -Rp "#{install_root}/#{APPNAME}.app" "#{install_root}/#{APP_PREFIX}#{name}.app"`
 end
 
-fix 'FFBR' , 'Browse'   , '/Applications' , 'FirefoxBlue.icns'
-fix 'FFDY' , 'Dactyl'   , '/Applications' , 'FireFoxBlue.icns'
+#fix 'FFTS' , 'Test'     , '/Applications' , nil
+APPNAME="FirefoxNightly"
+fix 'FFBR' , 'Browse'   , '/Applications' , 'FirefoxOrange.icns'
 fix 'FFSS' , 'Research' , '/Applications' , 'FireFoxBlue.icns'
-fix 'FFTS' , 'Test'     , '/Applications' , 'FireFoxBlue.icns'
-fix 'FFVO' , 'Volatile' , '/Applications' , 'FireFoxBlue.icns'
+#fix 'FFVO' , 'Volatile' , '/Applications' , 'FireFoxBlue.icns'
+#fix 'FFDY' , 'Dactyl'   , '/Applications' , 'FireFoxBlue.icns'
