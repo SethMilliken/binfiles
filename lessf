@@ -1,0 +1,10 @@
+#!/bin/sh
+LOGFILE=$1
+shift
+PATTERN=$@
+TEMP_DIR=/tmp/lesstmp
+TEMP_FILE="$TEMP_DIR/$(basename $LOGFILE)"
+[ ! -d $TEMP_DIR ] && mkdir $TEMP_DIR
+trap 'rm -rf "$TEMP_DIR"; exit' INT TERM EXIT
+( tail -f "$LOGFILE" | grep --line-buffered $PATTERN ) > "$TEMP_FILE" | less +F "$TEMP_FILE"
+trap - INT TERM EXIT
