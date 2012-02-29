@@ -108,7 +108,7 @@ on dispatch_message()
 end dispatch_message
 
 on send_notification(parameters)
- tell application "GrowlHelperApp"
+ tell application "Growl"
    set the all_notifications to {notification of parameters}
    set the enabled_notifications to {notification of parameters}
    set the notification_name to (notification of parameters)
