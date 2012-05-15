@@ -1,7 +1,8 @@
 #!/bin/bash
 # Growl 3.0
-GROWLHOME="/Applications/"
+APPHOME="/Applications/"
 GROWLAPP="Growl.app"
+DIVVYAPP="Divvy.app"
 NOTIFICATION_SCRIPT="${HOME}/bin/notify"
 
 function ensure_running {
@@ -16,8 +17,8 @@ function ensure_running {
 
 function open_growl {
     APP=$1
-    if [ -d ${GROWLHOME} ]; then
-        open "${GROWLHOME}/${APP}"
+    if [ -d ${APPHOME} ]; then
+        open "${APPHOME}/${APP}"
     fi
 }
 
@@ -29,5 +30,13 @@ end tell
 END_SCRIPT
 }
 
+
+function bounce_divvy {
+    killall Divvy 2>/dev/null
+    open ${APPHOME}/${DIVVYAPP}
+    ${NOTIFICATION_SCRIPT} 'Growl' "false" "Restarted" "Divvy" "" "Divvy"
+}
+
 ensure_running
 clear_notifications
+bounce_divvy
