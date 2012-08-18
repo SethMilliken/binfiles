@@ -9,6 +9,12 @@ function banner() {
     printf "===============================================[     %20s   ]=====\n" ${text}
 }
 
+function detect_root() {
+    toplevel=$(git rev-parse --git-dir | awk -F'.git' '{print $1}')
+    cd ${toplevel}
+    pwd
+}
+
 function super_update() {
     banner "SUPER UPDATE" true
     git pull --ff-only
@@ -65,6 +71,7 @@ function save_checkpoint() {
 }
 
 function run() {
+    detect_root
     super_update
     store_branchnames
     dirt_check
