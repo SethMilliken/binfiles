@@ -11,7 +11,7 @@ function banner() {
 
 function detect_root() {
     toplevel=$(git rev-parse --git-dir | awk -F'.git' '{print $1}')
-    cd ${toplevel}
+    cd ${toplevel:-.}
     pwd
 }
 
