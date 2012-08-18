@@ -67,7 +67,7 @@ commandList.insert(Command.new("ffdev",   "Open dev FireFox.", "/Applications/Fi
 commandList.insert(Command.new("ffvimp",   "Open vimperator FireFox.", "/Applications/FireFoxTest.app/Contents/MacOS/firefox --chromebug -P VimperatorTest"))
 commandList.insert(Command.new("fftest-choose",   "Open FireFoxTest.", "/Applications/FireFoxTest.app/Contents/MacOS/firefox -ProfileManager"))
 commandList.insert(Command.new("fftest",   "Open FireFoxTest.", "/Applications/FireFoxTest.app/Contents/MacOS/firefox -P Test"))
-commandList.insert(Command.new("ffchoose",   "Open selected FireFox.", "/Applications/FireFoxVolatile.app/Contents/MacOS/firefox --chromebug -ProfileManager"))
+commandList.insert(Command.new("ffchoose",   "Open selected FireFox.", "/Applications/FireFox.app/Contents/MacOS/firefox --chromebug -ProfileManager"))
 
 # Parse Options
 # TODO: Actually use --instance
