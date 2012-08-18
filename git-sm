@@ -2,8 +2,7 @@
 #set -e
 function banner() {
     text=$1
-    suppress=$2
-    if [ -z "$2"]; then echo; fi
+    if [ -z "$2" ]; then echo; fi
     printf "===============================================[     %20s   ]=====\n" ${text}
 }
 
