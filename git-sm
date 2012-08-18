@@ -43,7 +43,14 @@ function submodule_update() {
 
 function checkout() {
     banner "CHECKOUT"
-    git submodule foreach 'git checkout $(git config user.default-branch)'
+    default_branch="$(git config user.default-branch)"
+    git submodule foreach '                                                    \
+        if [[ -n "${default_branch}" ]]; then                                  \
+            git checkout ${default_branch};                                    \
+        else                                                                   \
+            git checkout master || true;                                       \
+        fi;                                                                    \
+    '
 }
 
 function update() {
