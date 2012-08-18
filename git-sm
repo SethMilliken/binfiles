@@ -55,7 +55,13 @@ function checkout() {
 
 function update() {
     banner "UPDATE"
-    git submodule foreach 'git pull --rebase'
+    git submodule foreach '                                                    \
+        if [[ "HEAD" == "$(git rev-parse --abbrev-ref HEAD)" ]]; then          \
+            echo "\tCannot update detached head.";                             \
+        else                                                                   \
+            git pull --rebase;                                                 \
+        fi;                                                                    \
+    '
 }
 
 function poption() {
