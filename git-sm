@@ -1,35 +1,51 @@
 #!/usr/bin/env bash
 #set -e
+
+TIMESTAMP=$(date +%Y-%m-%d.%T)
+
 function banner() {
     text=$1
     if [ -z "$2" ]; then echo; fi
     printf "===============================================[     %20s   ]=====\n" ${text}
 }
 
+function super_update() {
 banner "SUPER UPDATE" true
 git pull --ff-only
+}
 
+function store_branchnames() {
 banner "STORE BRANCHNAMES"
 git submodule foreach 'git config user.default-branch $(git rev-parse --abbrev-ref HEAD)'
+}
 
+function dirt_check() {
 banner "DIRT CHECK"
 git submodule foreach '                                                        \
     if [ -n "$(git diff-index HEAD --)" ]; then                                \
-        git stash save --quiet "autostash $(date +%Y-%m-%d.%T)" &&             \
+        git stash save --quiet "autostash '${TIMESTAMP}'" &&                   \
         git config user.autostashed true &&                                    \
         echo "\tStashed dirt.";                                                \
     fi;                                                                        \
 '
+}
 
+function submodule_update() {
 banner "SUBMODULE UPDATE"
 git submodule update --init
+}
 
+function checkout() {
 banner "CHECKOUT"
 git submodule foreach 'git checkout $(git config user.default-branch)'
+}
 
+function update() {
 banner "UPDATE"
 git submodule foreach 'git pull --rebase'
+}
 
+function poption() {
 banner "POP-TION"
 git submodule foreach '                                                        \
     if [[ -n "$(git config user.autostashed)" ]]; then                         \
@@ -38,3 +54,24 @@ git submodule foreach '                                                        \
         echo "\tRestored dirt.";                                               \
     fi;                                                                        \
 '
+}
+
+function save_checkpoint() {
+banner "SAVE CHECKPOINT"
+git commit --message="checkpoint ${TIMESTAMP}" -- \
+    .gitmodules $(awk -F\" '/submodule/{printf $2 " "}' .gitmodules)
+    default_remote=$(git config branch.$(git rev-parse --abbrev-ref HEAD).remote)
+    echo "git push ${default_remote} HEAD"
+}
+
+function run() {
+    super_update
+    store_branchnames
+    dirt_check
+    submodule_update
+    checkout
+    update
+    poption
+    save_checkpoint
+}
+run
