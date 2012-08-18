@@ -4,9 +4,8 @@
 TIMESTAMP=$(date +%Y-%m-%d.%T)
 
 function banner() {
-    text=$1
-    if [ -z "$2" ]; then echo; fi
-    printf "===============================================[     %20s   ]=====\n" ${text}
+    text="$1"
+    printf "===============================================[     %20s   ]=====\n" "${text}"
 }
 
 function detect_root() {
@@ -16,7 +15,7 @@ function detect_root() {
 }
 
 function super_update() {
-    banner "SUPER UPDATE" true
+    banner "SUPER UPDATE"
     git pull --ff-only
 }
 
@@ -97,4 +96,4 @@ function run() {
 
 run
 
-#vim: ft=sh
+#vim: ft=sh ve=all
