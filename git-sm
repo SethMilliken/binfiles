@@ -96,4 +96,4 @@ function run() {
 
 run
 
-#vim: ft=sh ve=all
+# vim: set ft=sh ve=all:
