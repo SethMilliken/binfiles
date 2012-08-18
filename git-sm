@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+#set -e
+function banner() {
+    text=$1
+    suppress=$2
+    if [ -z "$2"]; then echo; fi
+    printf "===============================================[     %20s   ]=====\n" ${text}
+}
+
+banner "SUPER UPDATE" true
+git pull --ff-only
+
+banner "STORE BRANCHNAMES"
+git submodule foreach 'git config user.default-branch $(git rev-parse --abbrev-ref HEAD)'
+
+banner "DIRT CHECK"
+git submodule foreach '                                                        \
+    if [ -n "$(git diff-index HEAD --)" ]; then                                \
+        git stash -q &&                                                        \
+        git config user.autostashed true &&                                    \
+        echo "\tStashed dirt.";                                                \
+    fi;                                                                        \
+'
+
+banner "SUBMODULE UPDATE"
+git submodule update --init
+
+banner "CHECKOUT"
+git submodule foreach 'git checkout $(git config user.default-branch)'
+
+banner "UPDATE"
+git submodule foreach 'git pull --rebase'
+
+banner "POP-TION"
+git submodule foreach '                                                        \
+    if [[ -n "$(git config user.autostashed)" ]]; then                         \
+        git stash pop -q &&                                                    \
+        git config --unset user.autostashed &&                                 \
+        echo "\tRestored dirt.";                                               \
+    fi;                                                                        \
+'
