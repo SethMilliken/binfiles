@@ -3,37 +3,51 @@
 # This is a script for modifying copies of Firefox to uniquely identify them.
 #
 
-APPNAME="Firefox"
-ORIGINAL_SIG="MOZB"
-ICON_NAME="firefox"
-BUNDLE_ID="org.mozilla.firefox"
-APP_PREFIX="Firefox"
+class FirefoxClone
+  ATTRIBUTES = %w{ original_sig icon_name bundle_id app_prefix identifier name install_root icon original }.map {|attr| attr.to_sym }
+  attr *ATTRIBUTES
 
-def fix(identifier, name, install_root, icon)
-    full_path="#{install_root}/#{APP_PREFIX}#{name}.app/Contents"
-    if /Scratch/ =~ name
-        bundle_id=BUNDLE_ID
+  def initialize(args = {})
+    args = {:install_root => '/Applications', :icon => 'FirefoxBlue.icns', :app_prefix => 'Firefox', :original_sig => 'MOZB', :icon_name => 'firefox', :bundle_id => 'org.mozilla.firefox'}.merge(args)
+    ATTRIBUTES.each {|attr| instance_variable_set("@#{attr}", args[attr]) }
+    clone
+  end
+
+  def clone
+    if /Scratch/ =~ @name
+      bundle_id=@bundle_id
     else
-        bundle_id="#{BUNDLE_ID}.#{name}"
+      bundle_id="#{@bundle_id}.#{@name}"
     end
-    create_copy(full_path, install_root, name) unless File.exist? full_path
-    if File.exist? full_path
-        `/usr/libexec/PlistBuddy #{full_path}/Info.plist -c 'Set :CFBundleIdentifier #{BUNDLE_ID}.'#{name}`
-        `/usr/libexec/PlistBuddy #{full_path}/Info.plist -c 'Set :CFBundleName '#{name}`
-        `/usr/libexec/PlistBuddy #{full_path}/Info.plist -c 'Set :CFBundleSignature '#{identifier}`
-        `/usr/bin/sed -i '' -es/#{ORIGINAL_SIG}/#{identifier}/ #{full_path}/PkgInfo`
-        `/bin/cp ~/Pictures/FirefoxIcons/#{icon} #{full_path}/Resources/#{ICON_NAME}.icns` unless icon.nil?
+    create_copy
+    if File.exist?(contents)
+      `/usr/libexec/PlistBuddy #{contents}/Info.plist -c 'Set :CFBundleIdentifier #{bundle_id}'`
+      `/usr/libexec/PlistBuddy #{contents}/Info.plist -c 'Set :CFBundleName '#{@name}`
+      `/usr/libexec/PlistBuddy #{contents}/Info.plist -c 'Set :CFBundleSignature '#{@identifier}`
+      `/usr/bin/sed -i '' -es/#{@original_sig}/#{@identifier}/ #{contents}/PkgInfo`
+      `/bin/cp ~/Pictures/FirefoxIcons/#{@icon} #{contents}/Resources/#{@icon_name}.icns` unless @icon.nil?
     end
+  end
+
+  def destination
+    "#{@install_root}/#{@app_prefix}#{@name}.app"
+  end
+
+  def contents
+    "#{destination}/Contents"
+  end
+
+  def create_copy
+    unless File.exist?(destination)
+      clone_parent = "#{@install_root}/#{@original}.app"
+      printf "'%s' not found. Cloning from '%s' (%s, %s)...\n", destination, clone_parent, @identifier, @icon
+      `cp -Rp "#{clone_parent}" "#{destination}"`
+    end
+  end
 end
 
-def create_copy(full_path, install_root, name)
-    printf "%s was not found. Copying...\n", full_path
-    `cp -Rp "#{install_root}/#{APPNAME}.app" "#{install_root}/#{APP_PREFIX}#{name}.app"`
-end
-
-#fix 'FFTS' , 'Test'     , '/Applications' , nil
-APPNAME="FirefoxNightly"
-fix 'FFBR' , 'Browse'   , '/Applications' , 'FirefoxOrange.icns'
-fix 'FFSS' , 'Research' , '/Applications' , 'FireFoxBlue.icns'
-#fix 'FFVO' , 'Volatile' , '/Applications' , 'FireFoxBlue.icns'
-#fix 'FFDY' , 'Dactyl'   , '/Applications' , 'FireFoxBlue.icns'
+FirefoxClone.new(:identifier => 'FFTS', :name => 'Test',     :original => 'Firefox',     :icon => 'FirefoxOrange.icns')
+FirefoxClone.new(:identifier => 'FFBR', :name => 'Browse',   :original => 'FirefoxBeta', :icon => 'FirefoxOrange.icns')
+FirefoxClone.new(:identifier => 'FFSS', :name => 'Research', :original => 'FirefoxBeta')
+#FirefoxClone.new(:identifier => 'FFVO', :name => 'Volatile', :original => 'Firefox')
+#FirefoxClone.new(:identifier => 'FFDY', :name => 'Dactyl',   :original => 'Firefox')
