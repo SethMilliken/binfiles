@@ -1,0 +1,68 @@
+#!/bin/sh
+self=$(basename $0)
+
+mode_exit_keys='Enter'
+mode_cancel_keys='C-c q'
+copy_selection_keys='C-t b'
+copy_cancel_keys='C-r'
+
+if [ $# -ne 1 ]; then
+    echo "${self} takes a single argument"
+    exit 1
+fi
+
+mode=$1
+
+copy_enter() {
+    for key in ${mode_exit_keys}; do
+        tmux bind-key -n ${key} run-shell "${self} copy-exit"
+    done
+    for key in ${mode_cancel_keys}; do
+        tmux bind-key -n ${key} run-shell "${self} copy-cancel"
+    done
+    for key in ${copy_selection_keys}; do
+        tmux bind-key -t vi-copy ${key} copy-selection
+    done
+    for key in ${copy_cancel_keys}; do
+        tmux bind-key -t vi-copy ${cancel_copy_keys} cancel
+    done
+    tmux copy-mode;
+}
+
+copy_exit() {
+    for key in ${copy_selection_keys}; do
+        tmux send-keys ${key}
+        break;
+    done
+    unbind_keys
+    reattach-to-user-namespace -l zsh -c "tmux saveb - | pbcopy"
+}
+
+copy_cancel() {
+    for key in ${copy_cancel_keys}; do
+        tmux send-keys ${key}
+        break;
+    done
+    unbind_keys
+}
+
+unbind_keys() {
+    for key in ${mode_exit_keys} ${mode_cancel_keys}; do
+        tmux unbind-key -n ${key}
+    done
+    for key in ${copy_selection_keys} ${copy_cancel_keys}; do
+        tmux unbind-key -t vi-copy ${key}
+    done
+}
+
+case $mode in
+     "copy-enter") copy_enter
+                     ;;
+      "copy-exit") copy_exit
+                     ;;
+    "copy-cancel") copy_cancel
+                     ;;
+                *) echo "Unrecognized argument: $*";
+                   exit 1;
+                     ;;
+esac
