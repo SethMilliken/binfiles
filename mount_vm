@@ -5,7 +5,7 @@
 
 DEBUG=
 #DEBUG=echo
-HOST=dev
+HOST=odev
 MOUNTPOINT=${HOME}/sandbox/work/vm
 VOLUMENAME=vm
 
