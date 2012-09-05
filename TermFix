@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+#
+# This is a script for modifying copies of iTerm to uniquely identify them.
+#
+APP="iTerm"
+
+def install_root()
+  return "/Applications"
+end
+
+def source_root()
+  full_path = Dir.glob("/usr/local/Cellar/iterm/**/#{APP}.app")
+  if full_path.length > 0
+    return File.dirname(full_path[-1])
+  end
+  full_path = "/Applications/#{APP}.app"
+  if File.exists? full_path
+    return File.dirname(full_path)
+  end
+end
+
+def fixup(identifier, name, icon)
+    full_path="#{install_root}/#{name}.app/Contents"
+    if /Scratch/ =~ name
+        bundle_id="com.googlecode.iterm2"
+    else
+        bundle_id="com.googlecode.iterm2.#{name}"
+    end
+    create_copy(full_path, name) unless File.exist? full_path
+    if File.exist? full_path
+        `/usr/libexec/PlistBuddy #{full_path}/Info.plist -c 'Set :CFBundleIdentifier '#{bundle_id}`
+        `/usr/libexec/PlistBuddy #{full_path}/Info.plist -c 'Set :CFBundleName '#{name}`
+        `/usr/libexec/PlistBuddy #{full_path}/Info.plist -c 'Set :CFBundleSignature '#{identifier}`
+        `/usr/bin/sed -i '' -es/ITRM/#{identifier}/ #{full_path}/PkgInfo`
+        #`/bin/cp ~/Pictures/MacVimIcons/#{icon} #{full_path}/Resources/MacVim.icns`
+    end
+end
+
+def create_copy(full_path, name)
+    printf "%s was not found. Copying...\n", full_path
+    `cp -Rp "#{source_root}/iTerm.app" "#{install_root}/#{name}.app"`
+end
+
+fixup 'ITR1', 'Remotes',           'VimGreen.icns'
+fixup 'ITR2', 'VM',        'VimPaleGreen.icns'
