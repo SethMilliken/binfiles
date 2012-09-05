@@ -46,8 +46,9 @@ class FirefoxClone
   end
 end
 
-FirefoxClone.new(:identifier => 'FFTS', :name => 'Test',     :original => 'Firefox',     :icon => 'FirefoxOrange.icns')
-FirefoxClone.new(:identifier => 'FFBR', :name => 'Browse',   :original => 'FirefoxBeta', :icon => 'FirefoxOrange.icns')
-FirefoxClone.new(:identifier => 'FFSS', :name => 'Research', :original => 'FirefoxBeta')
-#FirefoxClone.new(:identifier => 'FFVO', :name => 'Volatile', :original => 'Firefox')
-#FirefoxClone.new(:identifier => 'FFDY', :name => 'Dactyl',   :original => 'Firefox')
+FirefoxClone.new(:identifier => 'FFTE' , :name => 'Test'     , :original => 'Firefox' , :icon => 'FirefoxGlass.icns')
+FirefoxClone.new(:identifier => 'FFTR' , :name => 'Track'    , :original => 'Firefox' , :icon => 'FirefoxSauron.icns')
+FirefoxClone.new(:identifier => 'FFBR' , :name => 'Browse'   , :original => 'Firefox' , :icon => 'FirefoxWhite.icns')
+FirefoxClone.new(:identifier => 'FFRE' , :name => 'Research' , :original => 'Firefox' , :icon => 'FirefoxBlue.icns')
+#FirefoxClone.new(:identifier => 'FFVO' , :name => 'Volatile' , :original => 'Firefox')
+#FirefoxClone.new(:identifier => 'FFDY' , :name => 'Dactyl'   , :original => 'Firefox')
