@@ -2,44 +2,64 @@
 #
 # This is a script for modifying copies of iTerm to uniquely identify them.
 #
-APP="iTerm"
 
-def install_root()
-  return "/Applications"
-end
+class ItermClone
+  ATTRIBUTES = %w{ original_sig icon_name bundle_id app_prefix identifier name install_root icon original }.map {|attr| attr.to_sym }
+  attr *ATTRIBUTES
 
-def source_root()
-  full_path = Dir.glob("/usr/local/Cellar/iterm/**/#{APP}.app")
-  if full_path.length > 0
-    return File.dirname(full_path[-1])
+  def initialize(args = {})
+    args = {:install_root => '/Applications', :icon => 'iTerm.icns', :app_prefix => '', :original_sig => 'ITRM', :icon_name => 'iTerm', :bundle_id => 'com.googlecode.iterm2'}.merge(args)
+    ATTRIBUTES.each {|attr| instance_variable_set("@#{attr}", args[attr]) }
+    clone
   end
-  full_path = "/Applications/#{APP}.app"
-  if File.exists? full_path
-    return File.dirname(full_path)
-  end
-end
 
-def fixup(identifier, name, icon)
-    full_path="#{install_root}/#{name}.app/Contents"
-    if /Scratch/ =~ name
-        bundle_id="com.googlecode.iterm2"
+  def clone
+    if /Scratch/ =~ @name
+      bundle_id=@bundle_id
     else
-        bundle_id="com.googlecode.iterm2.#{name}"
+      bundle_id="#{@bundle_id}.#{@name}"
     end
-    create_copy(full_path, name) unless File.exist? full_path
-    if File.exist? full_path
-        `/usr/libexec/PlistBuddy #{full_path}/Info.plist -c 'Set :CFBundleIdentifier '#{bundle_id}`
-        `/usr/libexec/PlistBuddy #{full_path}/Info.plist -c 'Set :CFBundleName '#{name}`
-        `/usr/libexec/PlistBuddy #{full_path}/Info.plist -c 'Set :CFBundleSignature '#{identifier}`
-        `/usr/bin/sed -i '' -es/ITRM/#{identifier}/ #{full_path}/PkgInfo`
-        #`/bin/cp ~/Pictures/MacVimIcons/#{icon} #{full_path}/Resources/MacVim.icns`
+    create_copy
+    puts contents
+    if File.exist?(contents)
+      `/usr/libexec/PlistBuddy #{contents}/Info.plist -c 'Set :CFBundleIdentifier #{bundle_id}'`
+      `/usr/libexec/PlistBuddy #{contents}/Info.plist -c 'Set :CFBundleName '#{@name}`
+      `/usr/libexec/PlistBuddy #{contents}/Info.plist -c 'Set :CFBundleSignature '#{@identifier}`
+      `/usr/bin/sed -i '' -es/#{@original_sig}/#{@identifier}/ #{contents}/PkgInfo`
+      `/bin/cp ~/Pictures/FirefoxIcons/#{@icon} #{contents}/Resources/#{@icon_name}.icns` unless @icon.nil?
     end
+  end
+
+  def destination
+    "#{@install_root}/#{@app_prefix}#{@name}.app"
+  end
+
+  def contents
+    "#{destination}/Contents"
+  end
+
+  def create_copy
+    unless File.exist?(destination)
+      clone_parent = "#{@install_root}/#{@original}.app"
+      printf "'%s' not found. Cloning from '%s' (%s, %s)...\n", destination, clone_parent, @identifier, @icon
+      `cp -Rp "#{clone_parent}" "#{destination}"`
+    end
+  end
+
+  # TODO: work in brew location
+  def source_root
+    app='iTerm'
+    full_path = Dir.glob("/usr/local/Cellar/iterm/**/#{app}.app")
+    if full_path.length > 0
+      return File.dirname(full_path[-1])
+    end
+    full_path = "/Applications/#{app}.app"
+    if File.exists? full_path
+      return File.dirname(full_path)
+    end
+  end
+
 end
 
-def create_copy(full_path, name)
-    printf "%s was not found. Copying...\n", full_path
-    `cp -Rp "#{source_root}/iTerm.app" "#{install_root}/#{name}.app"`
-end
-
-fixup 'ITR1', 'Remotes',           'VimGreen.icns'
-fixup 'ITR2', 'VM',        'VimPaleGreen.icns'
+ItermClone.new(:identifier => 'ITR1' , :name => 'Remotes' , :original => 'iTerm' , :icon => 'CandC.icns')
+ItermClone.new(:identifier => 'ITR2' , :name => 'VM'      , :original => 'iTerm' , :icon => 'MatrixBlue.icns')
