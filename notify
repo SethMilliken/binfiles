@@ -28,7 +28,7 @@ fi
 ## Arg Name Assignment:
 SCRIPT=$1
 STICKY=$2
-MESSAGE=$3
+MESSAGE=$(echo "${3}" | sed -e 's/"/\\"/g')
 HEADER=$4
 IDENTIFIER=$5
 APP_ICON=$6

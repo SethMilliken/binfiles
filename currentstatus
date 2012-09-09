@@ -3,15 +3,15 @@
 # TODO: better handle missing timestamp
 # TODO: configurable top n items?
 # TODO: supporting vim function to retreive preformatted values?
-# TOOD: add line about adding to crontab & what the entry should look like
+# TODO: add line about adding to crontab & what the entry should look like
 # */15 * * * * /Users/seth/bin/currentstatus 1&> /dev/null
 NOTIFICATION_SCRIPT="${HOME}/bin/notify"
-STATE="you should..."
+STATE="focus on..."
 if [ ${HOSTNAME} == "seth.local" ]; then
     FILE="${HOME}/sandbox/work/janrain.tst.txt"
 else
     FILE="${HOME}/sandbox/personal/todo/personal.tst.txt"
 fi
 RESULT=`head -6 ${FILE} | grep -v '^$' | grep -v 'DOING' | awk -F'201.-' '{print $1}'`
-echo $RESULT
+echo "${RESULT}"
 ${NOTIFICATION_SCRIPT} $(basename $0) "false" "${RESULT}" "${STATE}"
