@@ -1,0 +1,33 @@
+#!/bin/bash
+# Growl 3.0
+APPHOME="/Applications/"
+GROWL_APP="Growl.app"
+BOUNCE_APP="Slate.app"
+NOTIFICATION_SCRIPT="${HOME}/bin/notify"
+
+function ensure_running {
+    RESULT=`ps x | grep Growl | grep -v grep`
+    if [[ $RESULT == "" ]]; then
+        open_growl ${GROWL_APP}
+        sleep 2
+        ${NOTIFICATION_SCRIPT} 'Growl' "false" "Restarted" "Growl" "" "Growl"
+    fi
+}
+
+function open_growl {
+    APP=$1
+    if [ -d ${APPHOME} ]; then
+        open "${APPHOME}/${APP}"
+    fi
+}
+
+function bounce_slate {
+if [[ "$(basename $0)" == "zap-slate" ]]; then
+    killall Slate 2>/dev/null
+    open -g ${APPHOME}/${BOUNCE_APP}
+    ${NOTIFICATION_SCRIPT} 'Growl' "false" "Restarted" "Slate" "" "Slate"
+fi
+}
+
+ensure_running
+bounce_slate
