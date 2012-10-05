@@ -6,8 +6,8 @@ BOUNCE_APP="Slate.app"
 NOTIFICATION_SCRIPT="${HOME}/bin/notify"
 
 function ensure_running {
-    RESULT=`ps x | grep Growl | grep -v grep`
-    if [[ $RESULT == "" ]]; then
+    RESULT=$(ps axwww | grep Growl | grep -v grep)
+    if [[ -z "${RESULT}" ]]; then
         open_growl ${GROWL_APP}
         sleep 2
         ${NOTIFICATION_SCRIPT} 'Growl' "false" "Restarted" "Growl" "" "Growl"
