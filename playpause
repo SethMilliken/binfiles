@@ -6,7 +6,6 @@ NOTIFICATION_SCRIPT="${HOME}/bin/notify"
 ssh ${REMOTE_SERVER} osascript ${TARGET_SCRIPT}
 STATE=`ssh ${REMOTE_SERVER} osascript << END
 tell app "iTunes"
-    activate
     return "iTunes " &  player state
 end tell
 END`
