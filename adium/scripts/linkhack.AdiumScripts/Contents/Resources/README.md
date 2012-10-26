@@ -3,6 +3,13 @@ Adium linkhack Script
 
 Use '/link' to open the most recently mentioned link in your default browser.
 
+Install
+================================================================================
+
+Install by opening `linkhack.AdiumScripts`.
+
+`open linkhack.AdiumScripts`
+
 
 Build
 ================================================================================
