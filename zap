@@ -10,15 +10,15 @@ function ensure_running {
     if [[ $RESULT == "" ]]
     then
         open_growl ${GROWLAPP}
-        sleep 2
+        sleep 1
         ${NOTIFICATION_SCRIPT} 'Growl' "false" "Restarted" "Growl" "" "Growl"
     fi
 }
 
 function open_growl {
     APP=$1
-    if [ -d ${APPHOME} ]; then
-        open "${APPHOME}/${APP}"
+    if [ -d ${APPHOME}/${APP} ]; then
+        open -g "${APPHOME}/${APP}"
     fi
 }
 
@@ -30,6 +30,11 @@ end tell
 END_SCRIPT
 }
 
+function bounce_growl {
+    killall Growl 2>/dev/null
+    sleep 1
+    ensure_running
+}
 
 function bounce_divvy {
 if [[ "$(basename $0)" == "zap-divvy" ]]; then
@@ -39,6 +44,6 @@ if [[ "$(basename $0)" == "zap-divvy" ]]; then
 fi
 }
 
-ensure_running
-clear_notifications
-bounce_divvy
+#clear_notifications
+bounce_growl
+#bounce_divvy
