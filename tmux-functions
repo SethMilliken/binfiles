@@ -24,7 +24,7 @@ copy_enter() {
         tmux bind-key -t vi-copy ${key} copy-selection
     done
     for key in ${copy_cancel_keys}; do
-        tmux bind-key -t vi-copy ${cancel_copy_keys} cancel
+        tmux bind-key -t vi-copy ${key} cancel
     done
     tmux copy-mode;
 }
