@@ -7,6 +7,7 @@ class FirefoxClone
   ATTRIBUTES = %w{ original_sig icon_name bundle_id app_prefix identifier name install_root icon original }.map {|attr| attr.to_sym }
   attr *ATTRIBUTES
 
+  # original_sig = FFSS?
   def initialize(args = {})
     args = {:install_root => '/Applications', :icon => 'FirefoxBlue.icns', :app_prefix => 'Firefox', :original_sig => 'MOZB', :icon_name => 'firefox', :bundle_id => 'org.mozilla.firefox'}.merge(args)
     ATTRIBUTES.each {|attr| instance_variable_set("@#{attr}", args[attr]) }
@@ -20,11 +21,14 @@ class FirefoxClone
       bundle_id="#{@bundle_id}.#{@name}"
     end
     create_copy
+    bundle_name_file="#{contents}/Resources/en.lproj/InfoPlist.strings"
     if File.exist?(contents)
       `/usr/libexec/PlistBuddy #{contents}/Info.plist -c 'Set :CFBundleIdentifier #{bundle_id}'`
       `/usr/libexec/PlistBuddy #{contents}/Info.plist -c 'Set :CFBundleName '#{@name}`
       `/usr/libexec/PlistBuddy #{contents}/Info.plist -c 'Set :CFBundleSignature '#{@identifier}`
       `/usr/bin/sed -i '' -es/#{@original_sig}/#{@identifier}/ #{contents}/PkgInfo`
+      `iconv -f utf-16 -t utf-8 #{bundle_name_file} | /usr/bin/sed -es/#{@app_prefix}/#{@app_prefix}#{@name}/ | iconv -f utf-8 -t utf-16 > #{bundle_name_file}.tmp`
+      `mv #{bundle_name_file}.tmp #{bundle_name_file}`
       `/bin/cp ~/Pictures/FirefoxIcons/#{@icon} #{contents}/Resources/#{@icon_name}.icns` unless @icon.nil?
     end
   end
