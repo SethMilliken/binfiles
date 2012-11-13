@@ -63,3 +63,4 @@ end
 
 ItermClone.new(:identifier => 'ITR1' , :name => 'Remotes' , :original => 'iTerm' , :icon => 'CandC.icns')
 ItermClone.new(:identifier => 'ITR2' , :name => 'VM'      , :original => 'iTerm' , :icon => 'MatrixBlue.icns')
+ItermClone.new(:identifier => 'ITR3' , :name => 'Comm'    , :original => 'iTerm' , :icon => 'MatrixGreen.icns')
