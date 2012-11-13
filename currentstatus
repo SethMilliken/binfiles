@@ -12,6 +12,6 @@ if [ ${HOSTNAME} == "seth.local" ]; then
 else
     FILE="${HOME}/sandbox/personal/todo/personal.tst.txt"
 fi
-RESULT=`head -6 ${FILE} | grep -v '^$' | grep -v 'DOING' | awk -F'201.-' '{print $1}'`
+RESULT=`head -6 ${FILE} | grep -v '^$' | grep -v 'DOING' | grep -v 'WTF' | grep -v '^@' | grep -v '{{{|}}}' | awk -F'201.-' '{print $1}'`
 echo "${RESULT}"
 ${NOTIFICATION_SCRIPT} $(basename $0) "false" "${RESULT}" "${STATE}"
