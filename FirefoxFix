@@ -27,14 +27,16 @@ class FirefoxClone
       `/usr/libexec/PlistBuddy #{contents}/Info.plist -c 'Set :CFBundleName '#{@name}`
       `/usr/libexec/PlistBuddy #{contents}/Info.plist -c 'Set :CFBundleSignature '#{@identifier}`
       `/usr/bin/sed -i '' -es/#{@original_sig}/#{@identifier}/ #{contents}/PkgInfo`
-      `iconv -f utf-16 -t utf-8 #{bundle_name_file} | /usr/bin/sed -es/#{@app_prefix}/#{@app_prefix}#{@name}/ | iconv -f utf-8 -t utf-16 > #{bundle_name_file}.tmp`
+      `iconv -f utf-16 -t utf-8 #{bundle_name_file} | /usr/bin/sed -E -e's/"#{@original}"/"#{@original}#{@name}"/' | iconv -f utf-8 -t utf-16 > #{bundle_name_file}.tmp`
+      @bundle_name = %x[ iconv -f utf-16 -t utf-8 #{bundle_name_file}.tmp | grep CFBundleName | awk -F'"' '{print $2}' ]
       `mv #{bundle_name_file}.tmp #{bundle_name_file}`
       `/bin/cp ~/Pictures/FirefoxIcons/#{@icon} #{contents}/Resources/#{@icon_name}.icns` unless @icon.nil?
+      printf "\tCreated instance: %s", @bundle_name
     end
   end
 
   def destination
-    "#{@install_root}/#{@app_prefix}#{@name}.app"
+    "#{@install_root}/#{@original}#{@name}.app"
   end
 
   def contents
