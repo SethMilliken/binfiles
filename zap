@@ -1,24 +1,23 @@
 #!/bin/bash
-# Growl 3.0
+APPNAME="${1}"
+APP="${APPNAME}.app"
 APPHOME="/Applications/"
-GROWLAPP="Growl.app"
-DIVVYAPP="Divvy.app"
+APPPATH="${APPHOME}/${APP}"
 NOTIFICATION_SCRIPT="${HOME}/bin/notify"
 
 function ensure_running {
-    RESULT=`ps x | grep Growl | grep -v grep`
+    RESULT=`ps x | grep ${APP} | grep -v grep`
     if [[ $RESULT == "" ]]
     then
-        open_growl ${GROWLAPP}
+        open_app
         sleep 1
-        ${NOTIFICATION_SCRIPT} 'Growl' "false" "Restarted" "Growl" "" "Growl"
+        ${NOTIFICATION_SCRIPT} ${APPNAME} "false" "Restarted" "${APPNAME}" "" "${APPNAME}"
     fi
 }
 
-function open_growl {
-    APP=$1
-    if [ -d ${APPHOME}/${APP} ]; then
-        open -g "${APPHOME}/${APP}"
+function open_app {
+    if [ -d ${APPPATH} ]; then
+        open -g "${APPPATH}"
     fi
 }
 
@@ -30,20 +29,10 @@ end tell
 END_SCRIPT
 }
 
-function bounce_growl {
-    killall Growl 2>/dev/null
+function bounce_app {
+    killall ${APPNAME} 2>/dev/null
     sleep 1
     ensure_running
 }
 
-function bounce_divvy {
-if [[ "$(basename $0)" == "zap-divvy" ]]; then
-    killall Divvy 2>/dev/null
-    open -g ${APPHOME}/${DIVVYAPP}
-    ${NOTIFICATION_SCRIPT} 'Growl' "false" "Restarted" "Divvy" "" "Divvy"
-fi
-}
-
-#clear_notifications
-bounce_growl
-#bounce_divvy
+bounce_app
