@@ -23,7 +23,7 @@ function run {
 }
 
 function autodetect {
-    for TARGET in samsara.local seth-pc.local seth.local laboratory.local
+    for TARGET in samsara.local seth-pc.local seth.local laboratory.local Engage-Kanban.local
     do
         HOST=`scutil -r ${TARGET} | grep -q Directly && echo ${TARGET}`
         if [ -n "${HOST}" ]
@@ -55,9 +55,11 @@ function select_network {
     case ${DESTINATION} in
         "seth.local")
             case ${HOSTNAME} in
+                "Engage-Kanban.local")    run_synergy client ${DESTINATION}
+                                    ;;
                 "samsara.local")    run_synergy client ${DESTINATION}
                                     ;;
-                "seth.local")       run_synergy host with "${HOME}/bin/synergy.conf" && sleep 1; synremote samsara work
+                "seth.local")       run_synergy host with "${HOME}/bin/synergy-work.conf" && sleep 1; synremote kanban work
                                     ;;
             esac
             ;;
