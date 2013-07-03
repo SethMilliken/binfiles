@@ -1,0 +1,44 @@
+#!/bin/bash
+APPNAME="${1}"
+MODE="${2}"
+APP="${APPNAME}.app"
+APPHOME="/Applications/"
+ACTION="Opened"
+APPPATH="${APPHOME}/${APP}"
+NOTIFICATION_SCRIPT="${HOME}/bin/notify"
+
+function ensure_running {
+    RESULT=`ps x | grep ${APP} | grep -v grep`
+    if [[ $RESULT == "" ]]
+    then
+        open_app
+        sleep 1
+        ${NOTIFICATION_SCRIPT} ${APPNAME} "false" "${ACTION}" "${APPNAME}" "" "${APPNAME}"
+    fi
+}
+
+function open_app {
+    if [ -d ${APPPATH} ]; then
+        open "${APPPATH}"
+    fi
+}
+
+function bounce_app {
+    RESULT=`killall -s ${APPNAME} 2>/dev/null`
+    if [[ $RESULT != "" ]]; then
+        killall ${APPNAME} 2>/dev/null
+        sleep 1
+        ACTION="Restarted"
+    fi
+    ensure_running
+}
+
+if [[ $MODE == "bounce" ]]; then
+    bounce_app
+elif [[ $MODE == "open" ]]; then
+    open_app
+elif [[ $MODE == "ensure" ]]; then
+    ensure_running
+elif [[ $MODE == "" ]]; then
+    ensure_running
+fi
