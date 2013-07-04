@@ -23,6 +23,14 @@ function open_app {
     fi
 }
 
+function activate_app {
+osascript <<END_SCRIPT
+tell application "${APP}"
+    activate
+end tell
+END_SCRIPT
+}
+
 function bounce_app {
     RESULT=`killall -s ${APPNAME} 2>/dev/null`
     if [[ $RESULT != "" ]]; then
@@ -35,6 +43,8 @@ function bounce_app {
 
 if [[ $MODE == "bounce" ]]; then
     bounce_app
+elif [[ $MODE == "activate" ]]; then
+    activate_app
 elif [[ $MODE == "open" ]]; then
     open_app
 elif [[ $MODE == "ensure" ]]; then
