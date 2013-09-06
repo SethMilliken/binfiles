@@ -18,7 +18,9 @@ function ensure_running {
 }
 
 function open_app {
-    if [ -d ${APPPATH} ]; then
+    if [[ "${APPNAME}" =~ "Firefox" ]]; then
+        ${APPPATH}/Contents/MacOS/firefox -P ${APPNAME##Firefox} &
+    elif [ -d ${APPPATH} ]; then
         open "${APPPATH}"
     fi
 }
@@ -41,6 +43,7 @@ function open_link {
 }
 
 function activate_app {
+ensure_running
 osascript <<END_SCRIPT
 tell application "${APP}"
     activate
