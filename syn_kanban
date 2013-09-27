@@ -1,0 +1,11 @@
+#!/bin/sh
+#
+# synergy active remotely
+#
+NOTIFICATION_SCRIPT="${HOME}/bin/notify"
+if [[ "${HOSTNAME}" == "samsara.local" ]]; then
+    RESULT='laboratory.local'
+else
+    RESULT='Engage Kanban'
+fi
+${NOTIFICATION_SCRIPT} $(basename $0) "true" "${RESULT}"
