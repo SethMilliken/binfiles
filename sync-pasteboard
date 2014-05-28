@@ -4,6 +4,7 @@ if [ -f "$HOME/bin/ssh-agent-refresh" ]; then
 fi
 case "$1" in
     "out") tmux save-buffer - | ssh pasteboard-host pbcopy 2>/dev/null
+           tmux save-buffer - | xclip 2>/dev/null
         ;;
      "in") tmux set-buffer "$(ssh pasteboard-host pbpaste 2>/dev/null)"
         ;;

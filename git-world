@@ -36,7 +36,7 @@ end
 if ARGV[0].nil?
     command = "state"
 else
-    command = ARGV
+  command = ARGV.join(" ")
 end
 
 puts "Running `git #{command}` on all repositories..."
