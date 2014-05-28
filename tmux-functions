@@ -3,7 +3,7 @@ self=$(basename $0)
 
 mode_exit_keys='Enter'
 mode_cancel_keys='C-c q'
-copy_selection_keys='C-t b'
+copy_selection_keys='C-t'
 copy_cancel_keys='C-r'
 
 if [ $# -ne 1 ]; then
