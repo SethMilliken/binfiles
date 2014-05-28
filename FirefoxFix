@@ -57,5 +57,6 @@ FirefoxClone.new(:identifier => 'FFTR' , :name => 'Track'    , :original => 'Fir
 FirefoxClone.new(:identifier => 'FFBR' , :name => 'Browse'   , :original => 'Firefox' , :icon => 'FirefoxWhite.icns')
 FirefoxClone.new(:identifier => 'FFRE' , :name => 'Research' , :original => 'Firefox' , :icon => 'FirefoxBlue.icns')
 FirefoxClone.new(:identifier => 'FFMO' , :name => 'Monitor'  , :original => 'Firefox' , :icon => 'FirefoxSauron.icns')
+FirefoxClone.new(:identifier => 'FFMO' , :name => 'Docs'     , :original => 'Firefox' , :icon => 'FirefoxGlass.icns')
 #FirefoxClone.new(:identifier => 'FFVO' , :name => 'Volatile' , :original => 'Firefox')
 #FirefoxClone.new(:identifier => 'FFDY' , :name => 'Dactyl'   , :original => 'Firefox')
