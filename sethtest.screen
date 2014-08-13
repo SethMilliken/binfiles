@@ -1,55 +1,0 @@
-# Create a ready-to-go screen session
-#
-source $HOME/.screenrc
-
-chdir $HOME
-screen -t  '~'
-stuff "git state"
-
-chdir $HOME/.vim
-screen -t .vim zsh
-stuff "git state"
-
-chdir $HOME/sethbin
-screen -t bin zsh
-stuff "git state"
-
-chdir $HOME/rpx/ruby/bin
-screen -t release zsh
-stuff "./rpx-release -b "
-
-chdir $HOME/bin
-screen -t forkingrails zsh
-stuff "forkingrails --ssl --debug"
-
-chdir $HOME/bin
-screen -t disco zsh
-stuff "disco --ssl --debug"
-
-chdir $HOME
-screen -t db zsh
-stuff "sudo -u postgres psql accelerator_development"
-
-chdir $HOME
-screen -t migrate zsh
-stuff "engage; cd db/migrate"
-
-chdir $HOME
-screen -t engage zsh
-stuff "engage"
-
-chdir /var/log/nginx
-screen -t nginx-logs zsh
-stuff "sudo multitail access.log error.log"
-
-chdir /etc/nginx
-screen -t nginx zsh
-stuff "vim nginx.conf"
-
-chdir $HOME/sethbin
-screen -t screen zsh
-stuff "vim sethtest.screen"
-
-chdir $HOME
-
-# vim: ft=screen

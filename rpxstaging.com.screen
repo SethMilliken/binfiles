@@ -1,59 +1,0 @@
-#
-# Create a ready-to-go screen session
-#
-source $HOME/.screenrc
-
-# 0
-chdir $HOME
-screen -t '~' bash
-stuff "ssh-add"
-
-# 5
-chdir $HOME/bin
-screen -t release bash
-stuff "rpx-pull 2011."
-
-# 4
-chdir $HOME/bin
-screen -t railslog bash
-stuff "less +F /home/murphy/code/release/rails/log/mongrel.log"
-
-# 6
-chdir /var/log/nginx
-screen -t nginx-logs bash
-stuff "sudo multitail access.log error.log"
-
-# 7
-chdir /etc/nginx
-screen -t nginx bash
-stuff "#sudo /etc/init.d/nginx restart"
-stuff "vim sites-enabled/rpxstaging.com +'vsplit nginx.conf' +'split conf.local/ssl-common'"
-
-# 8
-chdir $HOME
-screen -t db bash
-stuff "sudo -u postgres psql accelerator_staging"
-
-# 1
-chdir ~murphy
-screen -t murphy bash
-stuff "vim `which rpx-pull` +'vsplit /usr/local/sbin/release.sh' +'split .user-data'"
-
-# 1
-chdir $HOME/.vim
-screen -t vim bash
-stuff "git st"
-
-# 2
-chdir $HOME/bin
-screen -t bin bash
-stuff "git st"
-
-# 3
-chdir $HOME/bin
-screen -t screen bash
-stuff "vim rpxstaging.com.screen"
-
-chdir $HOME
-
-# vim: ft=screen

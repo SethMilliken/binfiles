@@ -1,53 +1,0 @@
-# Create a ready-to-go screen session
-# Rewrite these as a ruby script that generate these contents per host and sources it...
-#
-source $HOME/.screenrc
-
-chdir $HOME
-screen -t  '~'
-stuff "git st"
-
-chdir $HOME/.vim
-screen -t .vim bash
-stuff "git st"
-
-chdir $HOME/bin
-screen -t bin bash
-stuff "git st"
-
-chdir $HOME/sandbox/personal/
-screen -t personal bash
-stuff "git st"
-
-chdir $HOME/.pentadactyl
-screen -t pentadactyl  bash
-stuff "git st"
-
-chdir $HOME/sandbox/work
-screen -t work bash
-
-chdir $HOME/staging/vim
-screen -t vim-test  bash
-
-chdir $HOME/sandbox/code
-screen -t code bash
-
-chdir $HOME
-screen -t ports bash
-stuff "sudo port selfupdate"
-
-chdir $HOME/bin
-screen -t firefox  bash
-stuff "v ff"
-
-chdir $HOME/bin
-screen -t screen  bash
-stuff "vim laboratory.screen"
-
-chdir $HOME/bin
-screen -t synergy  bash
-stuff "less +F ~/Desktop/synergy.log"
-
-chdir $HOME
-
-# vim: ft=screen
