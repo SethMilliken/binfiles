@@ -2,53 +2,94 @@
 #
 # This is a script for modifying copies of MacVim to uniquely identify them.
 #
+DELETE = ["-d", "--delete"].include?(ARGV[0])
+
 APP="MacVim"
+BUNDLE_ID="VIMM"
 
-def install_root()
-  return "/Applications"
-end
+app_specs = [
+['VIM3', 'Todo',           'VimGreen.icns'     ],
+['VIM4', 'Vimwiki',        'VimPaleGreen.icns' ],
+['VIM5', 'Tasks',          'VimPurple.icns'    ],
+['VIM6', 'Research',       'VimGrey.icns'      ],
+['VIM7', 'SourceCode',     'VimBlue.icns'      ],
+['VIM8', 'Scratch',        'VimOrange.icns'    ],
+['VIMH', 'VimHelp',        'VimGrey.icns'      ],
+['VIMM', 'MacVim',         'VimGreen.icns'     ],
+['VIMT', 'TwitVim',        'VimBlue.icns'      ],
+['VIMT', 'Vimput',         'VimOrange.icns'    ],
+#['VIMA', 'AdiumVim',       'VimOrange.icns'   ],
+#['VIMC', 'ColloquyVim',    'VimOrange.icns'   ],
+]
 
-def source_root()
-  full_path = Dir.glob("/usr/local/Cellar/macvim/**/#{APP}.app")
-  if full_path.length > 0
-    return File.dirname(full_path[-1])
+class AppClone
+
+  attr_accessor :identifier, :name, :icon
+
+  def initialize(spec)
+    @identifier, @name, @icon = spec
+    @bundle_id = if /Scratch/ =~ @name
+                   "org.vim.MacVim"
+                 else
+                   "org.vim.MacVim.#{@name}"
+                 end
   end
-  full_path = "/Applications/#{APP}.app"
-  if File.exists? full_path
-    return File.dirname(full_path)
+
+  def install_root
+    "/Applications"
   end
-end
 
-def vimfix(identifier, name, icon)
-    full_path="#{install_root}/#{name}.app/Contents"
-    if /Scratch/ =~ name
-        bundle_id="org.vim.MacVim"
-    else
-        bundle_id="org.vim.MacVim.#{name}"
+  def app_path
+    "#{install_root}/#{@name}.app"
+  end
+
+  def contents_path
+    "#{app_path}/Contents"
+  end
+
+  def original_root
+    original_path = Dir.glob("/usr/local/Cellar/macvim/**/#{APP}.app")
+    if original_path.length > 0
+      return File.dirname(original_path[-1])
     end
-    create_copy(full_path, name) unless File.exist? full_path
-    if File.exist? full_path
-        `/usr/libexec/PlistBuddy #{full_path}/Info.plist -c 'Set :CFBundleIdentifier org.vim.'#{name}`
-        `/usr/libexec/PlistBuddy #{full_path}/Info.plist -c 'Set :CFBundleName '#{name}`
-        `/usr/libexec/PlistBuddy #{full_path}/Info.plist -c 'Set :CFBundleSignature '#{identifier}`
-        `/usr/bin/sed -i '' -es/VIMM/#{identifier}/ #{full_path}/PkgInfo`
-        `/bin/cp ~/Pictures/MacVimIcons/#{icon} #{full_path}/Resources/MacVim.icns`
+    original_path = "/Applications/#{APP}.app"
+    if File.exists? original_path
+      return File.dirname(original_path)
     end
+  end
+
+  def copy_original
+    unless File.exist? app_path
+      printf "%s was not found. Copying...\n", app_path
+      `cp -Rp "#{original_root}/#{APP}.app" "#{app_path}"`
+    end
+  end
+
+  def delete
+    if File.exist? app_path
+      printf "Deleting %s...\n", app_path
+      `rm -rf "#{app_path}"`
+    end
+  end
+
+  def clone
+    delete if DELETE
+    copy_original
+    if File.exist? contents_path
+      `/usr/libexec/PlistBuddy #{contents_path}/Info.plist -c 'Set :CFBundleIdentifier org.vim.'#{@name}`
+      `/usr/libexec/PlistBuddy #{contents_path}/Info.plist -c 'Set :CFBundleName '#{@name}`
+      `/usr/libexec/PlistBuddy #{contents_path}/Info.plist -c 'Set :CFBundleSignature '#{@identifier}`
+      `/usr/bin/sed -i '' -es/#{BUNDLE_ID}/#{@identifier}/ #{contents_path}/PkgInfo`
+      `/bin/cp ~/Pictures/#{APP}Icons/#{@icon} #{contents_path}/Resources/#{APP}.icns`
+    end
+  end
+
 end
 
-def create_copy(full_path, name)
-    printf "%s was not found. Copying...\n", full_path
-    `cp -Rp "#{source_root}/MacVim.app" "#{install_root}/#{name}.app"`
+apps = []
+for spec in app_specs do
+  apps << AppClone.new(spec)
 end
-
-vimfix 'VIM3', 'Todo',           'VimGreen.icns'
-vimfix 'VIM4', 'Vimwiki',        'VimPaleGreen.icns'
-vimfix 'VIM5', 'Tasks',          'VimPurple.icns'
-vimfix 'VIM6', 'Research',       'VimGrey.icns'
-vimfix 'VIM7', 'SourceCode',     'VimBlue.icns'
-vimfix 'VIM8', 'Scratch',        'VimOrange.icns'
-vimfix 'VIMH', 'VimHelp',        'VimGrey.icns'
-vimfix 'VIMM', 'MacVim',         'VimGreen.icns'
-vimfix 'VIMT', 'TwitVim',        'VimBlue.icns'
-#vimfix 'VIMA', 'AdiumVim',       'VimOrange.icns'
-#vimfix 'VIMC', 'ColloquyVim',    'VimOrange.icns'
+for app in apps
+  app.clone
+end
