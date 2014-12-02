@@ -1,0 +1,51 @@
+#!/usr/bin/env ruby
+require "uri"
+require 'optparse'
+require 'pathname'
+
+# Set Defaults
+options = {}
+options[:basename]  = Pathname.new("#{$0}").basename.to_s
+options[:instance]  = 'FirefoxResearch'
+options[:channel]   = 'irc.dev-ua.\#ops.weechatlog'
+options[:host]      = 'ax'
+options[:logdir]    = '~/.weechat/logs/'
+options[:lookback]  = 10
+options[:protocols] = ['http', 'https']
+
+# Parse Options
+optparse = OptionParser.new do|opts|
+  opts.banner = "Usage: #{options[:basename]} [options]"
+  opts.on( '-b', '--browser INSTANCE', 'name of FirefoxInstance used to open link') do |instance|
+    puts instance
+    options[:instance] = instance
+  end
+  opts.on( '-c', '--channel CHANNEL', 'name of channel log to scrape') do |channel|
+    options[:channel] = channel
+  end
+  opts.on( '-d', '--logdir LOGDIR', 'target host') do |logdir|
+    options[:logdir] = logdir
+  end
+  opts.on( '-l', '--lookback DEPTH', 'lookback depth') do |depth|
+    options[:lookback] = depth
+  end
+  opts.on( '-t', '--host TARGET', 'target host') do |host|
+    options[:host] = host
+  end
+  opts.on( '-h', '--help', 'display this help') do
+    puts opts
+    exit
+  end
+end
+
+optparse.parse!
+
+raw_content = %x[ ssh #{options[:host]} 'tail -#{options[:lookback]} #{options[:logdir]}#{options[:channel]}' ]
+
+raw_content.scan(URI.regexp(options[:protocols])) do |*match|
+  url = $&
+  puts %x[ activate #{options[:instance]} link #{url} ]
+  sleep 1
+end
+
+# vim: set ts=2 sw=2:
