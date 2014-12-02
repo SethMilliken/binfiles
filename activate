@@ -1,6 +1,7 @@
 #!/bin/bash
 APPNAME="${1}"
 MODE="${2}"
+ARG="${3}"
 APP="${APPNAME}.app"
 APPHOME="/Applications/"
 ACTION="Opened"
@@ -29,15 +30,20 @@ function open_link {
     if [[ $1 == 'bg' ]]; then
         background="-g"
     fi
+    notification_message="Invalid link provided."
+    link_candidate=$2
+    if [[ $2 == '' ]]; then
+        link_candidate="$(echo `pbpaste`)"
+        notification_message="No link on pasteboard"
+    fi
+    echo "${link_candidate}"
 
     if [ -d ${APPPATH} ]; then
-        link_candidate="$(echo `pbpaste`)"
-        echo "${link_candidate}"
         if [[ "${link_candidate}" =~ ^http ]]; then
-            open -a "${APPPATH}" ${background} "`pbpaste`"
+            open -a "${APPPATH}" ${background} "${link_candidate}"
             ${NOTIFICATION_SCRIPT} ${APPNAME} "false" "${link_candidate}" "${APPNAME}" "" "${APPNAME}"
         else
-            ${NOTIFICATION_SCRIPT} ${APPNAME} "false" "No link on pasteboard." "${APPNAME}" "" "${APPNAME}"
+            ${NOTIFICATION_SCRIPT} ${APPNAME} "false" "${notification_message}" "${APPNAME}" "" "${APPNAME}"
         fi
     fi
 }
@@ -47,6 +53,19 @@ ensure_running
 osascript <<END_SCRIPT
 tell application "${APP}"
     activate
+end tell
+END_SCRIPT
+}
+
+function last_tab {
+osascript <<END_SCRIPT
+tell application "${APP}"
+    activate
+    tell application "System Events"
+        key code 27 -- escape key
+        keystroke "g"
+        keystroke "$"
+    end tell
 end tell
 END_SCRIPT
 }
@@ -70,9 +89,10 @@ elif [[ $MODE == "open" ]]; then
 elif [[ $MODE == "ensure" ]]; then
     ensure_running
 elif [[ $MODE == "link" ]]; then
-    open_link
+    open_link 'fg' "${ARG}"
+    last_tab
 elif [[ $MODE == "blink" ]]; then
-    open_link "bg"
+    open_link 'bg' "${ARG}"
 elif [[ $MODE == "" ]]; then
     ensure_running
 fi
