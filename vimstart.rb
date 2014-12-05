@@ -66,9 +66,10 @@ commandList.insert(Command.new("ffchoose"      , "Open selected FireFox."   , "/
 commandList.insert(Command.new("fftest-choose" , "Open FireFoxTest."        , "/Applications/FireFoxTest.app/Contents/MacOS/firefox -ProfileManager"))
 
 commandList.insert(Command.new("ff"            , "Open default FireFox."    , "/Applications/Firefox.app/Contents/MacOS/firefox -P default"))
-commandList.insert(Command.new("ffre"          , "Open FireFoxResearch."    , "/Applications/FireFoxResearch.app/Contents/MacOS/firefox -P documentation"))
+commandList.insert(Command.new("ffre"          , "Open FireFoxResearch."    , "/Applications/FireFoxResearch.app/Contents/MacOS/firefox -P Research -app /Applications/FireFoxResearch.app/Contents/MacOS/browser/application.ini"))
 commandList.insert(Command.new("fftrack"       , "Open FireFoxTrack."       , "/Applications/FireFoxTrack.app/Contents/MacOS/firefox -P track"))
 commandList.insert(Command.new("fftest"        , "Open FireFoxTest."        , "/Applications/FireFoxTest.app/Contents/MacOS/firefox -P Test"))
+commandList.insert(Command.new("ffproj"        , "Open FireFoxProject."        , "/Applications/FireFoxProject.app/Contents/MacOS/firefox -P Project -chromebug"))
 
 # Parse Options
 # TODO: Actually use --instance
