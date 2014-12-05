@@ -35,4 +35,4 @@ function bounce_app {
     ensure_running
 }
 
-bounce_app
+clear_notifications
