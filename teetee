@@ -1,1 +1,1 @@
-ssh-add && tmux new-session \; source-file "${HOME}/.tmux/pix.tmux"
+ssh-add && tmux new-session \; source-file "${HOME}/.tmux/${SHORTHOST}.tmux"
