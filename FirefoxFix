@@ -4,12 +4,12 @@
 #
 
 class FirefoxClone
-  ATTRIBUTES = %w{ original_sig icon_name bundle_id app_prefix identifier name install_root icon original }.map {|attr| attr.to_sym }
+  ATTRIBUTES = %w{ original_sig icon_name bundle_id app_prefix identifier name install_root cask_root icon original }.map {|attr| attr.to_sym }
   attr *ATTRIBUTES
 
   # original_sig = FFSS?
   def initialize(args = {})
-    args = {:install_root => '/Applications', :icon => 'FirefoxBlue.icns', :app_prefix => 'Firefox', :original_sig => 'MOZB', :icon_name => 'firefox', :bundle_id => 'org.mozilla.firefox'}.merge(args)
+    args = {:install_root => '/Applications', :icon => 'FirefoxBlue.icns', :app_prefix => 'Firefox', :original_sig => 'MOZB', :icon_name => 'firefox', :bundle_id => 'org.mozilla.firefox', :cask_root => '/opt/homebrew-cask/Caskroom/firefox/latest'}.merge(args)
     ATTRIBUTES.each {|attr| instance_variable_set("@#{attr}", args[attr]) }
     clone
   end
@@ -44,8 +44,9 @@ class FirefoxClone
   end
 
   def create_copy
+    original_root =  Dir.exist?(cask_root) ? @cask_root : @install_root
     unless File.exist?(destination)
-      clone_parent = "#{@install_root}/#{@original}.app"
+      clone_parent = "#{original_root}/#{@original}.app"
       printf "'%s' not found. Cloning from '%s' (%s, %s)...\n", destination, clone_parent, @identifier, @icon
       `cp -Rp "#{clone_parent}" "#{destination}"`
     end
@@ -57,6 +58,8 @@ FirefoxClone.new(:identifier => 'FFTR' , :name => 'Track'    , :original => 'Fir
 FirefoxClone.new(:identifier => 'FFBR' , :name => 'Browse'   , :original => 'Firefox' , :icon => 'FirefoxWhite.icns')
 FirefoxClone.new(:identifier => 'FFRE' , :name => 'Research' , :original => 'Firefox' , :icon => 'FirefoxBlue.icns')
 FirefoxClone.new(:identifier => 'FFMO' , :name => 'Monitor'  , :original => 'Firefox' , :icon => 'FirefoxSauron.icns')
-FirefoxClone.new(:identifier => 'FFMO' , :name => 'Docs'     , :original => 'Firefox' , :icon => 'FirefoxGlass.icns')
+FirefoxClone.new(:identifier => 'FFDO' , :name => 'Docs'     , :original => 'Firefox' , :icon => 'FirefoxGlass.icns')
+FirefoxClone.new(:identifier => 'FFCH' , :name => 'Chat'     , :original => 'Firefox' , :icon => 'FirefoxOrange.icns')
+FirefoxClone.new(:identifier => 'FFPR' , :name => 'Project'  , :original => 'Firefox' , :icon => 'FirefoxOrange.icns')
 #FirefoxClone.new(:identifier => 'FFVO' , :name => 'Volatile' , :original => 'Firefox')
 #FirefoxClone.new(:identifier => 'FFDY' , :name => 'Dactyl'   , :original => 'Firefox')
