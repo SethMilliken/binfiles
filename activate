@@ -35,6 +35,8 @@ function open_link {
     if [[ $2 == '' ]]; then
         link_candidate="$(echo `pbpaste`)"
         notification_message="No link on pasteboard"
+    elif [[ $2 == 'NOTFOUND' ]]; then
+        notification_message="No link found."
     fi
     echo "${link_candidate}"
 
@@ -62,7 +64,7 @@ osascript <<END_SCRIPT
 tell application "${APP}"
     activate
     tell application "System Events"
-        key code 27 -- escape key
+        key code 53 -- escape key
         keystroke "g"
         keystroke "$"
     end tell
