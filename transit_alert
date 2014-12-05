@@ -3,7 +3,8 @@
 # bus arrival notification
 #
 NOTIFICATION_SCRIPT="${HOME}/bin/notify"
-TRANSIT_PAGE="http://trimet.org/arrivals/popup_tracker?locids=7747"
+#TRANSIT_PAGE="http://nextbart.info/etd.html?station=CIVC&destination=DBRK"
+TRANSIT_PAGE="http://m.bart.gov/schedules/eta?stn=CIVC"
 open -a 'Google Chrome.app' ${TRANSIT_PAGE}
 RESULT="watch for bus arrival times"
 ${NOTIFICATION_SCRIPT} $(basename $0) "false" "${RESULT}" "Transit Alert"
