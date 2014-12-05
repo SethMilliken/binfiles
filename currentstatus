@@ -8,7 +8,7 @@
 NOTIFICATION_SCRIPT="${HOME}/bin/notify"
 STATE="focus on..."
 if [ ${HOSTNAME} == "seth.local" ]; then
-    FILE="${HOME}/sandbox/work/janrain.tst.txt"
+    FILE="${HOME}/sandbox/work/work.tst.txt"
 else
     FILE="${HOME}/sandbox/personal/todo/personal.tst.txt"
 fi
