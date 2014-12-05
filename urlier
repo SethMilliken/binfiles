@@ -1,17 +1,21 @@
 #!/usr/bin/env ruby
 require "uri"
-require 'optparse'
-require 'pathname'
+require "optparse"
+require "pathname"
+
 
 # Set Defaults
 options = {}
-options[:basename]  = Pathname.new("#{$0}").basename.to_s
+options[:path]      = Pathname.new("#{$0}")
+options[:dir]       = options[:path].dirname.to_s
+options[:basename]  = options[:path].basename.to_s
 options[:instance]  = 'FirefoxResearch'
-options[:channel]   = 'irc.dev-ua.\#ops.weechatlog'
+options[:channel]   = 'dev-ua.\#ops'
 options[:host]      = 'ax'
-options[:logdir]    = '~/.weechat/logs/'
-options[:lookback]  = 10
+options[:logdir]    = '~/.weechat/logs'
+options[:lookback]  = 100
 options[:protocols] = ['http', 'https']
+options[:exclusive] = true
 
 # Parse Options
 optparse = OptionParser.new do|opts|
@@ -23,7 +27,7 @@ optparse = OptionParser.new do|opts|
   opts.on( '-c', '--channel CHANNEL', 'name of channel log to scrape') do |channel|
     options[:channel] = channel
   end
-  opts.on( '-d', '--logdir LOGDIR', 'target host') do |logdir|
+  opts.on( '-d', '--logdir LOGDIR', 'log directory') do |logdir|
     options[:logdir] = logdir
   end
   opts.on( '-l', '--lookback DEPTH', 'lookback depth') do |depth|
@@ -31,6 +35,9 @@ optparse = OptionParser.new do|opts|
   end
   opts.on( '-t', '--host TARGET', 'target host') do |host|
     options[:host] = host
+  end
+  opts.on( '-x', '--[no-]exclusive', 'only show most recent') do |exclusive|
+    options[:exclusive] = exclusive
   end
   opts.on( '-h', '--help', 'display this help') do
     puts opts
@@ -40,11 +47,35 @@ end
 
 optparse.parse!
 
-raw_content = %x[ ssh #{options[:host]} 'tail -#{options[:lookback]} #{options[:logdir]}#{options[:channel]}' ]
+def clean_url(url)
+  url.gsub(/\)$/, '')
+end
 
-raw_content.scan(URI.regexp(options[:protocols])) do |*match|
-  url = $&
-  puts %x[ activate #{options[:instance]} link #{url} ]
+logfile = "#{options[:logdir]}/irc.#{options[:channel]}.weechatlog"
+command = "ssh #{options[:host]} 'tail -#{options[:lookback]} #{logfile}'"
+raw_content = %x[ #{command} ].force_encoding("UTF-8")
+
+urls = []
+URI::extract(raw_content, options[:protocols]) do |url|
+  urls << url
+end
+
+if urls.length == 0
+  puts %x[ #{options[:dir]}/activate #{options[:instance]} blink "NOTFOUND" ]
+else
+  urls = urls[-1, 1] if options[:exclusive]
+end
+
+urls.each do |url|
+  instance = case
+               when url.index(/monitoring\.prod|clusto\.prod/)
+                 "FirefoxMonitor"
+               when url.index(/github\.com|jenkins\.prod|tofurkey\.urbanairship|jiveon/)
+                 "FirefoxBrowse"
+               else
+                 options[:instance]
+               end
+  puts %x[ #{options[:dir]}/activate #{instance} link "#{url}" ]
   sleep 1
 end
 
