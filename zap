@@ -22,6 +22,14 @@ function open_app {
 }
 
 function clear_notifications {
+# Need to quit because `close all notifications` doesn't reset notification
+# positions.
+osascript <<END_SCRIPT
+tell application "Growl"
+    quit
+end tell
+END_SCRIPT
+sleep 1
 osascript <<END_SCRIPT
 tell application "Growl"
     close all notifications
