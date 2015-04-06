@@ -1,0 +1,8 @@
+#!/bin/bash
+FUNCTION=$1
+SERVER=ax
+#APPNAME="Personal"
+#NOTIFICATION_SCRIPT="${HOME}/bin/notify"
+ssh ${SERVER} 'tmux source-file ${HOME}/.tmux/functions/'${FUNCTION}'.tmux'
+#notification_message="Did this work?"
+#${NOTIFICATION_SCRIPT} ${APPNAME} "false" "${notification_message}" "${APPNAME}" "" "${APPNAME}"
