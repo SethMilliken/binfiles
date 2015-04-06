@@ -24,6 +24,9 @@ optparse = OptionParser.new do|opts|
     puts instance
     options[:instance] = instance
   end
+  opts.on( '-u', '--url URL', 'url to open') do |url|
+    options[:url] = url
+  end
   opts.on( '-c', '--channel CHANNEL', 'name of channel log to scrape') do |channel|
     options[:channel] = channel
   end
@@ -56,8 +59,12 @@ command = "ssh #{options[:host]} 'tail -#{options[:lookback]} #{logfile}'"
 raw_content = %x[ #{command} ].force_encoding("UTF-8")
 
 urls = []
-URI::extract(raw_content, options[:protocols]) do |url|
-  urls << url
+if options[:url]
+  urls << options[:url]
+else
+  URI::extract(raw_content, options[:protocols]) do |url|
+    urls << url
+  end
 end
 
 if urls.length == 0
