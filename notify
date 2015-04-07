@@ -33,6 +33,7 @@ HEADER=$4
 IDENTIFIER=$5
 APP_ICON=$6
 
+if [[ "$(uname)" == "Darwin" ]]; then
 ## AppleScript Notification:
 osascript << END
 property script_name:    "${SCRIPT}"
@@ -159,4 +160,7 @@ on send_notification(parameters)
 end send_notification
 
 END
+else
+    tmux display-message "${HEADER}: ${MESSAGE}"
+fi
 # vim:ts=2:sts=2:ft=applescript
