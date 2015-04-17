@@ -77,7 +77,7 @@ urls.each do |url|
   instance = case
                when url.index(/monitoring\.prod|clusto\.prod/)
                  "FirefoxMonitor"
-               when url.index(/github\.com|jenkins\.prod|tofurkey\.urbanairship|jiveon/)
+               when url.index(/github\.com|jenkins\.prod|tofurkey\.urbanairship|jiveon|atlassian\.prod/)
                  "FirefoxBrowse"
                else
                  options[:instance]
