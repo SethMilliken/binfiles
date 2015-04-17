@@ -1,0 +1,5 @@
+#!/bin/sh
+REPO=$HOME/write
+git -C $REPO add -A .
+git -C $REPO commit -m$(date +%Y-%m-%d)
+git -C $REPO push origin HEAD
