@@ -1,5 +1,9 @@
 #!/bin/sh
 REPO=$HOME/write
-git -C $REPO add -A .
-git -C $REPO commit -m$(date +%Y-%m-%d)
-git -C $REPO push origin HEAD
+if [[ "$(hostname)" -eq "unworkable.org" ]]; then
+    ARGS="-C $REPO"
+    cd $REPO
+fi
+git $ARGS add -A .
+git $ARGS commit -m$(date +%Y-%m-%d)
+git $ARGS push origin HEAD
