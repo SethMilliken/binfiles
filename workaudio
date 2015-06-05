@@ -1,0 +1,14 @@
+#!/bin/bash
+# brew install switchaudio-osx
+PATH=/usr/local/bin/:${HOME}/bin:${PATH}
+output_source='USB PnP Sound Device'
+input_source='Jam'
+cli="$(command -v SwitchAudioSource)"
+notification="$(command -v notify)"
+if [ -x "${cli}" ]; then
+    ${cli} -s "${output_source}"
+    ${cli} -t input -s "${input_source}"
+    if [ -x "${notification}" ]; then
+        notify "ControlPlane" false "input: ${input_source}\noutput: ${output_source}" "Audio Switched"
+    fi
+fi
