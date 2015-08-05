@@ -1,8 +1,16 @@
 #!/bin/bash
 FUNCTION=$1
+CONTEXT=${2:-main}
 SERVER=ax
 #APPNAME="Personal"
 #NOTIFICATION_SCRIPT="${HOME}/bin/notify"
-ssh ${SERVER} 'tmux source-file ${HOME}/.tmux/functions/'${FUNCTION}'.tmux'
+CLIENT=$(ssh ${SERVER} "tmux show-option -s -v @tty_for_${CONTEXT}")
+if [[ -n "${CLIENT}" ]]; then
+  echo "Context: ${CONTEXT} Client: ${CLIENT}"
+  ssh ${SERVER} 'tmux switch-client -c '${CLIENT}' -t '${CONTEXT}
+  ssh ${SERVER} 'tmux source-file ${HOME}/.tmux/functions/'${FUNCTION}'.tmux'
+else
+  echo "Client $CONTEXT unavailable."
+fi
 #notification_message="Did this work?"
 #${NOTIFICATION_SCRIPT} ${APPNAME} "false" "${notification_message}" "${APPNAME}" "" "${APPNAME}"
