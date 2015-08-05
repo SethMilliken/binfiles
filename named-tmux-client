@@ -1,0 +1,8 @@
+#!/bin/sh
+IDENTIFIER=$1
+TTY=$(tty)
+if [ -n "${IDENTIFIER}" -a -n ${TTY} ]; then
+  tmux set -s @tty_for_${IDENTIFIER} "${TTY}"
+  tmux switch-client -c ${TTY} ${IDENTIFIER}
+  tmux attach -d -t ${IDENTIFIER}
+fi
