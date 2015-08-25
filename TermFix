@@ -14,6 +14,7 @@ app_specs = [
 ['ITR1' , 'Personal' , 'CandC.icns'       ],
 ['ITR2' , 'VM'       , 'MatrixBlue.icns'  ],
 ['ITR3' , 'Comm'     , 'MatrixGreen.icns' ],
+['ITR4' , 'Lists'    , 'MatrixGreen.icns' ],
 ]
 
 class AppClone
