@@ -105,6 +105,12 @@ on dispatch_message()
                  icon: "ControlPlane",              \
                    id: "controlplane_notification"  \
     } & defaults
+  else if script_name is "hammerspoon" then
+    set parameters to                               \
+    {                                               \
+         notification: "Hammerspoon Notification",  \
+                 icon: "Hammerspoon.app"            \
+    } & defaults
   else if script_name is "syn_local" or script_name is "syn_remote" or script_name is "syn_kanban" then
     set parameters to                               \
     {                                               \
