@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# TODO: Add target to .ssh/config
+ENVI=${2:-prod}
+DEFAULT_TARGET=${1}.${ENVI}.urbanairship.com
+TARGET=${HOST:-$DEFAULT_TARGET}
+SSH_ARGS="-o VisualHostKey=no -o ControlMaster=auto -o ControlPersist=3s -o ControlPath=~/.ssh/control/%r@%h-%p"
+
+echo "Checking for screen-256color termcap..."
+ssh ${SSH_ARGS} ${TARGET} "[[ -r ~/.terminfo/s/screen-256color || -r /usr/share/terminfo/s/screen-256color ]]"
+if [[ 1 -eq $? ]]; then
+    echo "Installing screen-256color termcap..."
+    infocmp screen-256color | ssh ${SSH_ARGS} ${TARGET} "cat - > screen-256color"
+    ssh ${SSH_ARGS} ${TARGET} "tic screen-256color && rm screen-256color"
+fi
+
+function install() {
+    FILENAME=$1
+    BASENAME=$(basename $FILENAME)
+    echo "Checking ${FILENAME}..."
+    ssh ${SSH_ARGS} ${TARGET} "cat ${FILENAME}" | diff - "${HOME}/${FILENAME}"
+    if [[ 1 -eq $? ]]; then
+        echo "Installing ${BASENAME}..."
+        scp ${SSH_ARGS} ${HOME}/${FILENAME} ${TARGET}:~/${FILENAME}
+    fi
+}
+
+#install ".tmux.conf"
+install ".ssh/rc"
+
+ssh -A ${TARGET} "if [[ ! -d ~/.tmux ]]; then curl araxia.net/ua | sh; fi"
+ssh ${TARGET} "if [[ -f ~/.tmux.conf ]]; then rm ~/.tmux.conf; fi; if [[ ! -L ~/.tmux.conf ]]; then ln -s ~/.tmux/.tmux.conf; fi"
+ssh ${TARGET} "tmux ls 2> /dev/null"
+ssh -A ${TARGET}
