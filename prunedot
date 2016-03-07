@@ -1,0 +1,2 @@
+#!/bin/bash
+find . -name .DS_Store -o -name .Trashes -o -name ._\* -exec echo 'rm "{}"' \; -prune
