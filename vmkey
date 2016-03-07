@@ -1,0 +1,2 @@
+#!/bin/sh
+sed -i -e '/^vm/ d' ~/.ssh/known_hosts
