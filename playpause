@@ -1,5 +1,5 @@
 #!/bin/bash
-REMOTE_SERVER="samsara" # Defined in ~/.ssh/config
+REMOTE_SERVER="music" # Defined in ~/.ssh/config
 TARGET_SCRIPT="~/Library/Scripts/applescripts/playpause.applescript"
 NOTIFICATION_SCRIPT="${HOME}/bin/notify"
 
