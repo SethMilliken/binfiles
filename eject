@@ -1,0 +1,9 @@
+#!/bin/sh
+if [[ "$1" == "-f" ]]; then
+    FORCED=force
+    VOLUME=$2
+    printf "Forced "
+else
+    VOLUME=$1
+fi
+diskutil unmount $FORCED /Volumes/$VOLUME
