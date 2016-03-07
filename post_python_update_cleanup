@@ -1,0 +1,5 @@
+#!/bin/sh
+if [ -d "$WORKON_HOME" ]; then
+    echo "Deleting $WORKON_HOME symlinks..."
+    find $WORKON_HOME -type l -delete
+fi
