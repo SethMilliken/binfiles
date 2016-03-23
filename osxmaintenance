@@ -1,0 +1,11 @@
+#!/bin/sh
+# A script to kill or restart various processes and apps that have
+# proven to be problematic after long uptimes.
+echo "Restarting bluetooth..."
+bluetooth-reset
+echo "Killing parentalcontrolsd..."
+sudo killall parentalcontrolsd
+echo "Zapping Display Menu..."
+zap Display Menu
+echo "Zapping Growl..."
+zap Growl
