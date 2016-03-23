@@ -2,5 +2,6 @@
 CWD=$HOME/Library/Application\ Support/Firefox/Profiles
 TIMESTAMP=`date +%Y-%m-%d.%T`
 cd $CWD
-git add **/sessionstore.js
+git add -f **/sessionstore.js
+git add -f **/sessionstore-backups/*.js
 git commit -m"$TIMESTAMP"
