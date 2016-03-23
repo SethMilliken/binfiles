@@ -6,17 +6,17 @@ APPPATH="${APPHOME}/${APP}"
 NOTIFICATION_SCRIPT="${HOME}/bin/notify"
 
 function ensure_running {
-    RESULT=`ps x | grep ${APP} | grep -v grep`
+    RESULT=`ps x | grep "${APP}" | grep -v grep`
     if [[ $RESULT == "" ]]
     then
         open_app
         sleep 1
-        ${NOTIFICATION_SCRIPT} ${APPNAME} "false" "Restarted" "${APPNAME}" "" "${APPNAME}"
+        ${NOTIFICATION_SCRIPT} "${APPNAME}" "false" "Restarted" "${APPNAME}" "" "${APPNAME}"
     fi
 }
 
 function open_app {
-    if [ -d ${APPPATH} ]; then
+    if [ -d "${APPPATH}" ]; then
         open -g "${APPPATH}"
     fi
 }
@@ -38,9 +38,9 @@ END_SCRIPT
 }
 
 function bounce_app {
-    killall ${APPNAME} 2>/dev/null
+    killall "${APPNAME}" 2>/dev/null
     sleep 1
     ensure_running
 }
 
-clear_notifications
+bounce_app
