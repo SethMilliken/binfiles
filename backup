@@ -1,0 +1,161 @@
+#!/bin/bash
+while [ "${#}" -gt 0 ] ; do
+    case "${1}" in
+        '-h'|'--help'|'-help'|'--usage'|'-usage')
+            shift
+            USAGE=1
+            break
+            ;;
+        "-s")
+            shift
+            SOURCE_ARG="${1}"
+            shift
+            ;;
+        "-d")
+            shift
+            DESTINATION_ARG="${1}"
+            shift
+            ;;
+        "-e")
+            shift
+            EXCLUDES_ARG="${1}"
+            shift
+            ;;
+        "-D")
+            shift
+            DRY_RUN=1
+            ;;
+        "--")
+            shift
+            break
+            ;;
+        -*)
+            echo "${0}: bad option '${1}'"
+            exit 1
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+if [ -n "${1}" ]; then
+   SOURCE_ARG=/Volumes/${1}
+fi
+SOURCE_DEFAULT=/Volumes/seth
+SOURCE=${SOURCE_ARG:-$SOURCE_DEFAULT}
+
+if [ -n "${2}" ]; then
+    DESTINATION_ARG=/Volumes/${2}
+fi
+DESTINATION_DEFAULT=/Volumes/mecum
+DESTINATION=${DESTINATION_ARG:-$DESTINATION_DEFAULT}
+
+BACKUP=${DESTINATION}/Backups/$(basename ${SOURCE})
+EXCLUDES=${SOURCE}/excludes.txt
+EXCLUDES_ALT=${DESTINATION}/excludes.txt
+TIMESTAMP=`date "+%Y-%m-%dT%H:%M:%S"`
+CURRENT_BACKUP=backup-$TIMESTAMP
+
+function verify_readable() {
+    if [ ! -d ${1} ]; then
+        echo "${1} does not exist or is not a directory"
+        return 1
+    elif [ ! -x ${1} ]; then
+        echo "${1} has prohibitive permissions"
+        return 1
+    elif [ ! -r ${1} ]; then
+        echo "${1} is not readable"
+        return 1
+    fi
+    return 0
+}
+
+function verify_writable() {
+    if [ ! -d ${1} ]; then
+        echo "${1} does not exist or is not a directory"
+        return 1
+    elif [ ! -x ${1} ]; then
+        echo "${1} has prohibitive permissions"
+        return 1
+    elif [ ! -w ${1} ]; then
+        echo "${1} is not writable"
+        return 1
+    fi
+    return 0
+}
+
+function verify_excludes() {
+    if [ -z "${1}" ]; then
+        return 1
+    elif [ ! -f "${1}" ]; then
+        return 1
+    elif [ ! -r "${1}" ]; then
+        return 1
+    fi
+    return 0
+}
+
+function choose_excludes() {
+    USE_EXCLUDES=""
+    verify_excludes ${EXCLUDES_ALT} && USE_EXCLUDES=${EXCLUDES_ALT}
+    verify_excludes ${EXCLUDES} && USE_EXCLUDES=${EXCLUDES}
+    verify_excludes ${EXCLUDES_ARG} && USE_EXCLUDES=${EXCLUDES_ARG}
+    echo $USE_EXCLUDES
+}
+
+function verify_locations() {
+    verify_readable "${SOURCE}" || FAILED="source"
+    verify_writable "${DESTINATION}" || FAILED="destination${FAILED}"
+    if [ -z "${FAILED}" ]; then
+        return 0
+    fi
+    return 1
+}
+
+function make_backup() {
+    verify_locations
+    if [ $? -eq 0 ]; then
+        mkdir -p ${BACKUP}
+        $(full_command)
+        rm -f ${BACKUP}/current
+        ln -s ${BACKUP}/${CURRENT_BACKUP} ${BACKUP}/current
+    fi
+}
+
+function full_command(){
+    if [ -n "$(choose_excludes)" ]; then
+        EXCLUDES_CLAUSE="--exclude-from=$(choose_excludes) "
+    fi
+    echo "rsync -aP ${EXCLUDES_CLAUSE}--link-dest=${BACKUP}/current $SOURCE ${BACKUP}/${CURRENT_BACKUP}"
+}
+
+function usage() {
+    cat <<EOF
+Usage: backup [OPTIONS] [-s] SOURCE [-d] [DESTINATION]
+
+-D: dry run; only show the command that would be executed
+-e path: use excludes
+-h, --help, -help, --usage, -usage: this
+
+Backup /Volume/SOURCE onto /Volume/DESTINATION into /Volume/DESTINATION/Backups/\$(basename SOURCE)
+
+Defaults are:
+SOURCE       ${SOURCE_DEFAULT}
+DESTINATION  ${DESTINATION_DEFAULT}
+
+Excludes file serach order:
+${EXCLUDES}
+${EXCLUDES_ALT}
+
+EOF
+}
+
+if [ -n "${USAGE}" ]; then
+    usage
+elif [ -n "${DRY_RUN}" ]; then
+    echo $(full_command)
+    verify_locations
+else
+    make_backup
+fi
