@@ -1,0 +1,3 @@
+#!/bin/sh
+APP_NAME=$1
+eval vim '"+let g:vim_app_name='"'$APP_NAME'\""
