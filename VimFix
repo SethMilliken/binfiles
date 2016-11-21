@@ -16,8 +16,8 @@ app_specs = [
 ['VIM8', 'Scratch',        'VimOrange.icns'    ],
 ['VIMH', 'VimHelp',        'VimGrey.icns'      ],
 ['VIMM', 'MacVim',         'VimGreen.icns'     ],
-['VIMT', 'TwitVim',        'VimBlue.icns'      ],
 ['VIMT', 'Vimput',         'VimOrange.icns'    ],
+#['VIMT', 'TwitVim',        'VimBlue.icns'     ],
 #['VIMA', 'AdiumVim',       'VimOrange.icns'   ],
 #['VIMC', 'ColloquyVim',    'VimOrange.icns'   ],
 ]
