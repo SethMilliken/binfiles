@@ -4,6 +4,7 @@
 echo "Restarting bluetooth..."
 bluetooth-reset
 echo "Killing parentalcontrolsd..."
+# sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.familycontrols.plist
 sudo killall parentalcontrolsd
 echo "Zapping Display Menu..."
 zap Display Menu
