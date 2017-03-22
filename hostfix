@@ -1,0 +1,3 @@
+#!/bin/sh
+# Remove given known_hosts entry
+sed -i -e '/^'${1}'/ d' ~/.ssh/known_hosts
