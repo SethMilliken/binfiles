@@ -2,7 +2,7 @@
 # brew install switchaudio-osx
 PATH=/usr/local/bin/:${HOME}/bin:${PATH}
 output_source='USB PnP Sound Device'
-input_source='Jam'
+input_source='USB PnP Sound Device'
 cli="$(command -v SwitchAudioSource)"
 notification="$(command -v notify)"
 if [ -x "${cli}" ]; then
