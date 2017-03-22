@@ -9,12 +9,12 @@ APPPATH="${APPHOME}/${APP}"
 NOTIFICATION_SCRIPT="${HOME}/bin/notify"
 
 function ensure_running {
-    RESULT=`ps x | grep ${APP} | grep -v grep`
+    RESULT=`ps x | grep "${APP}" | grep -v grep`
     if [[ $RESULT == "" ]]
     then
         open_app
         sleep 1
-        ${NOTIFICATION_SCRIPT} ${APPNAME} "false" "${ACTION}" "${APPNAME}" "" "${APPNAME}"
+        ${NOTIFICATION_SCRIPT} "${APPNAME}" "false" "${ACTION}" "${APPNAME}" "" "${APPNAME}"
     fi
 }
 
