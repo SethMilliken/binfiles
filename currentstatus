@@ -7,11 +7,16 @@
 # */15 * * * * /Users/seth/bin/currentstatus 1&> /dev/null
 NOTIFICATION_SCRIPT="${HOME}/bin/notify"
 STATE="taskstack"
-if [ ${HOSTNAME} == "seth.local" ]; then
-    FILE="${HOME}/sandbox/work/work.tst.txt"
-else
+
+FILE="${HOME}/sandbox/work/work.tst.txt"
+if [[ ! -f $FILE ]]; then
     FILE="${HOME}/sandbox/personal/todo/personal.tst.txt"
 fi
-RESULT=`head -6 ${FILE} | grep -v '^$' | grep -v 'DOING' | grep -v 'WTF' | grep -v '^@' | grep -v '{{{|}}}' | awk -F'201.-' '{print $1}'`
-echo "${RESULT}"
-${NOTIFICATION_SCRIPT} $(basename $0) "false" "${RESULT}" "${STATE}"
+
+notify() {
+  RESULT=`head -6 ${FILE} | grep -v '^$' | grep -v 'DOING' | grep -v 'WTF' | grep -v '^@' | grep -v '{{{|}}}' | awk -F'201.-' '{print $1}'`
+  echo "${RESULT}"
+  ${NOTIFICATION_SCRIPT} $(basename $0) "false" "${RESULT}" "${STATE}"
+}
+
+notify
