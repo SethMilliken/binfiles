@@ -11,9 +11,9 @@ def gitworld(command)
         "bin",                     \
         ".vim",                    \
         ".vim/bundle/vim-traitor", \
-        ".vim/bundle/vimple",      \
         ".pentadactyl",            \
         ".oh-my-zsh"               \
+        ".tmux"                    \
         "sandbox/work",            \
         "sandbox/personal",        \
     ]
