@@ -1,0 +1,12 @@
+#!/bin/bash
+REPOHOME="/Users/seth/sandbox/repos"
+FILES=$(ssh ax 'ls -1 ~/git')
+for repo in $FILES; do
+    localname=$(echo $repo | sed -e 's/.git//')
+    localrepo=$REPOHOME/$localname
+    if [[ -d "$localname" ]]; then
+        git -C "$localrepo" fetch --all
+    else
+        git -C "$REPOHOME" clone ssh://seth@araxia.net/~/git/$repo $localname
+    fi
+done
