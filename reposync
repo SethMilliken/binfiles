@@ -1,11 +1,12 @@
 #!/bin/bash
+SSH_AUTH_SOCK=$(lsof -a -p $(pgrep -n ssh-agent | head -1) -U -F n | sed -n 's/^n//p' | uniq)
 REPOHOME="/Users/seth/sandbox/repos"
 FILES=$(ssh ax 'ls -1 ~/git')
 for repo in $FILES; do
     localname=$(echo $repo | sed -e 's/.git//')
     localrepo=$REPOHOME/$localname
-    if [[ -d "$localname" ]]; then
-        git -C "$localrepo" fetch --all
+    if [[ -d "$localrepo" ]]; then
+        git -C "$localrepo" fetch --all | grep -v Fetching
     else
         git -C "$REPOHOME" clone ssh://seth@araxia.net/~/git/$repo $localname
     fi
