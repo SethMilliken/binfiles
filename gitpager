@@ -1,2 +1,12 @@
 #/bin/bash
-if [[ -n "$(which diff-so-fancy)" ]]; then diff-so-fancy; fi | /usr/bin/less --tabs=4 -RFX --pattern '^(Date|added|deleted|modified): '
+pattern_seed="--pattern '^(Date|added|deleted|modified): '"
+
+default_pager() {
+    /usr/bin/less --tabs=4 -RFX
+}
+
+if [ -n "$(which diff-so-fancy 2>/dev/null)" ]; then
+    diff-so-fancy | default_pager ${pattern_seed}
+else
+    default_pager
+fi
