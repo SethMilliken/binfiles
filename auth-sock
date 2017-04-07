@@ -1,0 +1,6 @@
+#!/bin/bash
+# Determine the ssh-agent auth socket
+#
+# Usage: SSH_AUTH_SOCKET=$(auth-sock)
+#
+echo "$(lsof -a -p $(pgrep -n ssh-agent | head -1) -U -F n | sed -n 's/^n//p' | uniq)"
