@@ -1,5 +1,5 @@
 #!/bin/bash
-SSH_AUTH_SOCK=$(lsof -a -p $(pgrep -n ssh-agent | head -1) -U -F n | sed -n 's/^n//p' | uniq)
+SSH_AUTH_SOCK=$(auth-sock)
 REPOHOME="/Users/seth/sandbox/repos"
 FILES=$(ssh ax 'ls -1 ~/git')
 for repo in $FILES; do
