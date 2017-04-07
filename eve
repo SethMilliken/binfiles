@@ -1,4 +1,9 @@
 #!/bin/bash
 EVENT_TRIGGER_HOST=wasteland.local
-SSH_AUTH_SOCK=$(auth-sock)
-ssh ${EVENT_TRIGGER_HOST} event $* 2>&1 | grep "event triggered" | sed -e 's/.*EventGhost "\(.*\)"/\1/'
+PROXY_HOST=muse.local
+if [[ "${PROXY_HOST}" == "${HOST}" ]]; then
+    SSH_AUTH_SOCK=$(auth-sock)
+    ssh ${EVENT_TRIGGER_HOST} event $* 2>&1 | grep "event triggered" | sed -e 's/.*EventGhost "\(.*\)"/\1/'
+else
+    ssh ${PROXY_HOST} eve $*
+fi
