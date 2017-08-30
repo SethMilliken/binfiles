@@ -6,4 +6,4 @@ if [[ "$1" == "-f" ]]; then
 else
     VOLUME=$1
 fi
-diskutil unmount $FORCED /Volumes/$VOLUME
+/usr/sbin/diskutil unmount $FORCED /Volumes/$VOLUME
