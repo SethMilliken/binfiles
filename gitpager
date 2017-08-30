@@ -1,11 +1,12 @@
 #/bin/bash
 pattern_seed="--pattern '^(Date|added|deleted|modified): '"
+diffso=diff-so-fancy
 
 default_pager() {
     /usr/bin/less --tabs=4 -RFX
 }
 
-if [ -n "$(which diff-so-fancy 2>/dev/null)" ]; then
+if [ -n "$(which $diffso  2>/dev/null)" ]; then
     diff-so-fancy | default_pager ${pattern_seed}
 else
     default_pager
