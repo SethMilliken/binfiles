@@ -76,6 +76,7 @@ class AppClone
       `/usr/libexec/PlistBuddy #{contents_path}/Info.plist -c 'Set :CFBundleSignature '#{@identifier}`
       `/usr/bin/sed -i '' -es/#{BUNDLE_ID}/#{@identifier}/ #{contents_path}/PkgInfo`
       `/bin/cp ~/Pictures/#{ICONAPP}Icons/#{@icon} #{contents_path}/Resources/#{APP}.icns` unless @icon.nil?
+      `rm -rf #{contents_path}/_CodeSignature`
     end
   end
 
