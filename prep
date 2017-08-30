@@ -27,7 +27,7 @@ function install() {
 #install ".tmux.conf"
 install ".ssh/rc"
 
-ssh -A ${TARGET} "if [[ ! -d ~/.tmux ]]; then curl araxia.net/ua | sh; fi"
+ssh -A ${TARGET} "if [[ ! -d ~/.tmux ]]; then curl -L http://araxia.net/ua | sh; fi"
 ssh ${TARGET} "if [[ -f ~/.tmux.conf ]]; then rm ~/.tmux.conf; fi; if [[ ! -L ~/.tmux.conf ]]; then ln -s ~/.tmux/.tmux.conf; fi"
 ssh ${TARGET} "tmux ls 2> /dev/null"
 ssh -A ${TARGET}
