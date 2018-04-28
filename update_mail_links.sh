@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/bin/bash
 function previous_month {
 	PREV_MONTHS="12 01 02 03 04 05 06 07 08 09 10 11"
 	PREV_MONTH=`echo $PREV_MONTHS | awk '{print $'"${1}"'}'`
@@ -27,7 +27,7 @@ function update_path {
 				continue
 			else
 				echo "New target for " ${CURRENT_LINK} ": " $NEW_TARGET
-				${DEBUG} ln -shf ${NEW_TARGET} ${CURRENT_LINK}
+				${DEBUG} ln -sf ${NEW_TARGET} ${CURRENT_LINK}
 				continue
 			fi
 		else
