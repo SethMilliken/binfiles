@@ -13,4 +13,21 @@ if [ ! -e ${location:-NOTFOUND} ]; then
     echo "multitail not found"
     return 1
 fi
-multitail -Z red,black,inverse -T -x "%m %u@%h %f (%t) [%l]" -b 8 -m 50 -n 50 -f "${CHAT1}" -m 50 -n 50 -f "${CHAT2}" -m 50 -n 50 -f "${CHAT3}" -m 50 -n 50 -f "${CHAT4}" -m 50 -n 50 -f "${CHAT5}"
+if [ $# -eq 1 ]; then
+    echo "Specify a chat profile: personal, ua"
+    exit 1
+elif [ $# -eq 2 ]; then
+    CHAT_PROFILE=$1
+    CHAT_ID=$2
+    case $CHAT_PROFILE in
+        "personal")
+            CHAT="${PCHATS}/${CHAT_ID}.weechatlog"
+            ;;
+        "ua")
+            CHAT="${CHATS}/python.ua.${CHAT_ID}.weechatlog"
+            ;;
+    esac
+    /bin/less +F ${CHAT}
+else
+    multitail -Z red,black,inverse -T -x "%m %u@%h %f (%t) [%l]" -b 8 -m 50 -n 50 -f "${CHAT1}" -m 50 -n 50 -f "${CHAT2}" -m 50 -n 50 -f "${CHAT3}" -m 50 -n 50 -f "${CHAT4}" -m 50 -n 50 -f "${CHAT5}"
+fi
