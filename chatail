@@ -1,0 +1,16 @@
+#!/bin/sh
+CHATS="/home/seth/.weechat/logs"
+PCHATS="/home/seth/.weechat_personal/logs"
+CHAT1="${PCHATS}/irc.bitlbee.tadhg.weechatlog"
+#CHAT2="${CHATS}/irc.slack-ua.#production-changes.weechatlog"
+CHAT2="${CHATS}/python.ua.#reach-sentry.weechatlog"
+CHAT3="${CHATS}/python.ua.#channel-reach.weechatlog"
+CHAT4="${CHATS}/python.ua.#reach-eng.weechatlog"
+CHAT5="${CHATS}/python.ua.&reach-team.weechatlog"
+
+location=$(which multitail 1&> /dev/null)
+if [ ! -e ${location:-NOTFOUND} ]; then
+    echo "multitail not found"
+    return 1
+fi
+multitail -Z red,black,inverse -T -x "%m %u@%h %f (%t) [%l]" -b 8 -m 50 -n 50 -f "${CHAT1}" -m 50 -n 50 -f "${CHAT2}" -m 50 -n 50 -f "${CHAT3}" -m 50 -n 50 -f "${CHAT4}" -m 50 -n 50 -f "${CHAT5}"
