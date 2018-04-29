@@ -1,5 +1,8 @@
 #!/bin/sh
 CLEANUP_DIR="${HOME}/.ssh/control"
+if [[ ! -d "${CLEANUP_DIR}" ]]; then
+    mkdir "${CLEANUP_DIR}"
+fi
 for file in $(ls -1 ${CLEANUP_DIR}); do
   echo "Removing ${CLEANUP_DIR}/${file}..."
   rm "${CLEANUP_DIR}/${file}"
