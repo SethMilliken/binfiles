@@ -43,13 +43,13 @@ class AppClone
   end
 
   def original_root
-    original_path = Dir.glob("#{CASKROOM}/#{CASK}/**/#{APP}.app")
-    if original_path.length > 0
-      return File.dirname(original_path[-1])
-    end
     original_path = "/Applications/#{APP}.app"
     if File.exists? original_path
       return File.dirname(original_path)
+    end
+    original_path = Dir.glob("#{CASKROOM}/#{CASK}/**/#{APP}.app")
+    if original_path.length > 0
+      return File.dirname(original_path[-1])
     end
   end
 
