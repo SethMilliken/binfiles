@@ -1,0 +1,34 @@
+#!/bin/sh
+
+# Function to check if given argument is a directory and if so print its
+# listing in color and return true if it was a directory.
+
+# Usage:
+# source /path/to/color-ls
+# colorls $1 isdirectory
+# if [ $isdirectory = true ]; then
+#     echo "success"
+# else
+#     echo "failure"
+# fi
+
+function colorls() {
+  local file=$1
+  local __isdirectory_var=$2
+  local result=false
+  if [ -d ${file:-NOTFOUND} ]; then
+      if [ "$(uname -s)"=="Darwin" ]; then
+          /bin/ls -alG $file
+      else
+          /bin/ls -al --color=always $file
+      fi
+      result=true
+  fi
+  if [[ "$__isdirectory_var" ]]; then
+      eval $__isdirectory_var="'$result'"
+  else
+      echo "$result"
+  fi
+}
+
+# vim: sw=4 et tw=0:
