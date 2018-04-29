@@ -1,7 +1,11 @@
-#!/usr/local/bin/zsh
-CWD=$HOME/Library/Application\ Support/Firefox/Profiles
+#!/bin/sh
+# 0  * * * *          $HOME/bin/ffss 2>&1 /dev/null
+CWD=${HOME}/Library/Application\ Support/Firefox/
 TIMESTAMP=`date +%Y-%m-%d.%T`
-cd $CWD
+cd "${CWD}"
 git add -f **/sessionstore.js
 git add -f **/sessionstore-backups/*.js
 git commit -m"$TIMESTAMP"
+#/usr/local/bin/git add -f Profiles/**/sessionstore.js
+#/usr/local/bin/git add -f Profiles/**/sessionstore-backups/recovery.js
+#/usr/local/bin/git commit -m"$TIMESTAMP"
