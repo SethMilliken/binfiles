@@ -1,1 +1,12 @@
-../.vim/bundle/vimpager/vimpager
+#!/bin/sh
+
+# Handle directories
+file=$1
+if [ -d ${file:-NOTFOUND} ]; then
+    /bin/ls -al --color=always $file
+        return 1
+else
+    ${HOME}/.vim/bundle/vimpager/vimpager $@
+fi
+
+# vim: sw=4 et tw=0:
