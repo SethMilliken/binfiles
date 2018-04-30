@@ -1,0 +1,58 @@
+#!/bin/sh
+
+# Symlink this as vimpager and vimcat to provide additional protections for
+# using them.
+
+# Function to check if given argument is a directory and if so print its
+# listing in color and return true if it was a directory.
+
+colorls() {
+  local file=$1
+  local __isdirectory_var=$2
+  local result=false
+  if [ -d "${file:-NOTFOUND}" ]; then
+      if [ "$(uname -s)" = "Darwin" ]; then
+          /bin/ls -alG $file
+      else
+          /bin/ls -al --color=always $file
+      fi
+      result=true
+  fi
+  if [ -n "$__isdirectory_var" ]; then
+      export "${__isdirectory_var}"="${result}"
+  else
+      echo "$result"
+  fi
+}
+
+# Function to check if given argument is text and if not print its
+# `file` output and return false.
+
+textdetect() {
+  local file=$1
+  local __istext_var=$2
+  local result=false
+  local check="$(file ${file} | grep -v text)"
+  if [ -z "${check}" ]; then
+      result=true
+  else
+      echo "${check}"
+  fi
+  if [ -n "$__istext_var" ]; then
+      export "${__istext_var}"="${result}"
+  else
+      echo "$result"
+  fi
+}
+
+pagerwrap() {
+  colorls $1 isdirectory
+  textdetect $1 istext
+  if [ "$isdirectory" = "false" -a "$istext" = "true" ]; then
+      "${HOME}/.vim/bundle/vimpager/$(basename ${0})" $@
+  fi
+}
+
+pagerwrap "$@"
+
+# vim: sw=4 et tw=0:
