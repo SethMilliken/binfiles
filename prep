@@ -4,10 +4,17 @@ ENVI=${2:-prod}
 DEFAULT_TARGET=${1}.${ENVI}.urbanairship.com
 TARGET=${HOST:-$DEFAULT_TARGET}
 SSH_ARGS="-o VisualHostKey=no -o ControlMaster=auto -o ControlPersist=3s -o ControlPath=~/.ssh/control/%r@%h-%p"
+TMUX_CONFIG_SYNC_SCRIPT="https://araxia.net/tmux-sync"
 
+
+ping -c1 -W1 ${TARGET} > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    echo "${TARGET} unreachable"
+    exit 1
+fi
 echo "Checking for screen-256color termcap..."
 ssh ${SSH_ARGS} ${TARGET} "[[ -r ~/.terminfo/s/screen-256color || -r /usr/share/terminfo/s/screen-256color ]]"
-if [[ 1 -eq $? ]]; then
+if [ 1 -eq $? ]; then
     echo "Installing screen-256color termcap..."
     infocmp screen-256color | ssh ${SSH_ARGS} ${TARGET} "cat - > screen-256color"
     ssh ${SSH_ARGS} ${TARGET} "tic screen-256color && rm screen-256color"
@@ -18,7 +25,7 @@ function install() {
     BASENAME=$(basename $FILENAME)
     echo "Checking ${FILENAME}..."
     ssh ${SSH_ARGS} ${TARGET} "cat ${FILENAME}" | diff - "${HOME}/${FILENAME}"
-    if [[ 1 -eq $? ]]; then
+    if [ 1 -eq $? ]; then
         echo "Installing ${BASENAME}..."
         scp ${SSH_ARGS} ${HOME}/${FILENAME} ${TARGET}:~/${FILENAME}
     fi
@@ -27,7 +34,7 @@ function install() {
 #install ".tmux.conf"
 install ".ssh/rc"
 
-ssh -A ${TARGET} "if [[ ! -d ~/.tmux ]]; then curl -L http://araxia.net/ua | sh; fi"
-ssh ${TARGET} "if [[ -f ~/.tmux.conf ]]; then rm ~/.tmux.conf; fi; if [[ ! -L ~/.tmux.conf ]]; then ln -s ~/.tmux/.tmux.conf; fi"
+ssh -A ${TARGET} "curl -s -L "${TMUX_CONFIG_SYNC_SCRIPT}" | sh"
+ssh ${TARGET} 'if [ -f "${HOME}/.tmux.conf" ]; then rm ~/.tmux.conf; fi; if [ ! -L "${HOME}/.tmux.conf" ]; then ln -s ~/.tmux/.tmux.conf; fi'
 ssh ${TARGET} "tmux ls 2> /dev/null"
 ssh -A ${TARGET}
