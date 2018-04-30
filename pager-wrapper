@@ -32,11 +32,11 @@ textdetect() {
   local file=$1
   local __istext_var=$2
   local result=false
-  local check="$(file ${file} | grep -v text)"
+  local check="$(file $(readlink -f ${file}) | awk -F':' '{print $2}' | grep -v text)"
   if [ -z "${check}" ]; then
       result=true
   else
-      echo "${check}"
+      file ${file}
   fi
   if [ -n "$__istext_var" ]; then
       export "${__istext_var}"="${result}"
