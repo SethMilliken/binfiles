@@ -1,0 +1,42 @@
+#!/usr/bin/env sh
+TMUX_WORK_TREE="${HOME}/.tmux"
+CONFIG_REPO="ssh://seth@araxia.net/~/git/tmuxfiles.git"
+CONFIG_HOST_NAME="araxia.net"
+# ssh-keygen -lF "${CONFIG_HOST_NAME}"
+CONFIG_HOST_FINGERPRINT="de:e5:0d:92:cc:50:72:f0:20:26:b6:66:a0:76:49:18"
+CONFIG_HOST_PUBLIC_KEY="araxia.net,34.208.78.167 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDc5k9fn36lAeiIlbpVAN/27vrOyt36xyODFTi5aoTfrzIBZ1DXF4A4yO0QAlZ0eACnALADdcMnQWFlga+RfeGnnDG6q54I/dtnRqkUF1/DOYpEjslzm2ppqvp588TeiAOjxZqe+//Ecp+hv7CjySEEpbNPPfuJnQt61Vz9Qna7iOAbe05YxyIRcRlqjXYbb8E7I+/QZk5g5OWDs7fyMI3+hGPXSek/kk4gcoz40mib/cahPnUqUpRrCLgIwONiMXhAwQJD+AqDiPvyGHFg9+QE8eOszXUtgoVdidCSg9zwzQCxXN+t1vYhguxHhu1oPmiZU772i5uL0p8EFz+yPt79"
+
+function install_hostkey() {
+    echo "Installing public key for tmux configuration repository host..."
+    echo "${CONFIG_HOST_PUBLIC_KEY}" >> ~/.ssh/known_hosts
+}
+
+function check_for_stale_hostkey() {
+    FOUND_FINGERPRINT=$(ssh-keygen -lF ${CONFIG_HOST_NAME} | grep -o ${CONFIG_HOST_FINGERPRINT})
+    #echo "found:    ${FOUND_FINGERPRINT}"
+    #echo "expected: ${CONFIG_HOST_FINGERPRINT}"
+    if [ "${FOUND_FINGERPRINT}" != "${CONFIG_HOST_FINGERPRINT}" ]; then
+        echo "Removing stale tmux configuration repository host public key..."
+        sed -i -e '/^'${CONFIG_HOST_NAME}'/ d' ~/.ssh/known_hosts
+        install_hostkey
+    fi
+}
+
+if [[ -z "$(ssh-keygen -F ${CONFIG_HOST_NAME})" ]]; then
+    install_hostkey
+else
+    check_for_stale_hostkey
+fi
+if [[ ! -x "$(command -v tmux)" ]]; then
+    echo "Installing tmux..."
+    sudo yum install -y tmux
+fi
+if [[ ! -d "${TMUX_WORK_TREE}/.git" ]]; then
+    echo "Retrieving tmux configuration..."
+    git clone "${CONFIG_REPO}" "${TMUX_WORK_TREE}"
+else
+    echo "Updating tmux configuration..."
+    cd "${TMUX_WORK_TREE}"
+    git pull --ff-only
+    git status --short
+fi
