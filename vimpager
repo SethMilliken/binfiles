@@ -1,7 +1,7 @@
 #!/bin/sh
-source ${HOME}/bin/color-ls
+. ${HOME}/bin/color-ls
 colorls $1 isdirectory
-if [ $isdirectory = false ]; then
-    ${HOME}/.vim/bundle/vimpager/vimpager $@
+if [ "$isdirectory" = "false" ]; then
+    "${HOME}/.vim/bundle/vimpager/vimpager" $@
 fi
 # vim: sw=4 et tw=0:
