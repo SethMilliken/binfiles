@@ -1,8 +1,8 @@
 #!/bin/bash
 EVENT_TRIGGER_HOST="wasteland.local"
-PROXY_HOST="muse.local"
+PROXY_HOST="samsara.local"
 if [[ "$(hostname)" == "${PROXY_HOST}" ]]; then
-    SSH_AUTH_SOCK=$(auth-sock)
+    export SSH_AUTH_SOCKET=$(auth-sock)
     ssh ${EVENT_TRIGGER_HOST} event $* 2>&1 | grep "event triggered" | sed -e 's/.*EventGhost "\(.*\)"/\1/'
 else
     echo "Sending event trigger through authorized proxy..."
