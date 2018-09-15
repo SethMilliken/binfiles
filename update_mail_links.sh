@@ -23,20 +23,20 @@ function update_path {
         then
             if [[ $NEW_TARGET == $FULLPATH ]]
             then
-                # echo No new target for ${CURRENT_LINK} ": " $FULLPATH  
-                continue
+                # echo No new target for ${CURRENT_LINK} ": " $FULLPATH
+                : no-op
             else
                 echo "New target for " ${CURRENT_LINK} ": " $NEW_TARGET
+                ${DEBUG} rm ${CURRENT_LINK}
                 ${DEBUG} ln -sf ${NEW_TARGET} ${CURRENT_LINK}
-                continue
+                : no-op
             fi
         else
             echo "Could not find target for" ${CURRENT_LINK} ": " $NEW_TARGET
-            continue
         fi
     else
-        #echo "Not a symbolic link: " ${CURRENT_LINK}
-        continue
+        # echo "Not a symbolic link: " ${CURRENT_LINK}
+        : no-op
     fi
 }
 
@@ -51,7 +51,6 @@ function contains {
         return 1
     fi
 }
-    
 
 for link in `ls -1d .*`
 do
@@ -72,7 +71,7 @@ do
     VALUE=$?
     if [[ $VALUE -eq 1 ]]
     then
-        update_path $link ${PREVIOUS_DATE} 
+        update_path $link ${PREVIOUS_DATE}
         continue
     fi
     if [[ $link == "nf" ]]
@@ -80,7 +79,7 @@ do
         continue
     fi
     # Everything else
-    update_path $link ${DATE} 
+    update_path $link ${DATE}
 done
 
 # vim:et:ts=4 sw=4
