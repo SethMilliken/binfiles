@@ -1,0 +1,8 @@
+#!/bin/sh
+# Generate a key pair suitable for use with PassKit NFC encryptionPublicKey
+DEFAULT_PRIVATE_KEY_FILE="private-nfc-key.pem"
+PRIVATE_KEY_FILE=${1:-$DEFAULT_PRIVATE_KEY_FILE}
+if [ -z "${1}" ]; then
+    openssl ecparam -name prime256v1 | openssl ecparam -genkey -noout -out "${PRIVATE_KEY_FILE}"
+fi
+openssl ec -in ${PRIVATE_KEY_FILE} -pubout -conv_form compressed 2> /dev/null | grep -v 'PUBLIC KEY' | sed -e 'N;s/\n//'
