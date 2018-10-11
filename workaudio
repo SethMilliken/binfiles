@@ -3,10 +3,11 @@
 PATH=/usr/local/bin/:${HOME}/bin:${PATH}
 output_source='USB PnP Sound Device'
 input_source='USB PnP Sound Device'
-cli="$(command -v SwitchAudioSource)"
+cli="$(command -v AudioSwitcher)"
 notification="$(command -v notify)"
 if [ -x "${cli}" ]; then
     ${cli} -s "${output_source}"
+    ${cli} -t system -s "${output_source}"
     ${cli} -t input -s "${input_source}"
     if [ -x "${notification}" ]; then
         notify "ControlPlane" false "input: ${input_source}\noutput: ${output_source}" "Audio Switched"
