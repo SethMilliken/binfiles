@@ -1,0 +1,23 @@
+#!/bin/sh
+PROD_NODES="e0428 e0429 e0426 e0427 e0430 e0670 e0668 e0669"
+STAG_NODES="e0477 e0709"
+LOGFILE="/mnt/services/passtools-backend/var/log/passtools-backend.log"
+LOG_NUMBERS=("" .1 .2 .3 .4 .5 .6 .7 .8)
+LOG_NUMBERS=("")
+if [[ -n $2 ]]; then
+    sub=stag
+    NODES=$STAG_NODES
+else
+    sub=prod
+    NODES=$PROD_NODES
+fi
+
+#DEBUG="echo "
+for node in ${NODES}; do
+    echo "Checking $node..."
+    for fn in "${LOG_NUMBERS[@]}"; do
+        echo "    ${LOGFILE}${fn}..."
+        COMMAND="ssh $node.$sub.urbanairship.com grep '$1' ${LOGFILE}${fn}"
+        $DEBUG $COMMAND
+    done
+done
