@@ -4,9 +4,9 @@ PCHATS="/home/seth/.weechat_personal/logs"
 CHAT1="${PCHATS}/irc.bitlbee.tadhg.weechatlog"
 #CHAT2="${CHATS}/irc.slack-ua.#production-changes.weechatlog"
 CHAT2="${CHATS}/python.ua.#reach-sentry.weechatlog"
-CHAT3="${CHATS}/python.ua.#channel-reach.weechatlog"
-CHAT4="${CHATS}/python.ua.#reach-eng.weechatlog"
-CHAT5="${CHATS}/python.ua.&reach-team.weechatlog"
+CHAT3="${CHATS}/python.ua.#channel-wallet.weechatlog"
+CHAT4="${CHATS}/python.ua.#wallet-eng.weechatlog"
+CHAT5="${CHATS}/python.ua.&wallet-team.weechatlog"
 
 location=$(which multitail 1&> /dev/null)
 if [ ! -e ${location:-NOTFOUND} ]; then
