@@ -16,8 +16,12 @@ function update_path {
     MATCH_STRING=$2
     if [ -L ${CURRENT_LINK} ]
     then
+        echo "Looking for match to $MATCH_STRING for link $CURRENT_LINK"
         FULLPATH=`ls -l ${CURRENT_LINK} | awk '{print $11}'`
-        CANDIDATE=`echo $FULLPATH | sed -e "s/\(.*\.\)\([0-9]*-[0-9]*\)\(.*\)/\1${MATCH_STRING}\3/"`
+        #echo "Full path: $FULLPATH"
+        CANDIDATE=`echo $FULLPATH | sed -e "s/\(.*\.\)\(archive\.\)*\([0-9]*-[0-9]*\)\(.*\)/\1${MATCH_STRING}\4/"`
+        #echo "Candidate: $CANDIDATE"
+        #echo "New target: $NEW_TARGET"
         NEW_TARGET=`ls -d ${CANDIDATE}`
         if [[ ${NEW_TARGET} != "" && -e ${NEW_TARGET} ]]
         then
@@ -64,6 +68,14 @@ do
         continue
     fi
     if [[ $link == ".current.in" ]]
+    then
+        continue
+    fi
+    if [[ $link == ".current.impersonal" ]]
+    then
+        continue
+    fi
+    if [[ $link == ".current.receipts" ]]
     then
         continue
     fi
