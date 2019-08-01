@@ -1,8 +1,15 @@
 #!/bin/sh
 IDENTIFIER=$1
+SOCKET=$2
 TTY=$(tty)
+
+TMUX_COMMAND="tmux"
+if [ -n "${SOCKET}" ]; then
+    TMUX_COMMAND="tmux -L ${SOCKET}"
+fi
+
 if [ -n "${IDENTIFIER}" -a -n ${TTY} ]; then
-  tmux set -s @tty_for_${IDENTIFIER} "${TTY}"
-  tmux switch-client -c ${TTY} ${IDENTIFIER}
-  tmux attach -d -t ${IDENTIFIER}
+  ${TMUX_COMMAND} set -s @tty_for_${IDENTIFIER} "${TTY}"
+  ${TMUX_COMMAND} switch-client -c ${TTY} ${IDENTIFIER}
+  ${TMUX_COMMAND} attach -d -t ${IDENTIFIER}
 fi
