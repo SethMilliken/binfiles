@@ -10,7 +10,6 @@ def gitworld(command)
         "",                        \
         "bin",                     \
         ".vim",                    \
-        ".vim/bundle/vim-traitor", \
         ".pentadactyl",            \
         ".oh-my-zsh"               \
         ".tmux"                    \
