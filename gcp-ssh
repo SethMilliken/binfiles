@@ -1,5 +1,7 @@
 #!/bin/bash
-GROUP="wallet-1-igm"
+
+# Avoid "setlocale cannot change locale" warnings
+export LC_ALL=C
 
 case $(basename $0) in
     gcp-eucs)
