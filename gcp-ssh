@@ -3,21 +3,37 @@
 # Avoid "setlocale cannot change locale" warnings
 export LC_ALL=C
 
+DEBUG=":"
+#DEBUG="echo"
+
 SERVICE_NAME=${SERVICE:-wallet}
 GROUP="${SERVICE_NAME}-1-igm"
 
 case $(basename $0) in
-    gcp-eucs)
+    *eucs*)
         REGION="europe-west1"
         PROJECT="ua-ops-transitional-eucs"
         ;;
-    gcp-stag)
+    *stag*)
         REGION="us-east1"
         PROJECT="ua-ops-transitional-stag"
         ;;
-    gcp-prod)
+    *prod*)
         REGION="us-east1"
         PROJECT="ua-ops-transitional-prod"
+        ;;
+    *)
+        echo "Please use an appropriately named symlink to this command."
+        exit 1
+        ;;
+esac
+
+case $(basename $0) in
+    *gcp*)
+        BEHAVIOR="ssh"
+        ;;
+    *stat*)
+        BEHAVIOR="status"
         ;;
     *)
         echo "Please use an appropriately named symlink to this command."
@@ -28,7 +44,7 @@ esac
 selection=$1
 
 instances_command="gcloud compute instance-groups list-instances --project $PROJECT --region $REGION $GROUP --format=csv[no-heading](instance.basename(),instance.scope(zones).segment(0))"
-echo $instances_command
+$DEBUG $instances_command
 instances_result=($($instances_command))
 
 declare -a available_instances
@@ -41,18 +57,32 @@ for ins in "${instances_result[@]}"; do
   done <<< "$ins"
 done
 
-if [[ -z "$selection" && ${#available_instances[@]} -gt 1 ]]; then
-    echo "Multiple instances available:"
-    echo ""
+if [[ $BEHAVIOR =~ status ]]; then
     for i in ${!available_instances[@]}; do
-        current=(${available_instances[$i]})
-        echo "$i: ${current[1]} (${current[2]})"
+        current_instance=(${available_instances[$i]})
+        name=${current_instance[1]}
+        zone=${current_instance[2]}
+        echo -n "$i) ${name} (${zone}): "
+        COMMAND="gcloud compute --project $PROJECT ssh --zone $zone $name -- curl http://localhost:17002/v1/system/status 2&>/dev/null | grep version | jq -r '.version'"
+        echo $COMMAND | zsh
     done
-    echo ""
-    echo "Choose a number and press [ENTER]:"
-    read selection
-    if [[ -z $selection ]]; then
-        exit 0
+    exit 0
+fi
+
+if [[ -z "$selection" && ${#available_instances[@]} -gt 1 ]]; then
+    if [[ $BEHAVIOR == ssh ]]; then
+        echo "Multiple instances available:"
+        echo ""
+        for i in ${!available_instances[@]}; do
+            current=(${available_instances[$i]})
+            echo "$i: ${current[1]} (${current[2]})"
+        done
+        echo ""
+        echo "Choose a number and press [ENTER]:"
+        read selection
+        if [[ -z $selection ]]; then
+            exit 0
+        fi
     fi
 else
     selection=1
@@ -63,7 +93,11 @@ if [[ ${#instances_result[@]} -gt 0 ]]; then
     name=${selected_instance[1]}
     zone=${selected_instance[2]}
 
+    COMMAND="gcloud compute scp --project $PROJECT --zone $zone $HOME/bin/gcp-bashrc $name:.bashrc"
+    $DEBUG $COMMAND
+    $COMMAND
+
     COMMAND="gcloud compute --project $PROJECT ssh --zone $zone $name"
-    echo $COMMAND
+    $DEBUG $COMMAND
     $COMMAND
 fi
