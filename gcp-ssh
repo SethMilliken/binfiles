@@ -58,10 +58,12 @@ else
     selection=1
 fi
 
-selected_instance=(${available_instances[$selection]})
-name=${selected_instance[1]}
-zone=${selected_instance[2]}
+if [[ ${#instances_result[@]} -gt 0 ]]; then
+    selected_instance=(${available_instances[$selection]})
+    name=${selected_instance[1]}
+    zone=${selected_instance[2]}
 
-COMMAND="gcloud compute --project $PROJECT ssh --zone $zone $name"
-echo $COMMAND
-$COMMAND
+    COMMAND="gcloud compute --project $PROJECT ssh --zone $zone $name"
+    echo $COMMAND
+    $COMMAND
+fi
