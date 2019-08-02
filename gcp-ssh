@@ -28,18 +28,20 @@ esac
 selection=$1
 
 instances_command="gcloud compute instance-groups list-instances --project $PROJECT --region $REGION $GROUP --format=csv[no-heading](instance.basename(),instance.scope(zones).segment(0))"
+echo $instances_command
 instances_result=($($instances_command))
 
 declare -a available_instances
 i=0
-while IFS="," read -r instance zone; do
-    ((i++))
-    id=$(echo $instance | awk -F'-' '{print $NF}')
-    available_instances[$i]="$id $instance $zone"
-done <<< "$instances_result"
+for ins in "${instances_result[@]}"; do
+  while IFS="," read -r instance zone; do
+      ((i++))
+      id=$(echo $instance | awk -F'-' '{print $NF}')
+      available_instances[$i]="$id $instance $zone"
+  done <<< "$ins"
+done
 
-
-if [[ -z $selection && ${#instances[@]} -gt 1 ]]; then
+if [[ -z "$selection" && ${#available_instances[@]} -gt 1 ]]; then
     echo "Multiple instances available:"
     echo ""
     for i in ${!available_instances[@]}; do
