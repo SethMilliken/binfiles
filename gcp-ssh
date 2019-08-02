@@ -3,6 +3,9 @@
 # Avoid "setlocale cannot change locale" warnings
 export LC_ALL=C
 
+SERVICE_NAME=${SERVICE:-wallet}
+GROUP="${SERVICE_NAME}-1-igm"
+
 case $(basename $0) in
     gcp-eucs)
         REGION="europe-west1"
