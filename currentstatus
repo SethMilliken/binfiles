@@ -1,22 +1,44 @@
 #!/bin/bash
 # TODO: use something better than year (date with format) for awk part
 # TODO: better handle missing timestamp
-# TODO: configurable top n items?
 # TODO: supporting vim function to retreive preformatted values?
 # TODO: add line about adding to crontab & what the entry should look like
 # */15 * * * * /Users/seth/bin/currentstatus 1&> /dev/null
 NOTIFICATION_SCRIPT="${HOME}/bin/notify"
 STATE="taskstack"
 
-FILE="${HOME}/sandbox/work/work.tst.txt"
-if [[ ! -f $FILE ]]; then
-    FILE="${HOME}/sandbox/personal/todo/personal.tst.txt"
-fi
+WORK_HOST="*skynet*"
+
+RAW_LINES=20
+OUT_LINES=6
+
+local_file() {
+    FILE="${HOME}/sandbox/work/work.tst.txt"
+    if [[ ! -f $FILE ]]; then
+        FILE="${HOME}/sandbox/personal/todo/personal.tst.txt"
+    fi
+    CONTENTS="cat $FILE"
+}
+
+remote_file() {
+    FILE="/home/seth/storage/sandbox/work/ua/work.tst" #2019-04-24 11:28:09 PDT
+    CONTENTS="ssh ax cat $FILE"
+}
 
 notify() {
-  RESULT=`head -6 ${FILE} | grep -v '^$' | grep -v 'DOING' | grep -v 'WTF' | grep -v '^@' | grep -v '{{{|}}}' | awk -F'201.-' '{print $1}'`
-  echo "${RESULT}"
-  ${NOTIFICATION_SCRIPT} $(basename $0) "false" "${RESULT}" "${STATE}"
+    RESULT=$($CONTENTS | head -${RAW_LINES} | grep -v '^$' | grep -v '^@' | grep -v 'DOING\|WTF\|{{{\|}}}' | awk -F'201.-' '{print $1}' | head -${OUT_LINES} )
+    if tty -s; then
+        echo "${RESULT}"
+    else
+        # Only post notification if not running in a terminal
+        ${NOTIFICATION_SCRIPT} $(basename $0) "false" "${RESULT}" "${STATE}"
+    fi
 }
+
+if [[ "$(hostname)" == $WORK_HOST ]]; then
+    remote_file
+else
+    local_file
+fi
 
 notify
