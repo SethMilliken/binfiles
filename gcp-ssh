@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/bin/sh
 
 # Avoid "setlocale cannot change locale" warnings
 export LC_ALL=C
 
-DEBUG=":"
-#DEBUG="echo"
+#DEBUG=":"
+DEBUG="echo"
 
 SERVICE_NAME=${SERVICE:-wallet}
 GROUP="${SERVICE_NAME}-1-igm"
@@ -34,6 +34,9 @@ case $(basename $0) in
         ;;
     *stat*)
         BEHAVIOR="status"
+        ;;
+    *logs*)
+        BEHAVIOR="logs"
         ;;
     *)
         echo "Please use an appropriately named symlink to this command."
@@ -70,7 +73,7 @@ if [[ $BEHAVIOR =~ status ]]; then
 fi
 
 if [[ -z "$selection" && ${#available_instances[@]} -gt 1 ]]; then
-    if [[ $BEHAVIOR == ssh ]]; then
+    if [[ $BEHAVIOR != status ]]; then
         echo "Multiple instances available:"
         echo ""
         for i in ${!available_instances[@]}; do
@@ -88,6 +91,21 @@ else
     selection=1
 fi
 
+if [[ $BEHAVIOR =~ logs ]]; then
+if [[ ${#instances_result[@]} -gt 0 ]]; then
+    selected_instance=(${available_instances[$selection]})
+    name=${selected_instance[1]}
+    zone=${selected_instance[2]}
+
+    REMOTE_COMMAND="sudo journalctl --no-pager -f -u wallet.service"
+    COMMAND="gcloud compute --project $PROJECT ssh --zone $zone $name --command"
+    $DEBUG $COMMAND "\"${REMOTE_COMMAND}\""
+    #${COMMAND} "${REMOTE_COMMAND}" | awk -F' {' '{ js="'\''\{"$2"'\''"; system("jq -r --args '\''[.[\"@timestamp\"],.level,.file,.message] | @tsv'\'' <<< " js)}'
+    ${COMMAND} "${REMOTE_COMMAND}" | awk -F']: ' '{ payload=$2; if (substr(payload,1,1) == "{" && substr(payload,length(payload),1) == "}") { js="'\''"payload"'\''"; system("jq -r --args '\''[.[\"@timestamp\"],.level,.message,.file] | @tsv'\'' <<< " js) } else { gsub(/\\n/, "\n", payload); gsub(/\\t/, "\t", payload); print payload}}'
+fi
+fi
+
+if [[ $BEHAVIOR =~ ssh ]]; then
 if [[ ${#instances_result[@]} -gt 0 ]]; then
     selected_instance=(${available_instances[$selection]})
     name=${selected_instance[1]}
@@ -100,4 +118,5 @@ if [[ ${#instances_result[@]} -gt 0 ]]; then
     COMMAND="gcloud compute --project $PROJECT ssh --zone $zone $name"
     $DEBUG $COMMAND
     $COMMAND
+fi
 fi
