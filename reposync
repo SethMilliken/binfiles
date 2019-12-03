@@ -1,6 +1,6 @@
 #!/bin/bash
-SSH_AUTH_SOCK=$(auth-sock)
-REPOHOME="/Users/seth/sandbox/repos"
+SSH_AUTH_SOCK=$($HOME/bin/auth-sock)
+REPOHOME="$HOME/sandbox/repos"
 FILES=$(ssh ax 'ls -1 ~/git')
 for repo in $FILES; do
     localname=$(echo $repo | sed -e 's/.git//')
