@@ -3,9 +3,11 @@ require 'open3'
 include Open3
 
 # TODO: use colors in output
+# TODO: use config file for repo locations
 
 def gitworld(command)
     home = ENV["HOME"]
+    trans = "/Volumes/trans/repos"
     paths = [                      \
         "",                        \
         "bin",                     \
@@ -15,9 +17,14 @@ def gitworld(command)
         ".tmux"                    \
         "sandbox/work",            \
         "sandbox/personal",        \
+        "#{trans}/personal",       \
+        "#{trans}/binfiles",       \
+        "#{trans}/vimfiles",       \
+        "#{trans}/dotfiles",       \
+        "#{trans}/pentafiles",     \
     ]
     paths.each do |path|
-        fullpath = "#{home}/#{path}"
+        fullpath = path.start_with?("/") ? "#{path}" : "#{home}/#{path}"
         if File.directory? fullpath
             Dir.chdir("#{fullpath}")
             popen3("git #{command}") do |stdin, stdout, stderr, wait_thr|
