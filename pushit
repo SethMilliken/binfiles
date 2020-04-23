@@ -1,7 +1,12 @@
 #!/bin/bash
+MESSAGE=$1
+if [[ -z "$MESSAGE" ]]; then
+    MESSAGE=$(date +%Y-%m-%d)
+fi
+
 REPO=$HOME/write
 ARGS="-C $REPO"
 cd $REPO
 git $ARGS add -A .
-git $ARGS commit -m$(date +%Y-%m-%d)
+git $ARGS commit -m${MESSAGE}
 git $ARGS push origin HEAD
