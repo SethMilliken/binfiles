@@ -8,6 +8,8 @@ MONTH=`date +%m`
 DATE=${YEAR}-${MONTH}
 previous_month `date +%m`
 PREVIOUS_DATE=${YEAR}-${PREV_MONTH}
+MAILDIR=${HOME}/Maildir
+
 #DEBUG="echo "
 DEBUG=""
 
@@ -56,6 +58,7 @@ function contains {
     fi
 }
 
+cd "${MAILDIR}"
 for link in `ls -1d .*`
 do
     # A couple of exceptions
