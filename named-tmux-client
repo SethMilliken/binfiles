@@ -10,6 +10,6 @@ fi
 
 if [ -n "${IDENTIFIER}" -a -n ${TTY} ]; then
   ${TMUX_COMMAND} set -s @tty_for_${IDENTIFIER} "${TTY}"
-  ${TMUX_COMMAND} switch-client -c ${TTY} ${IDENTIFIER}
+  ${TMUX_COMMAND} switch-client -c ${TTY} -t ${IDENTIFIER}
   ${TMUX_COMMAND} attach -d -t ${IDENTIFIER}
 fi
