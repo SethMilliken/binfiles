@@ -20,8 +20,8 @@ function ensure_running {
 
 function open_app {
     if [[ "${APPNAME}" =~ "Firefox" ]]; then
-        ${APPPATH}/Contents/MacOS/firefox -P ${APPNAME##Firefox} &
-    elif [ -d ${APPPATH} ]; then
+        "${APPPATH}/Contents/MacOS/firefox" -P "${APPNAME##Firefox}" &
+    elif [ -d "${APPPATH}" ]; then
         open "${APPPATH}"
     fi
 }
@@ -40,12 +40,12 @@ function open_link {
     fi
     echo "${link_candidate}"
 
-    if [ -d ${APPPATH} ]; then
+    if [ -d "${APPPATH}" ]; then
         if [[ "${link_candidate}" =~ ^http ]]; then
             open -a "${APPPATH}" ${background} "${link_candidate}"
-            ${NOTIFICATION_SCRIPT} ${APPNAME} "false" "${link_candidate}" "${APPNAME}" "" "${APPNAME}"
+            ${NOTIFICATION_SCRIPT} "${APPNAME}" "false" "${link_candidate}" "${APPNAME}" "" "${APPNAME}"
         else
-            ${NOTIFICATION_SCRIPT} ${APPNAME} "false" "${notification_message}" "${APPNAME}" "" "${APPNAME}"
+            ${NOTIFICATION_SCRIPT} "${APPNAME}" "false" "${notification_message}" "${APPNAME}" "" "${APPNAME}"
         fi
     fi
 }
@@ -73,9 +73,9 @@ END_SCRIPT
 }
 
 function bounce_app {
-    RESULT=`killall -s ${APPNAME} 2>/dev/null`
+    RESULT=`killall -s "${APPNAME}" 2>/dev/null`
     if [[ $RESULT != "" ]]; then
-        killall ${APPNAME} 2>/dev/null
+        killall "${APPNAME}" 2>/dev/null
         sleep 1
         ACTION="Restarted"
     fi
