@@ -20,7 +20,7 @@ options[:exclusive] = true
 # Parse Options
 optparse = OptionParser.new do|opts|
   opts.banner = "Usage: #{options[:basename]} [options]"
-  opts.on( '-b', '--browser INSTANCE', 'name of FirefoxInstance used to open link') do |instance|
+  opts.on( '-b', '--browser INSTANCE', 'name of Firefox instance used to open link') do |instance|
     puts instance
     options[:instance] = instance
   end
@@ -79,9 +79,9 @@ end
 urls.each do |url|
   instance = case
                when url.index(/monitoring\.prod|clusto\.prod/)
-                 "FirefoxMonitor"
+                 "Firefox Developer Edition"
                when url.index(/github\.com|jenkins\.prod|tofurkey\.urbanairship|jiveon|atlassian\.prod/)
-                 "FirefoxBrowse"
+                 "Firefox"
                else
                  options[:instance]
                end
