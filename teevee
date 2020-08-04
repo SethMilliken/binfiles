@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# https://github.com/Pulse-Eight/libcec/blob/master/include/cectypes.h#L829
+# 1 2 4 8 16 31
+DEBUG_LEVEL=4
+#DEBUG_LEVEL=0
+COMPORT=/dev/cu.usbmodemv51
+
+function usage() {
+    echo "$(basename $0) [ on | off ]"
+    exit 0
+}
+
+function execute_command() {
+    COMMAND="${1}"
+    echo "${COMMAND}" | ${CEC_CLIENT} --log-level ${DEBUG_LEVEL} --single-command -p 2 ${COMPORT}
+}
+
+CEC_CLIENT=$(which cec-client)
+if [[ -z "${CEC_CLIENT}" ]]; then
+    echo "Install the cec-client first: 'brew install libcec'"
+    exit 1
+fi
+
+case $1 in
+    on)
+        execute_command "on 0"
+        ;;
+    off)
+        execute_command "standby 0"
+        ;;
+    *)
+        usage
+        ;;
+esac
