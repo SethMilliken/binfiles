@@ -10,6 +10,7 @@ options[:path]      = Pathname.new("#{$0}")
 options[:dir]       = options[:path].dirname.to_s
 options[:basename]  = options[:path].basename.to_s
 options[:instance]  = 'FirefoxResearch'
+options[:lincastor] = 'LinCastor'
 options[:channel]   = 'dev-ua.\#ops'
 options[:host]      = 'ax'
 options[:logdir]    = '~/.weechat/logs'
@@ -76,8 +77,9 @@ else
   urls = urls[-1, 1] if options[:exclusive]
 end
 
-urls.each do |url|
-  instance = case
+def handle_with_firefox(options, urls)
+  urls.each do |url|
+    instance = case
                when url.index(/monitoring\.prod|clusto\.prod/)
                  "Firefox Developer Edition"
                when url.index(/github\.com|jenkins\.prod|tofurkey\.urbanairship|jiveon|atlassian\.prod/)
@@ -85,8 +87,19 @@ urls.each do |url|
                else
                  options[:instance]
                end
-  puts %x[ #{options[:dir]}/activate #{instance} link "#{url}" ]
-  sleep 1
+    puts %x[ #{options[:dir]}/activate #{instance} link "#{url}" ]
+    sleep 1
+  end
 end
+
+def handle_with_lincastor(options, urls)
+  urls.each do |url|
+    puts %x[ #{options[:dir]}/activate #{options[:lincastor]} link "#{url}" ]
+    sleep 1
+  end
+end
+
+#handle_with_firefox
+handle_with_lincastor(options, urls)
 
 # vim: set ts=2 sw=2:
