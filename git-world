@@ -22,6 +22,8 @@ def gitworld(command)
         "#{trans}/vimfiles",       \
         "#{trans}/dotfiles",       \
         "#{trans}/pentafiles",     \
+        ".vim/bundle/vim-morning-pages", \
+        ".vim/bundle/vim-mtg-spell",     \
     ]
     paths.each do |path|
         fullpath = path.start_with?("/") ? "#{path}" : "#{home}/#{path}"
