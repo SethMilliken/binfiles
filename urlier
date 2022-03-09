@@ -99,7 +99,15 @@ def handle_with_lincastor(options, urls)
   end
 end
 
-#handle_with_firefox
-handle_with_lincastor(options, urls)
+def handle_with_default(options, urls)
+  urls.each do |url|
+    puts %x[ open "#{url}" ]
+    sleep 1
+  end
+end
+
+
+#handle_with_firefox #handle_with_lincastor(options, urls)
+handle_with_default(options, urls)
 
 # vim: set ts=2 sw=2:
