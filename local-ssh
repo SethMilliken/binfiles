@@ -1,0 +1,3 @@
+#! /bin/bash
+# Show local Bonjour/zeroconf ssh hosts
+dns-sd -t 1 -B _ssh._tcp .
