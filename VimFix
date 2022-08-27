@@ -50,9 +50,13 @@ class AppClone
   end
 
   def original_root
-    original_path = Dir.glob("/usr/local/Cellar/macvim/**/#{APP}.app")
-    if original_path.length > 0
-      return File.dirname(original_path[-1])
+    brewcandidate = Dir.glob("/usr/local/Cellar/macvim/**/#{APP}.app")
+    if brewcandidate.length > 0
+      return File.dirname(brewcandidate[-1])
+    end
+    brewcandidate2 = Dir.glob("/opt/homebrew/Cellar/macvim/**/#{APP}.app")
+    if brewcandidate2.length > 0
+      return File.dirname(brewcandidate2[-1])
     end
     original_path = "/Applications/#{APP}.app"
     if File.exists? original_path
