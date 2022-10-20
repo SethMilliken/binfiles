@@ -62,16 +62,19 @@ EOF
     unless File.exist?(destination)
       clone_parent = "#{original_root}/#{@original}.app"
       printf "'%s' not found. Cloning from '%s' (%s, %s)...\n", destination, clone_parent, @identifier, @icon
+      `rm -rf "#{destination}"`
       `cp -Rp "#{clone_parent}" "#{destination}"`
     end
+    `open "#{destination}"`
   end
 end
 
-FirefoxClone.new(:identifier => 'FFTE' , :name => 'Test'     , :original => 'FirefoxDeveloperEdition' , :icon => 'FirefoxGlass.icns')
-FirefoxClone.new(:identifier => 'FFTR' , :name => 'Track'    , :original => 'FirefoxDeveloperEdition' , :icon => 'FirefoxNeon.icns')
-FirefoxClone.new(:identifier => 'FFBR' , :name => 'Browse'   , :original => 'FirefoxDeveloperEdition' , :icon => 'FirefoxWhite.icns')
-FirefoxClone.new(:identifier => 'FFRE' , :name => 'Research' , :original => 'FirefoxDeveloperEdition' , :icon => 'FirefoxBlue.icns')
-#FirefoxClone.new(:identifier => 'FFMO' , :name => 'Monitor'  , :original => 'Firefox' , :icon => 'FirefoxSauron.icns')
+FirefoxClone.new(:identifier => 'FFPE' , :name => 'Personal'  , :original => 'Firefox' , :icon => 'FirefoxWhite.icns')
+FirefoxClone.new(:identifier => 'FFMO' , :name => 'Monitor'   , :original => 'Firefox' , :icon => 'FirefoxSauron.icns')
+FirefoxClone.new(:identifier => 'FFBR' , :name => 'Browse'    , :original => 'Firefox' , :icon => 'FirefoxBlack.icns')
+#FirefoxClone.new(:identifier => 'FFTE' , :name => 'Test'      , :original => 'Firefox' , :icon => 'FirefoxGlass.icns')
+#FirefoxClone.new(:identifier => 'FFTR' , :name => 'Track'    , :original => 'FirefoxDeveloperEdition' , :icon => 'FirefoxNeon.icns')
+#FirefoxClone.new(:identifier => 'FFRE' , :name => 'Research' , :original => 'FirefoxDeveloperEdition' , :icon => 'FirefoxBlue.icns')
 #FirefoxClone.new(:identifier => 'FFDO' , :name => 'Docs'     , :original => 'Firefox' , :icon => 'FirefoxGlass.icns')
 #FirefoxClone.new(:identifier => 'FFCH' , :name => 'Chat'     , :original => 'Firefox' , :icon => 'FirefoxOrange.icns')
 #FirefoxClone.new(:identifier => 'FFPR' , :name => 'Project'  , :original => 'Firefox' , :icon => 'FirefoxOrange.icns')

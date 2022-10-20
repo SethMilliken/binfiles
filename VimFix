@@ -12,7 +12,7 @@ app_specs = [
 ['VIM8', 'Scratch',        'VimOrange.icns'    ],
 ['VIMW', 'WorkScratch',    'VimGrey.icns'      ],
 ['VIMT', 'WorkTodo',       'VimBlue.icns'      ],
-['VIMM', 'MacVim',         'VimGreen.icns'     ],
+#['VIMM', 'MacVim',         'VimGreen.icns'     ],
 #['VIM4', 'Vimwiki',        'VimPaleGreen.icns' ],
 #['VIM5', 'Tasks',          'VimPurple.icns'    ],
 #['VIM7', 'SourceCode',     'VimBlue.icns'      ],
@@ -58,6 +58,10 @@ class AppClone
     if brewcandidate2.length > 0
       return File.dirname(brewcandidate2[-1])
     end
+    #original_path = Dir.glob("/usr/local/Caskroom/macvim/**/#{APP}.app")
+    #if original_path.length > 0
+    #  return File.dirname(original_path[-1])
+    #end
     original_path = "/Applications/#{APP}.app"
     if File.exists? original_path
       return File.dirname(original_path)
@@ -68,6 +72,7 @@ class AppClone
     unless File.exist? app_path
       printf "%s was not found. Copying...\n", app_path
       `cp -Rp "#{original_root}/#{APP}.app" "#{app_path}"`
+      `open "#{app_path}"`
     end
   end
 

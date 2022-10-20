@@ -12,9 +12,9 @@ CASK="iterm2"
 
 app_specs = [
 ['ITR1' , 'Personal' , 'CandC.icns'       ],
-['ITR2' , 'VM'       , 'MatrixBlue.icns'  ],
-['ITR3' , 'Comm'     , 'MatrixGreen.icns' ],
-['ITR4' , 'Lists'    , 'MatrixGreen.icns' ],
+#['ITR2' , 'VM'       , 'MatrixBlue.icns'  ],
+#['ITR3' , 'Comm'     , 'MatrixGreen.icns' ],
+#['ITR4' , 'Lists'    , 'MatrixGreen.icns' ],
 ]
 
 class AppClone
@@ -57,6 +57,7 @@ class AppClone
     unless File.exist? app_path
       printf "%s was not found. Copying...\n", app_path
       `cp -Rp "#{original_root}/#{APP}.app" "#{app_path}"`
+      `open "#{app_path}"`
     end
   end
 
@@ -77,6 +78,7 @@ class AppClone
       `/usr/bin/sed -i '' -es/#{BUNDLE_ID}/#{@identifier}/ #{contents_path}/PkgInfo`
       `/bin/cp ~/Pictures/#{ICONAPP}Icons/#{@icon} #{contents_path}/Resources/#{APP}.icns` unless @icon.nil?
       `rm -rf #{contents_path}/_CodeSignature`
+      printf "Updated: %s\n", contents_path
     end
   end
 
