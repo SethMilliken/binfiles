@@ -1,0 +1,56 @@
+#!/bin/bash
+# Simple script to flash Swept Corne firmware
+
+FIRMWARE_SITE="https://github.com/SethMilliken/swept-corne-zmk/actions"
+DESTINATION="/Volumes/NICENANO/"
+BASE="${HOME}/Downloads"
+ARCHIVE="${BASE}/swept-firmware"
+DEFAULT_FIRMWARE="${BASE}/firmware.zip"
+
+TEMP=$(mktemp -d)
+TIMESTAMP=`date "+%Y-%m-%d.%H-%M-%S"`
+
+HALF=$1
+FIRMWARE=${2:-$DEFAULT_FIRMWARE}
+
+function flash_firmware_command() {
+    FILENAME=$1
+    UF2_FILE="${TEMP}/${FILENAME}"
+    unzip -p ${FIRMWARE} ${FILENAME} > ${UF2_FILE}
+    echo "cp ${UF2_FILE} ${DESTINATION}"
+}
+
+if [[ ! -f "${FIRMWARE}" ]]; then
+    echo "Firmware zip not found: ${FIRMWARE}"
+    echo "Download from: ${FIRMWARE_SITE}"
+    exit 1
+fi
+
+if [[ -z "${HALF}" ]]; then
+    echo "Half: must specify left or right or clean"
+    exit 2
+fi
+
+case $HALF in
+    "clean")
+        COMMAND="mv ${FIRMWARE} ${ARCHIVE}/swept-firmware-${TIMESTAMP}.zip"
+        ;;
+    "left")
+        COMMAND=$(flash_firmware_command "corne_left-nice_nano_v2-zmk.uf2")
+        ;;
+    "right")
+        COMMAND=$(flash_firmware_command "corne_right-nice_nano_v2-zmk.uf2")
+        ;;
+esac
+
+if [[ ! "${HALF}" == "clean" && ! -d "${DESTINATION}" ]]; then
+    echo "Destination not found: ${DESTINATION}"
+    exit 3
+fi
+
+echo $COMMAND
+$COMMAND
+
+## Make sure the temp directory gets removed on script exit.
+trap "exit 4"          HUP INT PIPE QUIT TERM
+trap 'rm -rf "$TEMP"'  EXIT
