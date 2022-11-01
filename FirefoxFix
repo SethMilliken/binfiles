@@ -3,45 +3,84 @@
 # This is a script for modifying copies of Firefox to uniquely identify them.
 #
 
+def create_clones
+  FirefoxClone.new(:creator_code => 'FFFA' , :name => 'Facebook'  , :original => 'Firefox' , :icon => 'Facebook.icns')
+  FirefoxClone.new(:creator_code => 'FFMO' , :name => 'Monitor'   , :original => 'Firefox' , :icon => 'FirefoxSauron.icns')
+  FirefoxClone.new(:creator_code => 'FFPE' , :name => 'Personal'  , :original => 'Firefox' , :icon => 'FirefoxWhite.icns')
+  #FirefoxClone.new(:creator_code => 'FFBR' , :name => 'Browse    , :original => 'Firefox' , :icon => 'FirefoxBlack.icns')
+  #FirefoxClone.new(:creator_code => 'FFDO' , :name => 'Docs'     , :original => 'Firefox' , :icon => 'FirefoxGlass.icns')
+  #FirefoxClone.new(:creator_code => 'FFTE' , :name => 'Test'     , :original => 'Firefox' , :icon => 'FirefoxGlass.icns')
+  #FirefoxClone.new(:creator_code => 'FFTR' , :name => 'Track'    , :original => 'FirefoxDeveloperEdition' , :icon => 'FirefoxNeon.icns')
+  #FirefoxClone.new(:creator_code => 'FFRE' , :name => 'Research' , :original => 'FirefoxDeveloperEdition' , :icon => 'FirefoxBlue.icns')
+end
+
 class FirefoxClone
-  ATTRIBUTES = %w{ original_sig icon_name bundle_id app_prefix identifier name install_root cask_root icon original }.map {|attr| attr.to_sym }
+  ATTRIBUTES = %w{ orig_creator_code icon_name base_bundle_id app_prefix creator_code name install_root cask_root icon original }.map {|attr| attr.to_sym }
   attr *ATTRIBUTES
 
-  # original_sig = FFSS?
   def initialize(args = {})
-    #args = {:install_root => '/Applications', :icon => 'FirefoxBlue.icns', :app_prefix => 'Firefox', :original_sig => 'MOZB', :icon_name => 'firefox', :bundle_id => 'org.mozilla.firefox', :cask_root => '/opt/homebrew-cask/Caskroom/firefox/latest'}.merge(args)
-    args = {:install_root => '/Applications', :icon => 'FirefoxBlue.icns', :app_prefix => 'Firefox', :original_sig => 'MOZB', :icon_name => 'firefox', :bundle_id => 'org.mozilla.firefox', :cask_root => '/opt/homebrew-cask/Caskroom/firefox/latest'}.merge(args)
+    args = {
+      :install_root => '/Applications',
+      :icon => 'FirefoxBlue.icns',
+      :app_prefix => 'Firefox',
+      :orig_creator_code => 'MOZB',
+      :icon_name => 'firefox',
+      :base_bundle_id => 'org.mozilla.firefox',
+      :cask_root => '/opt/homebrew-cask/Caskroom/firefox/latest'
+    }.merge(args)
     ATTRIBUTES.each {|attr| instance_variable_set("@#{attr}", args[attr]) }
     clone
   end
 
-  def clone
-    if /Scratch/ =~ @name
-      bundle_id=@bundle_id
-    else
-      bundle_id="#{@bundle_id}.#{@name}"
-    end
-    create_copy
-    bundle_name_file="#{contents}/Resources/en.lproj/InfoPlist.strings"
-    if File.exist?(contents)
-      `/usr/libexec/PlistBuddy #{contents}/Info.plist -c 'Set :CFBundleIdentifier #{bundle_id}'`
-      `/usr/libexec/PlistBuddy #{contents}/Info.plist -c 'Set :CFBundleName '#{@name}`
-      `/usr/libexec/PlistBuddy #{contents}/Info.plist -c 'Set :CFBundleSignature '#{@identifier}`
-      `/usr/bin/sed -i '' -es/#{@original_sig}/#{@identifier}/ #{contents}/PkgInfo`
-      `iconv -f utf-16 -t utf-8 #{bundle_name_file} | /usr/bin/sed -E -e's/"#{@original}"/"#{@app_prefix}#{@name}"/' | iconv -f utf-8 -t utf-16 > #{bundle_name_file}.tmp`
-      @bundle_name = %x[ iconv -f utf-16 -t utf-8 #{bundle_name_file}.tmp | grep CFBundleName | awk -F'"' '{print $2}' ]
-      `mv #{bundle_name_file}.tmp #{bundle_name_file}`
-      `/bin/cp ~/Pictures/FirefoxIcons/#{@icon} #{contents}/Resources/#{@icon_name}.icns` unless @icon.nil?
-      printf "\tCreated instance: %s", @bundle_name
-    end
+  def bundle_name
+    "#{@app_prefix}#{@name}"
   end
 
-  def destination
-    "#{@install_root}/#{@app_prefix}#{@name}.app"
+  def bundle_file_name
+    "#{contents}/Resources/en.lproj/InfoPlist.strings"
+  end
+
+  def bundle_id
+    "#{@base_bundle_id}.#{@name}"
   end
 
   def contents
     "#{destination}/Contents"
+  end
+
+  def destination
+    "#{@install_root}/#{bundle_name}.app"
+  end
+
+  def clone
+    create_app_copy
+    bundle_name_file="#{contents}/Resources/en.lproj/InfoPlist.strings"
+    if File.exist?(contents)
+      printf "Updating  %s (%s)...\n", "#{contents}", "#{bundle_id}"
+      `/usr/libexec/PlistBuddy #{contents}/Info.plist -c 'Set :CFBundleIdentifier '#{bundle_id}`
+      `/usr/libexec/PlistBuddy #{contents}/Info.plist -c 'Set :CFBundleName '#{bundle_name}`
+      `/usr/bin/sed -i '' -es/#{@orig_creator_code}/#{@creator_code}/ #{contents}/PkgInfo`
+      `iconv -f utf-16 -t utf-8 #{bundle_name_file} | /usr/bin/sed -E -e's/"#{@original}"/"#{bundle_name}"/' | iconv -f utf-8 -t utf-16 > #{bundle_name_file}.tmp`
+      `mv #{bundle_name_file}.tmp #{bundle_name_file}`
+      `/bin/cp ~/Pictures/icons/FirefoxIcons/#{@icon} #{contents}/Resources/#{@icon_name}.icns` unless @icon.nil?
+      printf "\tCreated instance: %s", bundle_name
+    end
+  end
+
+  def create_app_copy
+    original_root = resolve_alias.strip.gsub("/#{@original}.app/", "")
+    unless original_root
+      original_root =  Dir.exist?(cask_root) ? @cask_root : @install_root
+    end
+    unless File.exist?(destination)
+      clone_parent = "#{original_root}/#{@original}.app"
+      printf "Cloning %s from '%s' (%s, %s)...\n", destination, clone_parent, @creator_code, @icon
+      `rm -rf "#{destination}"`
+      `cp -Rp "#{clone_parent}" "#{destination}"`
+    end
+    # This may ensure cache gets updated
+    `touch "#{destination}"`
+    `open "#{destination}"`
   end
 
   def resolve_alias
@@ -54,30 +93,7 @@ EOF
     ]
   end
 
-  def create_copy
-    original_root = resolve_alias.strip.gsub("/#{@original}.app/", "")
-    unless original_root
-      original_root =  Dir.exist?(cask_root) ? @cask_root : @install_root
-    end
-    unless File.exist?(destination)
-      clone_parent = "#{original_root}/#{@original}.app"
-      printf "'%s' not found. Cloning from '%s' (%s, %s)...\n", destination, clone_parent, @identifier, @icon
-      `rm -rf "#{destination}"`
-      `cp -Rp "#{clone_parent}" "#{destination}"`
-    end
-    `open "#{destination}"`
-  end
 end
 
-FirefoxClone.new(:identifier => 'FFPE' , :name => 'Personal'  , :original => 'Firefox' , :icon => 'FirefoxWhite.icns')
-FirefoxClone.new(:identifier => 'FFMO' , :name => 'Monitor'   , :original => 'Firefox' , :icon => 'FirefoxSauron.icns')
-FirefoxClone.new(:identifier => 'FFBR' , :name => 'Browse'    , :original => 'Firefox' , :icon => 'FirefoxBlack.icns')
-#FirefoxClone.new(:identifier => 'FFTE' , :name => 'Test'      , :original => 'Firefox' , :icon => 'FirefoxGlass.icns')
-#FirefoxClone.new(:identifier => 'FFTR' , :name => 'Track'    , :original => 'FirefoxDeveloperEdition' , :icon => 'FirefoxNeon.icns')
-#FirefoxClone.new(:identifier => 'FFRE' , :name => 'Research' , :original => 'FirefoxDeveloperEdition' , :icon => 'FirefoxBlue.icns')
-#FirefoxClone.new(:identifier => 'FFDO' , :name => 'Docs'     , :original => 'Firefox' , :icon => 'FirefoxGlass.icns')
-#FirefoxClone.new(:identifier => 'FFCH' , :name => 'Chat'     , :original => 'Firefox' , :icon => 'FirefoxOrange.icns')
-#FirefoxClone.new(:identifier => 'FFPR' , :name => 'Project'  , :original => 'Firefox' , :icon => 'FirefoxOrange.icns')
-
-#FirefoxClone.new(:identifier => 'FFVO' , :name => 'Volatile' , :original => 'Firefox')
-#FirefoxClone.new(:identifier => 'FFDY' , :name => 'Dactyl'   , :original => 'Firefox')
+create_clones
+`killall Dock`
