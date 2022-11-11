@@ -6,12 +6,13 @@ DELETE = ["-d", "--delete"].include?(ARGV[0])
 
 APP="iTerm"
 ICONAPP="Firefox"
-BUNDLE_ID="ITRM"
+APP_ICON="AppIcon"
+ORIG_CREATOR_CODE="ITRM"
 CASKROOM="/opt/homebrew-cask/Caskroom"
 CASK="iterm2"
 
 app_specs = [
-['ITR1' , 'Personal' , 'CandC.icns'       ],
+['ITR1' , 'Personal' , 'MatrixGreen.icns'       ],
 #['ITR2' , 'VM'       , 'MatrixBlue.icns'  ],
 #['ITR3' , 'Comm'     , 'MatrixGreen.icns' ],
 #['ITR4' , 'Lists'    , 'MatrixGreen.icns' ],
@@ -19,10 +20,10 @@ app_specs = [
 
 class AppClone
 
-  attr_accessor :identifier, :name, :icon
+  attr_accessor :creator_code, :name, :icon
 
   def initialize(spec)
-    @identifier, @name, @icon = spec
+    @creator_code, @name, @icon = spec
     @bundle_id = if /iTerm/ =~ @name
                    "com.googlecode.iterm2"
                  else
@@ -57,6 +58,7 @@ class AppClone
     unless File.exist? app_path
       printf "%s was not found. Copying...\n", app_path
       `cp -Rp "#{original_root}/#{APP}.app" "#{app_path}"`
+      # Must initially launch copied app before modifying it.
       `open "#{app_path}"`
     end
   end
@@ -72,14 +74,24 @@ class AppClone
     delete if DELETE
     copy_original
     if File.exist? contents_path
+      printf "Updating  %s (%s)...\n", "#{contents_path}", "#{@bundle_id}"
       `/usr/libexec/PlistBuddy #{contents_path}/Info.plist -c 'Set :CFBundleIdentifier '#{@bundle_id}`
       `/usr/libexec/PlistBuddy #{contents_path}/Info.plist -c 'Set :CFBundleName '#{@name}`
-      `/usr/libexec/PlistBuddy #{contents_path}/Info.plist -c 'Set :CFBundleSignature '#{@identifier}`
-      `/usr/bin/sed -i '' -es/#{BUNDLE_ID}/#{@identifier}/ #{contents_path}/PkgInfo`
-      `/bin/cp ~/Pictures/#{ICONAPP}Icons/#{@icon} #{contents_path}/Resources/#{APP}.icns` unless @icon.nil?
-      `rm -rf #{contents_path}/_CodeSignature`
-      printf "Updated: %s\n", contents_path
+      `/usr/libexec/PlistBuddy #{contents_path}/Info.plist -c 'Set :CFBundleSignature '#{@creator_code}`
+      copy_command="/bin/cp ~/Pictures/icons/#{ICONAPP}Icons/#{@icon} #{contents_path}/Resources/#{APP_ICON}.icns"
+      `#{copy_command}` unless @icon.nil?
+      # Wait a bit after launch to prevent treating the quit  as a crash
+      `sleep 3`
+      # Quit launched app after modifying it to pick up changes.
+      `osascript -e 'quit app "#{@name}"'`
+      # Trick to get Dock to pick up icon change
+      `touch #{app_path}`
+      printf "Created instance: %s at %s\n", @bundle_id, app_path
     end
+  end
+
+  def open
+      `open "#{app_path}"`
   end
 
 end
@@ -90,4 +102,9 @@ for spec in app_specs do
 end
 for app in apps
   app.clone
+end
+# To get Dock to pick up icon change
+`killall Dock`
+for app in apps
+  app.open
 end

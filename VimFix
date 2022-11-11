@@ -5,13 +5,17 @@
 DELETE = ["-d", "--delete"].include?(ARGV[0])
 
 APP="MacVim"
-BUNDLE_ID="VIMM"
+ICONAPP="MacVim"
+APP_ICON="MacVim"
+ORIG_CREATOR_CODE="VIMM"
+CASKROOM="/opt/homebrew-cask/Caskroom"
+CASK="macvim"
 
 app_specs = [
-['VIM3', 'Todo',           'VimPaleGreen.icns' ],
-['VIM8', 'Scratch',        'VimOrange.icns'    ],
-['VIMW', 'WorkScratch',    'VimGrey.icns'      ],
-['VIMT', 'WorkTodo',       'VimBlue.icns'      ],
+['VIMD', 'Todo',           'VimPaleGreen.icns' ],
+#['VIMS', 'Scratch',        'VimOrange.icns'    ],
+#['VIMW', 'WorkScratch',    'VimGrey.icns'      ],
+#['VIMT', 'WorkTodo',       'VimBlue.icns'      ],
 #['VIMM', 'MacVim',         'VimGreen.icns'     ],
 #['VIM4', 'Vimwiki',        'VimPaleGreen.icns' ],
 #['VIM5', 'Tasks',          'VimPurple.icns'    ],
@@ -26,7 +30,7 @@ app_specs = [
 
 class AppClone
 
-  attr_accessor :identifier, :name, :icon
+  attr_accessor :creator_code, :name, :icon
 
   def initialize(spec)
     @identifier, @name, @icon = spec
@@ -50,21 +54,13 @@ class AppClone
   end
 
   def original_root
-    brewcandidate = Dir.glob("/usr/local/Cellar/macvim/**/#{APP}.app")
-    if brewcandidate.length > 0
-      return File.dirname(brewcandidate[-1])
-    end
-    brewcandidate2 = Dir.glob("/opt/homebrew/Cellar/macvim/**/#{APP}.app")
-    if brewcandidate2.length > 0
-      return File.dirname(brewcandidate2[-1])
-    end
-    #original_path = Dir.glob("/usr/local/Caskroom/macvim/**/#{APP}.app")
-    #if original_path.length > 0
-    #  return File.dirname(original_path[-1])
-    #end
     original_path = "/Applications/#{APP}.app"
     if File.exists? original_path
       return File.dirname(original_path)
+    end
+    original_path = Dir.glob("#{CASKROOM}/#{CASK}/**/#{APP}.app")
+    if original_path.length > 0
+      return File.dirname(original_path[-1])
     end
   end
 
@@ -72,6 +68,7 @@ class AppClone
     unless File.exist? app_path
       printf "%s was not found. Copying...\n", app_path
       `cp -Rp "#{original_root}/#{APP}.app" "#{app_path}"`
+      # Must initially launch copied app before modifying it.
       `open "#{app_path}"`
     end
   end
@@ -87,13 +84,22 @@ class AppClone
     delete if DELETE
     copy_original
     if File.exist? contents_path
-      `/usr/libexec/PlistBuddy #{contents_path}/Info.plist -c 'Set :CFBundleIdentifier org.vim.'#{@name}`
+      `/usr/libexec/PlistBuddy #{contents_path}/Info.plist -c 'Set :CFBundleIdentifier '#{@bundle_id}`
       `/usr/libexec/PlistBuddy #{contents_path}/Info.plist -c 'Set :CFBundleName '#{@name}`
-      `/usr/libexec/PlistBuddy #{contents_path}/Info.plist -c 'Set :CFBundleSignature '#{@identifier}`
-      `/usr/bin/sed -i '' -es/#{BUNDLE_ID}/#{@identifier}/ #{contents_path}/PkgInfo`
-      `/bin/cp ~/Pictures/#{APP}Icons/#{@icon} #{contents_path}/Resources/#{APP}.icns`
-      `rm -rf #{contents_path}/_CodeSignature`
+      `/usr/libexec/PlistBuddy #{contents_path}/Info.plist -c 'Set :CFBundleSignature '#{@creator_code}`
+      #`/usr/bin/sed -i '' -es/#{BUNDLE_ID}/#{@identifier}/ #{contents_path}/PkgInfo`
+      copy_command="/bin/cp ~/Pictures/icons/#{ICONAPP}Icons/#{@icon} #{contents_path}/Resources/#{APP_ICON}.icns"
+      `#{copy_command}` unless @icon.nil?
+      # Quit launched app after modifying it to pick up changes.
+      `osascript -e 'quit app "#{@name}"'`
+      # Trick to get Dock to pick up icon change
+      `touch #{app_path}`
+      printf "Created instance: %s at %s\n", @bundle_id, app_path
     end
+  end
+
+  def open
+      `open "#{app_path}"`
   end
 
 end
@@ -104,4 +110,9 @@ for spec in app_specs do
 end
 for app in apps
   app.clone
+end
+# To get Dock to pick up icon change
+`killall Dock`
+for app in apps
+  app.open
 end
