@@ -21,6 +21,7 @@ function flash_firmware_command() {
 }
 
 if [[ ! -f "${FIRMWARE}" ]]; then
+    echo "Attach keyboard via USB and put into bootloader mode."
     echo "Firmware zip not found: ${FIRMWARE}"
     echo "Download from: ${FIRMWARE_SITE}"
     exit 1
