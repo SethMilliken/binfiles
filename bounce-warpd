@@ -1,0 +1,30 @@
+#!/bin/zsh
+MODE=$1
+
+function stop() {
+launchctl unload /Library/LaunchAgents/com.warpd.warpd.plist
+}
+
+function start() {
+launchctl load /Library/LaunchAgents/com.warpd.warpd.plist
+}
+
+case $MODE in
+  restart)
+    stop
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  start)
+    start
+    ;;
+  fore)
+    stop
+    warpd --foreground
+    ;;
+  *)
+    echo "$(basename $0) [ start | stop | restart | fore ]"
+    ;;
+esac
