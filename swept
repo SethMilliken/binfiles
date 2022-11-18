@@ -28,13 +28,16 @@ if [[ ! -f "${FIRMWARE}" ]]; then
 fi
 
 if [[ -z "${HALF}" ]]; then
-    echo "Half: must specify left or right or clean"
+    echo "Half: must specify left, right, archive, or clean"
     exit 2
 fi
 
 case $HALF in
-    "clean")
+    "archive")
         COMMAND="mv ${FIRMWARE} ${ARCHIVE}/swept-firmware-${TIMESTAMP}.zip"
+        ;;
+    "clean")
+        COMMAND="rm ${FIRMWARE}"
         ;;
     "left")
         COMMAND=$(flash_firmware_command "corne_left-nice_nano_v2-zmk.uf2")
@@ -44,7 +47,8 @@ case $HALF in
         ;;
 esac
 
-if [[ ! "${HALF}" == "clean" && ! -d "${DESTINATION}" ]]; then
+SKIP_DEST_REGEX="clean|archive"
+if [[ ! "${HALF}" =~ $SKIP_DEST_REGEX && ! -d "${DESTINATION}" ]]; then
     echo "Destination not found: ${DESTINATION}"
     exit 3
 fi
